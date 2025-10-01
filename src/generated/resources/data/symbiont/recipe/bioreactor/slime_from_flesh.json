@@ -1,0 +1,17 @@
+{
+  "type": "symbiont:bioreactor",
+  "fluid_input": {
+    "fluid": "minecraft:water"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "minecraft:water"
+  },
+  "item_input": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "item_output": {
+    "count": 1,
+    "id": "minecraft:slime_ball"
+  }
+}
