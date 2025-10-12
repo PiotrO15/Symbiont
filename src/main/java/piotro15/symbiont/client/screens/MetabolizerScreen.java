@@ -17,12 +17,6 @@ public class MetabolizerScreen extends BasicMachineScreen<MetabolizerMenu> {
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "textures/gui/metabolizer.png");
 
-    private static final ResourceLocation ARROW_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID,"textures/gui/arrow_progress.png");
-
-    private static final ResourceLocation ENERGY_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "textures/gui/energy_storage_16_52.png");
-
     public MetabolizerScreen(MetabolizerMenu menu, Inventory playerInv, Component title) {
         super(menu, playerInv, title);
         this.imageWidth = 176;
@@ -31,7 +25,7 @@ public class MetabolizerScreen extends BasicMachineScreen<MetabolizerMenu> {
 
         bars.add(new FluidTankRenderer(menu.getInputFluidTank(), 35, 17, 16, 52));
         bars.add(new FluidTankRenderer(menu.getOutputFluidTank(), 152, 17, 16, 52));
-        bars.add(new EnergyBarRenderer(menu.getEnergyStorage(), 8, 17, 16, 52));
+        bars.add(new EnergyBarRenderer(() -> menu.getContainerData(2), () -> menu.getContainerData(3), 8, 17, 16, 52));
     }
 
     @Override
@@ -41,22 +35,12 @@ public class MetabolizerScreen extends BasicMachineScreen<MetabolizerMenu> {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        renderProgressArrow(gfx, x, y);
+        renderProgressArrow(gfx, 86 + x, 34 + y);
     }
 
     @Override
     public ResourceLocation getTexture() {
         return TEXTURE;
-    }
-
-    private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
-        if(menu.isCrafting()) {
-            guiGraphics.blit(ARROW_TEXTURE, 86 + x, 34 + y, 0, 0, menu.getScaledArrowProgress(), 16, 24, 16);
-        }
-    }
-
-    private void renderEnergyStorage(GuiGraphics guiGraphics, int x, int y) {
-        guiGraphics.blit(ENERGY_TEXTURE, 8 + x, 17 + y + (52 - menu.getScaledPowerStorage()), 0, 0, 16, menu.getScaledPowerStorage(), 16, 52);
     }
 }
 

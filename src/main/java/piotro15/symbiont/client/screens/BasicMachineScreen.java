@@ -7,12 +7,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.api.BarRenderer;
+import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.common.menus.BasicMachineMenu;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BasicMachineScreen<M extends BasicMachineMenu> extends AbstractContainerScreen<M> {
+    private static final ResourceLocation ARROW_TEXTURE =
+            ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID,"textures/gui/arrow_progress.png");
+
     protected final List<BarRenderer> bars = new ArrayList<>();
 
     public BasicMachineScreen(M menu, Inventory playerInventory, Component title) {
@@ -36,4 +40,10 @@ public abstract class BasicMachineScreen<M extends BasicMachineMenu> extends Abs
     }
 
     public abstract ResourceLocation getTexture();
+
+    protected void renderProgressArrow(GuiGraphics gfx, int x, int y) {
+        if(menu.isCrafting()) {
+            gfx.blit(ARROW_TEXTURE, x, y, 0, 0, menu.getScaledArrowProgress(), 16, 24, 16);
+        }
+    }
 }

@@ -34,8 +34,24 @@ import piotro15.symbiont.common.registries.ModRecipeTypes;
 import java.util.Optional;
 
 public class BioreactorBlockEntity extends MachineBlockEntity implements MenuProvider {
-    private final FluidTank inputTank = new FluidTank(4000);
-    private final FluidTank outputTank = new FluidTank(4000);
+    private final FluidTank inputTank = new FluidTank(4000) {
+        @Override
+        protected void onContentsChanged() {
+            setChanged();
+            if(!level.isClientSide()) {
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+            }
+        }
+    };
+    private final FluidTank outputTank = new FluidTank(4000) {
+        @Override
+        protected void onContentsChanged() {
+            setChanged();
+            if(!level.isClientSide()) {
+                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
+            }
+        }
+    };
     private final EnergyStorage energyStorage = new EnergyStorage(10000, 100);
     protected ItemStackHandler items;
 

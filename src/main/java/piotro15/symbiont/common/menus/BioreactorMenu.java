@@ -102,12 +102,12 @@ public class BioreactorMenu extends BasicMachineMenu {
         return blockEntity.getOutputTank().getFluid();
     }
 
-    public EnergyStorage getEnergyStorage() {
-        return blockEntity.getEnergyStorage();
-    }
-
     public boolean isCrafting() {
         return data.get(0) > 0;
+    }
+
+    public int getContainerData(int id) {
+        return this.data.get(id);
     }
 
     public int getScaledArrowProgress() {
@@ -116,29 +116,6 @@ public class BioreactorMenu extends BasicMachineMenu {
         int arrowPixelSize = 24;
 
         return maxProgress != 0 && progress != 0 ? progress * arrowPixelSize / maxProgress : 0;
-    }
-
-    public int getScaledPowerStorage() {
-        int power = data.get(2);
-        int maxPower = data.get(3);
-
-        int height = 52;
-
-        return power != 0 && maxPower != 0 ? power * height / maxPower : 0;
-    }
-
-    private void addPlayerInventory(Inventory playerInventory) {
-        for (int row = 0; row < 3; ++row) {
-            for (int col = 0; col < 9; ++col) {
-                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
-            }
-        }
-    }
-
-    private void addPlayerHotbar(Inventory playerInventory) {
-        for (int col = 0; col < 9; ++col) {
-            this.addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
-        }
     }
 }
 

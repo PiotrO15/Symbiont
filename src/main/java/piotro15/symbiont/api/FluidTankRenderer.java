@@ -81,7 +81,6 @@ public class FluidTankRenderer implements BarRenderer {
         float vMin = textureSprite.getV0();
         float vMax = textureSprite.getV1();
 
-//        vMax = vMax - ((16F - (y2 - y1)) / 16F * (vMax - vMin));
         vMin = vMin - (((y2 - y1) - 16F) / 16F * (vMax - vMin));
 
         RenderSystem.setShaderTexture(0, texture);
@@ -100,9 +99,9 @@ public class FluidTankRenderer implements BarRenderer {
     private static final ResourceLocation FLUID_TANK_OVERLAY =
             ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "textures/gui/fluid_tank_overlay.png");
 
-    private int x, y, width, height;
-    private FluidTank tank;
-    private int capacity;
+    private final int x, y, width, height;
+    private final FluidTank tank;
+    private final int capacity;
 
     @Override
     public void render(GuiGraphics gfx, int x, int y) {
