@@ -8,10 +8,13 @@
     "id": "minecraft:water"
   },
   "item_input": {
-    "item": "minecraft:rotten_flesh"
+    "item": "symbiont:culture_starter"
   },
   "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:proto_cell"
+    },
     "count": 1,
-    "id": "minecraft:slime_ball"
+    "id": "symbiont:cell_culture"
   }
 }

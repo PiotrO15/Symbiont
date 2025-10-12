@@ -13,6 +13,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -25,34 +26,31 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import piotro15.symbiont.api.FluidApi;
 import piotro15.symbiont.common.item.CellCultureItem;
-import piotro15.symbiont.common.menus.BioreactorMenu;
+import piotro15.symbiont.common.menus.MetabolizerMenu;
 import piotro15.symbiont.common.recipe.BioreactorRecipe;
 import piotro15.symbiont.common.recipe.BioreactorRecipeInput;
+import piotro15.symbiont.common.recipe.MetabolizerRecipe;
+import piotro15.symbiont.common.recipe.MetabolizerRecipeInput;
 import piotro15.symbiont.common.registries.ModBlockEntities;
 import piotro15.symbiont.common.registries.ModRecipeTypes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class BioreactorBlockEntity extends MachineBlockEntity implements MenuProvider {
+public class MetabolizerBlockEntity extends MachineBlockEntity implements MenuProvider {
     private final FluidTank inputTank = new FluidTank(4000);
     private final FluidTank outputTank = new FluidTank(4000);
     private final EnergyStorage energyStorage = new EnergyStorage(10000, 100);
+
     protected ItemStackHandler items;
 
     private int progress;
     private static final int MAX_PROGRESS = 200;
 
-    public BioreactorBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.BIOREACTOR.get(), pos, state);
-        items = new ItemStackHandler(2) {
-            @Override
-            protected void onContentsChanged(int slot) {
-                setChanged();
-                if(!level.isClientSide()) {
-                    level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-                }
-            }
-        };
+    public MetabolizerBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.METABOLIZER.get(), pos, state);
+        items = new ItemStackHandler(6);
 
         data = new ContainerData() {
             private final int[] ints = new int[4];
@@ -60,7 +58,7 @@ public class BioreactorBlockEntity extends MachineBlockEntity implements MenuPro
             @Override
             public int get(int i) {
                 return switch (i) {
-                    case 0 -> BioreactorBlockEntity.this.progress;
+                    case 0 -> MetabolizerBlockEntity.this.progress;
                     case 2 -> energyStorage.getEnergyStored();
                     case 3 -> energyStorage.getMaxEnergyStored();
                     default -> 0;
@@ -70,7 +68,7 @@ public class BioreactorBlockEntity extends MachineBlockEntity implements MenuPro
             @Override
             public void set(int i, int value) {
                 switch (i) {
-                    case 0 -> BioreactorBlockEntity.this.progress = value;
+                    case 0 -> MetabolizerBlockEntity.this.progress = value;
 //                    case 1: BioreactorBlockEntity.this.maxProgress = value;
                     default -> {}
                 }
@@ -120,15 +118,15 @@ public class BioreactorBlockEntity extends MachineBlockEntity implements MenuPro
 
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInv, @NotNull Player player) {
-        return new BioreactorMenu(id, playerInv, this, this.data);
+        return new MetabolizerMenu(id, playerInv, this, this.data);
     }
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.translatable("container.bioreactor");
+        return Component.translatable("container.metabolizer");
     }
 
-    private void craftRecipe(BioreactorRecipe recipe) {
+    private void craftRecipe(MetabolizerRecipe recipe) {
         if (level == null) {
             return;
         }
@@ -157,7 +155,7 @@ public class BioreactorBlockEntity extends MachineBlockEntity implements MenuPro
         outputTank.fill(recipe.fluidOutput(), IFluidHandler.FluidAction.EXECUTE);
     }
 
-    private boolean canAcceptOutput(BioreactorRecipe recipe) {
+    private boolean canAcceptOutput(MetabolizerRecipe recipe) {
         if (level == null) {
             return false;
         }
@@ -207,21 +205,21 @@ public class BioreactorBlockEntity extends MachineBlockEntity implements MenuPro
             return;
         }
 
-        BioreactorRecipeInput input = new BioreactorRecipeInput(items.getStackInSlot(0), inputTank.getFluid());
+        MetabolizerRecipeInput input = new MetabolizerRecipeInput(List.of(items.getStackInSlot(0), items.getStackInSlot(2)), inputTank.getFluid());
 
         if (level == null) {
             return;
         }
 
-        Optional<RecipeHolder<BioreactorRecipe>> recipeMatch = level.getRecipeManager()
-                .getRecipeFor(ModRecipeTypes.BIOREACTOR.get(), input, level);
+        Optional<RecipeHolder<MetabolizerRecipe>> recipeMatch = level.getRecipeManager()
+                .getRecipeFor(ModRecipeTypes.METABOLIZER.get(), input, level);
 
         if (recipeMatch.isEmpty()) {
             progress = 0;
             return;
         }
 
-        BioreactorRecipe match = recipeMatch.get().value();
+        MetabolizerRecipe match = recipeMatch.get().value();
 
         if (canAcceptOutput(match)) {
             energyStorage.extractEnergy(20, false); // cost per tick
@@ -249,7 +247,4 @@ public class BioreactorBlockEntity extends MachineBlockEntity implements MenuPro
     public IEnergyStorage getEnergyStorageForSide(@Nullable Direction side) {
         return this.energyStorage; // simple: same energy storage on all sides
     }
-
-
 }
-

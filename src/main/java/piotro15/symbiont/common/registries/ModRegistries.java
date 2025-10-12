@@ -14,6 +14,6 @@ public class ModRegistries {
 
     @SubscribeEvent
     public static void registerDataRegistry(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(CELL_TYPE, CellType.CODEC);
+        event.dataPackRegistry(ModRegistries.CELL_TYPE, CellType.CODEC, CellType.CODEC);
     }
 }

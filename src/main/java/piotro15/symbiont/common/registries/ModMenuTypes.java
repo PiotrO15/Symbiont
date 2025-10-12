@@ -9,10 +9,12 @@ import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import piotro15.symbiont.common.blocks.entities.BioreactorBlockEntity;
+import piotro15.symbiont.common.blocks.entities.MetabolizerBlockEntity;
 import piotro15.symbiont.common.menus.BioreactorMenu;
 import piotro15.symbiont.common.menus.CellEditorMenu;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.common.blocks.entities.CellEditorBlockEntity;
+import piotro15.symbiont.common.menus.MetabolizerMenu;
 
 public class ModMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, Symbiont.MOD_ID);
@@ -24,6 +26,16 @@ public class ModMenuTypes {
                 BlockEntity be = inv.player.level().getBlockEntity(pos);
                 if (be instanceof BioreactorBlockEntity ceb)
                     return new BioreactorMenu(id, inv, ceb, new SimpleContainerData(4));
+                return null;
+            }));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<MetabolizerMenu>> METABOLIZER = MENU_TYPES.register("metabolizer",
+            () -> IMenuTypeExtension.create((id, inv, buf) ->
+            {
+                BlockPos pos = buf.readBlockPos();
+                BlockEntity be = inv.player.level().getBlockEntity(pos);
+                if (be instanceof MetabolizerBlockEntity ceb)
+                    return new MetabolizerMenu(id, inv, ceb, new SimpleContainerData(4));
                 return null;
             }));
 

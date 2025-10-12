@@ -1,0 +1,22 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "fluid": "minecraft:water"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "minecraft:water"
+  },
+  "item_input": [
+    {
+      "item": "symbiont:cell_culture"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "item_output": {
+    "count": 2,
+    "id": "symbiont:cell_culture"
+  }
+}

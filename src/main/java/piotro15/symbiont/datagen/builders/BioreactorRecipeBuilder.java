@@ -1,4 +1,4 @@
-package piotro15.symbiont.datagen;
+package piotro15.symbiont.datagen.builders;
 
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;

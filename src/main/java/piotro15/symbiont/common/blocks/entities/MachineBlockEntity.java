@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class MachineBlockEntity extends BlockEntity implements BlockEntityTicker<MachineBlockEntity> {
     public int progress;
-    protected ItemStackHandler items;
     protected ContainerData data;
 
     public MachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {

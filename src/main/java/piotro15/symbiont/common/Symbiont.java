@@ -13,10 +13,13 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import org.slf4j.Logger;
 import piotro15.symbiont.common.blocks.entities.BioreactorBlockEntity;
 import piotro15.symbiont.common.blocks.entities.MachineWorkerBlockEntity;
+import piotro15.symbiont.common.blocks.entities.MetabolizerBlockEntity;
 import piotro15.symbiont.common.config.Config;
+import piotro15.symbiont.common.genetics.CellType;
 import piotro15.symbiont.common.registries.*;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -137,6 +140,25 @@ public class Symbiont {
                 Capabilities.EnergyStorage.BLOCK,
                 ModBlockEntities.MACHINE_WORKER.get(),
                 (MachineWorkerBlockEntity::getEnergyStorageForSide)
+        );
+
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.METABOLIZER.get(),
+                (MetabolizerBlockEntity::getItemHandlerForSide)
+        );
+
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                ModBlockEntities.METABOLIZER.get(),
+                (MetabolizerBlockEntity::getFluidHandlerForSide)
+        );
+
+
+        event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                ModBlockEntities.METABOLIZER.get(),
+                (MetabolizerBlockEntity::getEnergyStorageForSide)
         );
     }
 }

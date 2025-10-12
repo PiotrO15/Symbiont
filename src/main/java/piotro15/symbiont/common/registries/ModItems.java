@@ -5,6 +5,7 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import piotro15.symbiont.common.Symbiont;
+import piotro15.symbiont.common.item.CellCultureItem;
 
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Symbiont.MOD_ID);
@@ -12,5 +13,6 @@ public class ModItems {
     public static final DeferredItem<BlockItem> CELL_EDITOR = ITEMS.register("cell_editor", () -> new BlockItem(ModBlocks.CELL_EDITOR.get(), new BlockItem.Properties()));
     public static final DeferredItem<BlockItem> BIOREACTOR = ITEMS.register("bioreactor", () -> new BlockItem(ModBlocks.BIOREACTOR.get(), new BlockItem.Properties()));
 
-    public static final DeferredItem<Item> CELL_CULTURE = ITEMS.register("cell_culture", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> CELL_CULTURE = ITEMS.register("cell_culture", () -> new CellCultureItem(new Item.Properties()));
+    public static final DeferredItem<Item> CULTURE_STARTER = ITEMS.register("culture_starter", () -> new Item(new Item.Properties()));
 }

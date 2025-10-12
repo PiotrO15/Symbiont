@@ -1,0 +1,6 @@
+{
+  "block.symbiont.bioreactor": "Bioreactor",
+  "block.symbiont.metabolizer": "Metabolizer",
+  "container.bioreactor": "Bioreactor",
+  "container.metabolizer": "Metabolizer"
+}
