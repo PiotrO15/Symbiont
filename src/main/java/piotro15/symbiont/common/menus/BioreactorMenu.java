@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.common.blocks.entities.BioreactorBlockEntity;
 import piotro15.symbiont.common.registries.ModMenuTypes;
 
-public class BioreactorMenu extends AbstractContainerMenu {
+public class BioreactorMenu extends BasicMachineMenu {
     private final int slotCount = 2;
     private final BioreactorBlockEntity blockEntity;
     private final ContainerData data;

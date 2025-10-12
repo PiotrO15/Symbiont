@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.common.blocks.entities.MetabolizerBlockEntity;
 import piotro15.symbiont.common.registries.ModMenuTypes;
 
-public class MetabolizerMenu extends AbstractContainerMenu {
+public class MetabolizerMenu extends BasicMachineMenu {
     private final int slotCount = 6;
     private final MetabolizerBlockEntity blockEntity;
     private final ContainerData data;

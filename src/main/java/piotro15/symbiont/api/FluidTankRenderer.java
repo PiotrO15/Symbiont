@@ -6,13 +6,29 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import org.joml.Matrix4f;
+import piotro15.symbiont.common.Symbiont;
 
-public class FluidTankRenderer {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class FluidTankRenderer implements BarRenderer {
+    public FluidTankRenderer(FluidTank inputFluidTank, int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.tank = inputFluidTank;
+        this.capacity = inputFluidTank.getCapacity();
+    }
+
     public static void renderFluid(GuiGraphics gfx, int x, int y, int width, int height, FluidStack stack, int capacity) {
         if (stack.isEmpty()) return;
 
@@ -79,5 +95,37 @@ public class FluidTankRenderer {
         bufferBuilder.addVertex(matrix4f, (float) x2, (float) y1, (float) z).setUv(uMax, vMin).setColor(1f, 1f, 1f, 1f);
         BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
         RenderSystem.disableBlend();
+    }
+
+    private static final ResourceLocation FLUID_TANK_OVERLAY =
+            ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "textures/gui/fluid_tank_overlay.png");
+
+    private int x, y, width, height;
+    private FluidTank tank;
+    private int capacity;
+
+    @Override
+    public void render(GuiGraphics gfx, int x, int y) {
+        renderFluid(gfx, x + this.x, y + this.y, width, height, tank.getFluid(), capacity);
+    }
+
+    @Override
+    public void renderTooltip(GuiGraphics gfx, int leftPos, int topPos, int mouseX, int mouseY) {
+        if (mouseX >= leftPos + x && mouseX < leftPos + x + width &&
+                mouseY >= topPos + y && mouseY < topPos + y + height) {
+
+            List<Component> tooltip = new ArrayList<>();
+            if (tank.getFluid().getAmount() > 0) {
+                tooltip.add(tank.getFluid().getHoverName());
+            }
+            tooltip.add(Component.literal(tank.getFluid().getAmount() + " / " + tank.getCapacity() + " mB"));
+
+            gfx.renderTooltip(Minecraft.getInstance().font, tooltip, Optional.empty(), mouseX, mouseY);
+        }
+    }
+
+    @Override
+    public void renderOverlay(GuiGraphics gfx, int leftPos, int topPos) {
+        gfx.blit(FLUID_TANK_OVERLAY, leftPos + x, topPos + y, 0, 0, width, height, width, height);
     }
 }
