@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "symbiont:block/bioreactor",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "symbiont:block/bioreactor",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "symbiont:block/bioreactor"
+    },
+    "facing=east": {
+      "model": "symbiont:block/bioreactor",
+      "y": 180
+    }
+  }
+}

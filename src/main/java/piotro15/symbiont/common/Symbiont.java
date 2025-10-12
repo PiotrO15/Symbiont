@@ -15,6 +15,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 import piotro15.symbiont.common.blocks.entities.BioreactorBlockEntity;
+import piotro15.symbiont.common.blocks.entities.MachineWorkerBlockEntity;
 import piotro15.symbiont.common.config.Config;
 import piotro15.symbiont.common.registries.*;
 
@@ -117,6 +118,25 @@ public class Symbiont {
                 Capabilities.EnergyStorage.BLOCK,
                 ModBlockEntities.BIOREACTOR.get(),
                 (BioreactorBlockEntity::getEnergyStorageForSide)
+        );
+
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.MACHINE_WORKER.get(),
+                (MachineWorkerBlockEntity::getItemHandlerForSide)
+        );
+
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                ModBlockEntities.MACHINE_WORKER.get(),
+                (MachineWorkerBlockEntity::getFluidHandlerForSide)
+        );
+
+
+        event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                ModBlockEntities.MACHINE_WORKER.get(),
+                (MachineWorkerBlockEntity::getEnergyStorageForSide)
         );
     }
 }

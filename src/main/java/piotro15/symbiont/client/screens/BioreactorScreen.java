@@ -70,9 +70,9 @@ public class BioreactorScreen extends AbstractContainerScreen<BioreactorMenu> {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics pGuiGraphics, int mouseX, int mouseY, float pPartialTick) {
-        super.render(pGuiGraphics, mouseX, mouseY, pPartialTick);
-        this.renderTooltip(pGuiGraphics, mouseX, mouseY);
+    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        this.renderTooltip(guiGraphics, mouseX, mouseY);
 
         int tankX = leftPos + 8;
         int tankY = topPos + 17;
@@ -87,7 +87,7 @@ public class BioreactorScreen extends AbstractContainerScreen<BioreactorMenu> {
             List<Component> tooltip = new ArrayList<>();
             tooltip.add(Component.literal(stack.getEnergyStored() + " / " + stack.getMaxEnergyStored() + " RF"));
 
-            pGuiGraphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
+            guiGraphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
         }
 
         FluidTank inputStack = menu.getInputFluidTank();
@@ -103,7 +103,23 @@ public class BioreactorScreen extends AbstractContainerScreen<BioreactorMenu> {
             }
             tooltip.add(Component.literal(inputStack.getFluid().getAmount() + " / " + inputStack.getCapacity() + " mB"));
 
-            pGuiGraphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
+            guiGraphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
+        }
+
+        FluidTank outputStack = menu.getOutputFluidTank();
+
+        tankX = leftPos + 152;
+
+        if (mouseX >= tankX && mouseX < tankX + tankWidth &&
+                mouseY >= tankY && mouseY < tankY + tankHeight) {
+
+            List<Component> tooltip = new ArrayList<>();
+            if (outputStack.getFluid().getAmount() > 0) {
+                tooltip.add(outputStack.getFluid().getHoverName());
+            }
+            tooltip.add(Component.literal(outputStack.getFluid().getAmount() + " / " + outputStack.getCapacity() + " mB"));
+
+            guiGraphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
         }
     }
 }

@@ -94,6 +94,10 @@ public class BioreactorMenu extends AbstractContainerMenu {
         return blockEntity.getInputTank();
     }
 
+    public FluidTank getOutputFluidTank() {
+        return blockEntity.getOutputTank();
+    }
+
     public FluidStack getOutputFluid() {
         return blockEntity.getOutputTank().getFluid();
     }
