@@ -14,11 +14,14 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.common.Symbiont;
+import piotro15.symbiont.common.genetics.Biocode;
+import piotro15.symbiont.common.genetics.Biotrait;
 import piotro15.symbiont.common.registries.ModDataComponents;
 import piotro15.symbiont.common.registries.ModItems;
 import piotro15.symbiont.datagen.builders.BioreactorRecipeBuilder;
 import piotro15.symbiont.datagen.builders.MetabolizerRecipeBuilder;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class RecipeDatagen extends RecipeProvider {
@@ -30,7 +33,7 @@ public class RecipeDatagen extends RecipeProvider {
     @Override
     protected void buildRecipes(@NotNull RecipeOutput consumer) {
         ItemStack protoCellStack = new ItemStack(ModItems.CELL_CULTURE.get());
-        protoCellStack.applyComponents(DataComponentMap.builder().set(ModDataComponents.CELL_TYPE, ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "proto_cell")).build());
+        protoCellStack.applyComponents(DataComponentMap.builder().set(ModDataComponents.CELL_TYPE, ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "glucose")).set(ModDataComponents.BIOCODE, new Biocode(Map.of(Biotrait.BiotraitType.STABILITY, ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "stable")))).build());
 
         BioreactorRecipeBuilder.newBioreactorRecipe
                 (Ingredient.of(ModItems.CULTURE_STARTER.get()),

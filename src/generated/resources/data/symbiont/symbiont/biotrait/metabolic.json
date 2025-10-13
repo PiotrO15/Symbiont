@@ -1,0 +1,10 @@
+{
+  "modifiers": [
+    {
+      "type": "symbiont:integer_trait_modifier",
+      "stat_type": "METABOLISM",
+      "value": 1.5
+    }
+  ],
+  "trait_type": "METABOLISM"
+}

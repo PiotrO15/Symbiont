@@ -26,7 +26,7 @@ public class Datagen {
         dataGenerator.addProvider(event.includeClient(), new RecipeDatagen(packOutput, lookupProvider));
 
         dataGenerator.addProvider(event.includeClient(), (DataProvider.Factory<DatapackBuiltinEntriesProvider>) output -> new DatapackBuiltinEntriesProvider(
-                output, lookupProvider, new RegistrySetBuilder().add(ModRegistries.CELL_TYPE, CellTypeProvider::registerCellTypes), Collections.singleton(Symbiont.MOD_ID))
+                output, lookupProvider, new RegistrySetBuilder().add(ModRegistries.CELL_TYPE, CellTypeProvider::registerCellTypes).add(ModRegistries.BIOTRAIT, BiotraitProvider::registerBiotraits), Collections.singleton(Symbiont.MOD_ID))
         );
 
         dataGenerator.addProvider(event.includeClient(), new LanguageDatagen(packOutput, Symbiont.MOD_ID, "en_us"));

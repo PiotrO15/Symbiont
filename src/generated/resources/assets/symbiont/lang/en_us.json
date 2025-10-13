@@ -4,5 +4,11 @@
   "cell_type.symbiont.glucose": "Glucose Cell Culture",
   "cell_type.symbiont.proto_cell": "Proto-Cell Culture",
   "container.bioreactor": "Bioreactor",
-  "container.metabolizer": "Metabolizer"
+  "container.metabolizer": "Metabolizer",
+  "item.symbiont.cell_culture": "Unknown Cell Culture",
+  "item.symbiont.cell_culture.environment": "Environment: ",
+  "item.symbiont.cell_culture.growth": "Growth: ",
+  "item.symbiont.cell_culture.metabolism": "Metabolism: ",
+  "item.symbiont.cell_culture.special": "Special: ",
+  "item.symbiont.cell_culture.stability": "Stability: "
 }

@@ -1,0 +1,10 @@
+{
+  "modifiers": [
+    {
+      "type": "symbiont:integer_trait_modifier",
+      "stat_type": "STABILITY",
+      "value": 1.3
+    }
+  ],
+  "trait_type": "STABILITY"
+}

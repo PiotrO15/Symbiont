@@ -2,6 +2,7 @@ package piotro15.symbiont.common.genetics;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
 
@@ -17,10 +18,10 @@ public record CellType(
     );
 
     public static class CellTypeBuilder {
-        private Map<Biotrait.BiotraitType, Biotrait> traits = Map.of();
+        private Map<Biotrait.BiotraitType, ResourceLocation> traits = Map.of();
         private int color = 0xFFFFFF;
 
-        public CellTypeBuilder setTraits(Map<Biotrait.BiotraitType, Biotrait> traits) {
+        public CellTypeBuilder setTraits(Map<Biotrait.BiotraitType, ResourceLocation> traits) {
             this.traits = traits;
             return this;
         }

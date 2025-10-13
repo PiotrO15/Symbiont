@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import piotro15.symbiont.api.DynamicFluidTank;
 import piotro15.symbiont.api.DynamicItemStackHandler;
 import piotro15.symbiont.api.FluidApi;
+import piotro15.symbiont.common.genetics.IntegerTraitModifier;
 import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.menus.BioreactorMenu;
 import piotro15.symbiont.common.recipe.BioreactorRecipe;

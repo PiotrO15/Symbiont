@@ -1,5 +1,5 @@
-// 1.21.1	2025-10-12T13:40:02.0861279	Recipes
+// 1.21.1	2025-10-13T15:10:37.0434795	Recipes
 5d73352f8188315dfee72f8f675cbbd49e1e884b data/symbiont/advancement/recipes/misc/culture_starter.json
-536a6054b036a44221d66453f9b78bb0d49da70e data/symbiont/recipe/bioreactor/proto_cell.json
+e3b6cac80e0c10c1138e31c6cc2215b99c507a79 data/symbiont/recipe/bioreactor/proto_cell.json
 91cff32e23dd55caafd6be52579b7c007e9b8dcd data/symbiont/recipe/culture_starter.json
 6c31982e2157dea4d2573b4ee1b104829e07bc33 data/symbiont/recipe/metabolizer/glucose.json

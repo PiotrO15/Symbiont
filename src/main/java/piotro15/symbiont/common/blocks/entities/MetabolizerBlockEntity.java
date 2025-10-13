@@ -99,11 +99,6 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
         tag.put("Items", items.serializeNBT(lookup));
         tag.putInt("Progress", progress);
         tag.put("Energy", energyStorage.serializeNBT(lookup));
-        //tag.put("InputTank", inputTank.writeToNBT(lookup, tag));
-        //tag.put("OutputTank", outputTank.writeToNBT(lookup, tag));
-
-//        inputTank.writeToNBT(lookup, tag.getCompound("InputTank"));
-//        outputTank.writeToNBT(lookup, tag.getCompound("OutputTank"));
 
         CompoundTag inputTag = new CompoundTag();
         inputTank.writeToNBT(lookup, inputTag);

@@ -20,6 +20,7 @@ import piotro15.symbiont.common.blocks.entities.MachineWorkerBlockEntity;
 import piotro15.symbiont.common.blocks.entities.MetabolizerBlockEntity;
 import piotro15.symbiont.common.config.Config;
 import piotro15.symbiont.common.genetics.CellType;
+import piotro15.symbiont.common.genetics.TraitModifierRegistry;
 import piotro15.symbiont.common.registries.*;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -64,6 +65,7 @@ public class Symbiont {
         ModRecipeTypes.RECIPE_TYPES.register(modEventBus);
         ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
         modEventBus.addListener(this::registerCapabilities);
+        TraitModifierRegistry.registerConditions();
 
         // Register the Deferred Register to the mod event bus so tabs get registered
 //        CREATIVE_MODE_TABS.register(modEventBus);

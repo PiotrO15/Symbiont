@@ -12,7 +12,10 @@
   },
   "item_output": {
     "components": {
-      "symbiont:cell_type": "symbiont:proto_cell"
+      "symbiont:biocode": {
+        "STABILITY": "symbiont:stable"
+      },
+      "symbiont:cell_type": "symbiont:glucose"
     },
     "count": 1,
     "id": "symbiont:cell_culture"

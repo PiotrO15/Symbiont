@@ -15,12 +15,11 @@ import piotro15.symbiont.common.blocks.entities.MetabolizerBlockEntity;
 import piotro15.symbiont.common.registries.ModMenuTypes;
 
 public class MetabolizerMenu extends BasicMachineMenu {
-    private final int slotCount = 6;
     private final MetabolizerBlockEntity blockEntity;
     private final ContainerData data;
 
     public MetabolizerMenu(int id, Inventory playerInv, MetabolizerBlockEntity blockEntity, ContainerData data) {
-        super(ModMenuTypes.METABOLIZER.get(), id);
+        super(ModMenuTypes.METABOLIZER.get(), id, 6);
         this.blockEntity = blockEntity;
         this.data = data;
 
@@ -36,53 +35,6 @@ public class MetabolizerMenu extends BasicMachineMenu {
         this.addPlayerHotbar(playerInv);
 
         addDataSlots(data);
-    }
-
-    @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
-        ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-
-        if (slot.hasItem()) {
-            ItemStack rawStack = slot.getItem();
-            itemStack = rawStack.copy();
-
-            if (index == 1) {
-                if (!this.moveItemStackTo(rawStack, slotCount, Inventory.INVENTORY_SIZE + slotCount, true)) {
-                    return ItemStack.EMPTY;
-                }
-
-                slot.onQuickCraft(rawStack, itemStack);
-            }
-            else if (index >= slotCount && index < Inventory.INVENTORY_SIZE + slotCount) {
-                if (!this.moveItemStackTo(rawStack, 0, 1, false)) {
-                    if (index < 27 + slotCount) {
-                        if (!this.moveItemStackTo(rawStack, 27 + slotCount, Inventory.INVENTORY_SIZE + slotCount, false)) {
-                            return ItemStack.EMPTY;
-                        }
-                    }
-                    else if (!this.moveItemStackTo(rawStack, slotCount, 27 + slotCount, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                }
-            }
-            else if (!this.moveItemStackTo(rawStack, slotCount, Inventory.INVENTORY_SIZE + slotCount, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (rawStack.isEmpty()) {
-                slot.setByPlayer(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
-
-            if (rawStack.getCount() == itemStack.getCount()) {
-                return ItemStack.EMPTY;
-            }
-            slot.onTake(player, rawStack);
-        }
-
-        return itemStack;
     }
 
     @Override

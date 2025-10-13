@@ -1,3 +1,5 @@
 {
-  "biocode": []
+  "biocode": {
+    "STABILITY": "symbiont:instability"
+  }
 }

@@ -10,9 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public record Biotrait(
-        BiotraitType type
+        BiotraitType type,
 //        List<CellGroup> applicableGroups,
-//        List<GenericTraitModifier> modifiers
+        List<GenericTraitModifier> modifiers
 ) {
     public static final Codec<Biotrait> CODEC;
     public static final StreamCodec<ByteBuf, Biotrait> STREAM_CODEC;
@@ -23,13 +23,14 @@ public record Biotrait(
     );
 
     public static Biotrait parse(String s) {
-        return new Biotrait(BiotraitType.valueOf(s));
+        return new Biotrait(BiotraitType.valueOf(s), List.of());
     }
 
     static {
         CODEC = RecordCodecBuilder.create(instance ->
                 instance.group(
-                        BIOTRAIT_TYPE_CODEC.fieldOf("trait_type").forGetter(Biotrait::type)
+                        BIOTRAIT_TYPE_CODEC.fieldOf("trait_type").forGetter(Biotrait::type),
+                        TraitModifierRegistry.CODEC.listOf().fieldOf("modifiers").forGetter(Biotrait::modifiers)
                 ).apply(instance, Biotrait::new));
         STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(Biotrait::parse, Biotrait::toString);
     }
