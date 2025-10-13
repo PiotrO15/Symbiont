@@ -23,6 +23,8 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import piotro15.symbiont.api.DynamicFluidTank;
+import piotro15.symbiont.api.DynamicItemStackHandler;
 import piotro15.symbiont.api.FluidApi;
 import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.menus.BioreactorMenu;
@@ -33,25 +35,9 @@ import piotro15.symbiont.common.registries.ModRecipeTypes;
 
 import java.util.Optional;
 
-public class BioreactorBlockEntity extends MachineBlockEntity implements MenuProvider {
-    private final FluidTank inputTank = new FluidTank(4000) {
-        @Override
-        protected void onContentsChanged() {
-            setChanged();
-            if(!level.isClientSide()) {
-                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-            }
-        }
-    };
-    private final FluidTank outputTank = new FluidTank(4000) {
-        @Override
-        protected void onContentsChanged() {
-            setChanged();
-            if(!level.isClientSide()) {
-                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-            }
-        }
-    };
+public class BioreactorBlockEntity extends BasicMachineBlockEntity implements MenuProvider {
+    private final DynamicFluidTank inputTank = new DynamicFluidTank(4000, this);
+    private final DynamicFluidTank outputTank = new DynamicFluidTank(4000, this);
     private final EnergyStorage energyStorage = new EnergyStorage(10000, 100);
     protected ItemStackHandler items;
 
@@ -60,15 +46,7 @@ public class BioreactorBlockEntity extends MachineBlockEntity implements MenuPro
 
     public BioreactorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BIOREACTOR.get(), pos, state);
-        items = new ItemStackHandler(2) {
-            @Override
-            protected void onContentsChanged(int slot) {
-                setChanged();
-                if(!level.isClientSide()) {
-                    level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-                }
-            }
-        };
+        items = new DynamicItemStackHandler(2, this);
 
         data = new ContainerData() {
             private final int[] ints = new int[4];
@@ -119,11 +97,6 @@ public class BioreactorBlockEntity extends MachineBlockEntity implements MenuPro
         tag.put("Items", items.serializeNBT(lookup));
         tag.putInt("Progress", progress);
         tag.put("Energy", energyStorage.serializeNBT(lookup));
-        //tag.put("InputTank", inputTank.writeToNBT(lookup, tag));
-        //tag.put("OutputTank", outputTank.writeToNBT(lookup, tag));
-
-//        inputTank.writeToNBT(lookup, tag.getCompound("InputTank"));
-//        outputTank.writeToNBT(lookup, tag.getCompound("OutputTank"));
 
         CompoundTag inputTag = new CompoundTag();
         inputTank.writeToNBT(lookup, inputTag);
@@ -217,7 +190,7 @@ public class BioreactorBlockEntity extends MachineBlockEntity implements MenuPro
     }
 
     @Override
-    public void serverTick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity) {
+    public void serverTick(Level level, BlockPos pos, BlockState state, BasicMachineBlockEntity blockEntity) {
         if (energyStorage.getEnergyStored() < 20) {
             progress = 0;
             return;

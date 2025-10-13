@@ -15,5 +15,8 @@ public class LanguageDatagen extends LanguageProvider {
 
         add("container.bioreactor", "Bioreactor");
         add("container.metabolizer", "Metabolizer");
+
+        add("cell_type.symbiont.proto_cell", "Proto-Cell Culture");
+        add("cell_type.symbiont.glucose", "Glucose Cell Culture");
     }
 }

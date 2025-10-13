@@ -13,7 +13,6 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -24,23 +23,22 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import piotro15.symbiont.api.DynamicFluidTank;
+import piotro15.symbiont.api.DynamicItemStackHandler;
 import piotro15.symbiont.api.FluidApi;
 import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.menus.MetabolizerMenu;
-import piotro15.symbiont.common.recipe.BioreactorRecipe;
-import piotro15.symbiont.common.recipe.BioreactorRecipeInput;
 import piotro15.symbiont.common.recipe.MetabolizerRecipe;
 import piotro15.symbiont.common.recipe.MetabolizerRecipeInput;
 import piotro15.symbiont.common.registries.ModBlockEntities;
 import piotro15.symbiont.common.registries.ModRecipeTypes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class MetabolizerBlockEntity extends MachineBlockEntity implements MenuProvider {
-    private final FluidTank inputTank = new FluidTank(4000);
-    private final FluidTank outputTank = new FluidTank(4000);
+public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements MenuProvider {
+    private final DynamicFluidTank inputTank = new DynamicFluidTank(4000, this);
+    private final DynamicFluidTank outputTank = new DynamicFluidTank(4000, this);
     private final EnergyStorage energyStorage = new EnergyStorage(10000, 100);
 
     protected ItemStackHandler items;
@@ -50,7 +48,7 @@ public class MetabolizerBlockEntity extends MachineBlockEntity implements MenuPr
 
     public MetabolizerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.METABOLIZER.get(), pos, state);
-        items = new ItemStackHandler(6);
+        items = new DynamicItemStackHandler(6, this);
 
         data = new ContainerData() {
             private final int[] ints = new int[4];
@@ -199,7 +197,7 @@ public class MetabolizerBlockEntity extends MachineBlockEntity implements MenuPr
     }
 
     @Override
-    public void serverTick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity) {
+    public void serverTick(Level level, BlockPos pos, BlockState state, BasicMachineBlockEntity blockEntity) {
         if (energyStorage.getEnergyStored() < 20) {
             progress = 0;
             return;

@@ -1,6 +1,8 @@
 {
   "block.symbiont.bioreactor": "Bioreactor",
   "block.symbiont.metabolizer": "Metabolizer",
+  "cell_type.symbiont.glucose": "Glucose Cell Culture",
+  "cell_type.symbiont.proto_cell": "Proto-Cell Culture",
   "container.bioreactor": "Bioreactor",
   "container.metabolizer": "Metabolizer"
 }

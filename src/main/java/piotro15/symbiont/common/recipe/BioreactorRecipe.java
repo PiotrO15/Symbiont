@@ -27,7 +27,7 @@ public record BioreactorRecipe(Ingredient input, FluidIngredient fluidInput, Ite
 
     @Override
     public boolean matches(BioreactorRecipeInput bioreactorRecipeInput, @NotNull Level level) {
-        return input.test(bioreactorRecipeInput.stack()); // && fluidInput.test(bioreactorRecipeInput.fluidInput());
+        return input.test(bioreactorRecipeInput.stack()) && fluidInput.test(bioreactorRecipeInput.fluidInput());
     }
 
     @Override
