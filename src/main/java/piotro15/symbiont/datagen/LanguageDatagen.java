@@ -29,5 +29,8 @@ public class LanguageDatagen extends LanguageProvider {
         add("item.symbiont.cell_culture.metabolism", "Metabolism: ");
         add("item.symbiont.cell_culture.environment", "Environment: ");
         add("item.symbiont.cell_culture.special", "Special: ");
+
+        add("itemGroup.symbiont.common", "Symbiont Common Items");
+        add("itemGroup.symbiont.cells", "Symbiont Cells & Traits");
     }
 }

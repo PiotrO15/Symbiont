@@ -1,10 +1,18 @@
 package piotro15.symbiont.common.registry;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import piotro15.symbiont.common.Symbiont;
+import piotro15.symbiont.common.genetics.CellType;
 import piotro15.symbiont.common.item.CellCultureItem;
 
 public class ModItems {
@@ -17,4 +25,27 @@ public class ModItems {
 
     public static final DeferredItem<Item> CELL_CULTURE = ITEMS.register("cell_culture", () -> new CellCultureItem(new Item.Properties()));
     public static final DeferredItem<Item> CULTURE_STARTER = ITEMS.register("culture_starter", () -> new Item(new Item.Properties()));
+
+    @SubscribeEvent
+    public static void buildContents(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == ModCreativeModeTabs.COMMON.getKey()) {
+            event.accept(BIOFORMER);
+            event.accept(METABOLIZER);
+            event.accept(BIOREACTOR);
+            event.accept(RECOMBINATOR);
+            event.accept(CULTURE_STARTER);
+        }
+        if (event.getTabKey() == ModCreativeModeTabs.CELLS.getKey()) {
+            Level level = Minecraft.getInstance().level;
+            if (level != null) {
+                Registry<CellType> blendTypeRegistry = level.registryAccess().registryOrThrow(ModRegistries.CELL_TYPE);
+
+                for (ResourceKey<CellType> blendKey : blendTypeRegistry.registryKeySet()) {
+                    ItemStack stack = new ItemStack(ModItems.CELL_CULTURE.get());
+                    stack.set(ModDataComponents.CELL_TYPE.get(), blendKey.location());
+                    event.accept(stack);
+                }
+            }
+        }
+    }
 }
