@@ -1,6 +1,11 @@
-// 1.21.1	2025-10-13T15:36:07.2066805	Registries
+// 1.21.1	2025-10-13T18:55:02.0383816	Registries
 4890c05cc89edc0c4b64166a143aff6c12ac7214 data/symbiont/symbiont/biotrait/instability.json
 354cd9fd6bda6fd3fe8c70db58039fa8e0312464 data/symbiont/symbiont/biotrait/metabolic.json
 2437aac49732987752a18aed772cd12c6b3f6c41 data/symbiont/symbiont/biotrait/stable.json
+3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/coral.json
+3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/ferrocell.json
+3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/fiber.json
 8e27f79e92c6f250c422a161cc0b2dd8d6d833ee data/symbiont/symbiont/cell_type/glucose.json
+3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/polycell.json
 3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/proto_cell.json
+3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/silica.json

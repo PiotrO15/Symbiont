@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.common.genetics.Biotrait;
 import piotro15.symbiont.common.genetics.IntegerTraitModifier;
-import piotro15.symbiont.common.registries.ModRegistries;
+import piotro15.symbiont.common.registry.ModRegistries;
 
 import java.util.List;
 

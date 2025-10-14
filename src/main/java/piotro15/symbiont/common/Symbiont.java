@@ -3,6 +3,7 @@ package piotro15.symbiont.common;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -13,15 +14,14 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import org.slf4j.Logger;
-import piotro15.symbiont.common.blocks.entities.BioreactorBlockEntity;
-import piotro15.symbiont.common.blocks.entities.MachineWorkerBlockEntity;
-import piotro15.symbiont.common.blocks.entities.MetabolizerBlockEntity;
+import piotro15.symbiont.common.block.entity.BasicMachineBlockEntity;
+import piotro15.symbiont.common.block.entity.MachineWorkerBlockEntity;
 import piotro15.symbiont.common.config.Config;
-import piotro15.symbiont.common.genetics.CellType;
 import piotro15.symbiont.common.genetics.TraitModifierRegistry;
-import piotro15.symbiont.common.registries.*;
+import piotro15.symbiont.common.registry.*;
+
+import java.util.List;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(Symbiont.MOD_ID)
@@ -108,25 +108,6 @@ public class Symbiont {
     public void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
-                ModBlockEntities.BIOREACTOR.get(),
-                (BioreactorBlockEntity::getItemHandlerForSide)
-        );
-
-        event.registerBlockEntity(
-                Capabilities.FluidHandler.BLOCK,
-                ModBlockEntities.BIOREACTOR.get(),
-                (BioreactorBlockEntity::getFluidHandlerForSide)
-        );
-
-
-        event.registerBlockEntity(
-                Capabilities.EnergyStorage.BLOCK,
-                ModBlockEntities.BIOREACTOR.get(),
-                (BioreactorBlockEntity::getEnergyStorageForSide)
-        );
-
-        event.registerBlockEntity(
-                Capabilities.ItemHandler.BLOCK,
                 ModBlockEntities.MACHINE_WORKER.get(),
                 (MachineWorkerBlockEntity::getItemHandlerForSide)
         );
@@ -144,23 +125,28 @@ public class Symbiont {
                 (MachineWorkerBlockEntity::getEnergyStorageForSide)
         );
 
-        event.registerBlockEntity(
-                Capabilities.ItemHandler.BLOCK,
+        List<BlockEntityType<?>> registeredBlockEntities = List.of(
+                ModBlockEntities.BIOREACTOR.get(),
                 ModBlockEntities.METABOLIZER.get(),
-                (MetabolizerBlockEntity::getItemHandlerForSide)
+                ModBlockEntities.BIOFORMER.get()
         );
 
-        event.registerBlockEntity(
-                Capabilities.FluidHandler.BLOCK,
-                ModBlockEntities.METABOLIZER.get(),
-                (MetabolizerBlockEntity::getFluidHandlerForSide)
-        );
-
-
-        event.registerBlockEntity(
-                Capabilities.EnergyStorage.BLOCK,
-                ModBlockEntities.METABOLIZER.get(),
-                (MetabolizerBlockEntity::getEnergyStorageForSide)
-        );
+        for (BlockEntityType<?> type : registeredBlockEntities) {
+            event.registerBlockEntity(
+                    Capabilities.ItemHandler.BLOCK,
+                    type,
+                    ((be, direction) -> ((BasicMachineBlockEntity) be).getItemHandlerForSide(direction))
+            );
+            event.registerBlockEntity(
+                    Capabilities.FluidHandler.BLOCK,
+                    type,
+                    ((be, direction) -> ((BasicMachineBlockEntity) be).getFluidHandlerForSide(direction))
+            );
+            event.registerBlockEntity(
+                    Capabilities.EnergyStorage.BLOCK,
+                    type,
+                    ((be, direction) -> ((BasicMachineBlockEntity) be).getEnergyStorageForSide(direction))
+            );
+        }
     }
 }

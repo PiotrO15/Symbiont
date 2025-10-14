@@ -6,16 +6,24 @@ import net.minecraft.resources.ResourceLocation;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.common.genetics.Biotrait;
 import piotro15.symbiont.common.genetics.CellType;
-import piotro15.symbiont.common.genetics.IntegerTraitModifier;
-import piotro15.symbiont.common.registries.ModRegistries;
+import piotro15.symbiont.common.registry.ModRegistries;
 
-import java.util.List;
 import java.util.Map;
 
 public class CellTypeProvider {
     public static void registerCellTypes(BootstrapContext<CellType> bootstrapContext) {
+        // Metabolic Cultures
         register(bootstrapContext, "proto_cell", new CellType.CellTypeBuilder().build());
         register(bootstrapContext, "glucose", new CellType.CellTypeBuilder().setTraits(Map.of(Biotrait.BiotraitType.STABILITY, ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "instability"))).build());
+
+        // Structural Cultures
+        register(bootstrapContext, "polycell", new CellType.CellTypeBuilder().build());
+        register(bootstrapContext, "fiber", new CellType.CellTypeBuilder().build());
+
+        // Metalocell Cultures
+        register(bootstrapContext, "ferrocell", new CellType.CellTypeBuilder().build());
+        register(bootstrapContext, "coral", new CellType.CellTypeBuilder().build());
+        register(bootstrapContext, "silica", new CellType.CellTypeBuilder().build());
     }
 
     private static void register(BootstrapContext<CellType> bootstrapContext, String name, CellType cellType) {

@@ -15,8 +15,8 @@ import piotro15.symbiont.common.genetics.Biocode;
 import piotro15.symbiont.common.genetics.Biotrait;
 import piotro15.symbiont.common.genetics.CellType;
 import piotro15.symbiont.common.genetics.IntegerTraitModifier;
-import piotro15.symbiont.common.registries.ModDataComponents;
-import piotro15.symbiont.common.registries.ModRegistries;
+import piotro15.symbiont.common.registry.ModDataComponents;
+import piotro15.symbiont.common.registry.ModRegistries;
 
 import java.util.HashMap;
 import java.util.List;

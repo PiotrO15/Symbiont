@@ -3,7 +3,6 @@ package piotro15.symbiont.common.recipe;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -15,11 +14,10 @@ import net.neoforged.neoforge.common.util.RecipeMatcher;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import org.jetbrains.annotations.NotNull;
-import piotro15.symbiont.common.registries.ModRecipeSerializers;
-import piotro15.symbiont.common.registries.ModRecipeTypes;
+import piotro15.symbiont.common.registry.ModRecipeSerializers;
+import piotro15.symbiont.common.registry.ModRecipeTypes;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public record MetabolizerRecipe(
         NonNullList<Ingredient> ingredients,

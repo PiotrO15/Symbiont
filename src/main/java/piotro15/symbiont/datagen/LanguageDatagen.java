@@ -12,9 +12,13 @@ public class LanguageDatagen extends LanguageProvider {
     protected void addTranslations() {
         add("block.symbiont.bioreactor", "Bioreactor");
         add("block.symbiont.metabolizer", "Metabolizer");
+        add("block.symbiont.bioformer", "Bioformer");
+        add("block.symbiont.recombinator", "Recombinator");
 
         add("container.bioreactor", "Bioreactor");
         add("container.metabolizer", "Metabolizer");
+        add("container.bioformer", "Bioformer");
+        add("container.recombinator", "Recombinator");
 
         add("cell_type.symbiont.proto_cell", "Proto-Cell Culture");
         add("cell_type.symbiont.glucose", "Glucose Cell Culture");

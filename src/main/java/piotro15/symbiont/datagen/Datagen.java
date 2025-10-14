@@ -10,7 +10,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import piotro15.symbiont.common.Symbiont;
-import piotro15.symbiont.common.registries.ModRegistries;
+import piotro15.symbiont.common.registry.ModRegistries;
 
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;

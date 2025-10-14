@@ -1,7 +1,6 @@
 package piotro15.symbiont.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.FileToIdConverter;
@@ -14,15 +13,16 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import piotro15.symbiont.client.screens.BioreactorScreen;
-import piotro15.symbiont.client.screens.MetabolizerScreen;
+import piotro15.symbiont.client.screen.BioformerScreen;
+import piotro15.symbiont.client.screen.BioreactorScreen;
+import piotro15.symbiont.client.screen.MetabolizerScreen;
 import piotro15.symbiont.common.Symbiont;
-import piotro15.symbiont.client.screens.CellEditorScreen;
+import piotro15.symbiont.client.screen.RecombinatorScreen;
 import piotro15.symbiont.common.genetics.CellType;
-import piotro15.symbiont.common.registries.ModDataComponents;
-import piotro15.symbiont.common.registries.ModItems;
-import piotro15.symbiont.common.registries.ModMenuTypes;
-import piotro15.symbiont.common.registries.ModRegistries;
+import piotro15.symbiont.common.registry.ModDataComponents;
+import piotro15.symbiont.common.registry.ModItems;
+import piotro15.symbiont.common.registry.ModMenuTypes;
+import piotro15.symbiont.common.registry.ModRegistries;
 
 import java.util.Map;
 
@@ -36,8 +36,9 @@ public class SymbiontClient {
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.BIOREACTOR.get(), BioreactorScreen::new);
-        event.register(ModMenuTypes.CELL_EDITOR.get(), CellEditorScreen::new);
+        event.register(ModMenuTypes.RECOMBINATOR.get(), RecombinatorScreen::new);
         event.register(ModMenuTypes.METABOLIZER.get(), MetabolizerScreen::new);
+        event.register(ModMenuTypes.BIOFORMER.get(), BioformerScreen::new);
     }
 
     @SubscribeEvent

@@ -1,0 +1,247 @@
+package piotro15.symbiont.common.block.entity;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import piotro15.symbiont.api.DynamicFluidTank;
+import piotro15.symbiont.api.DynamicItemStackHandler;
+import piotro15.symbiont.common.item.CellCultureItem;
+import piotro15.symbiont.common.menu.BioformerMenu;
+import piotro15.symbiont.common.recipe.BioformerRecipe;
+import piotro15.symbiont.common.recipe.BioformerRecipeInput;
+import piotro15.symbiont.common.recipe.MetabolizerRecipe;
+import piotro15.symbiont.common.recipe.MetabolizerRecipeInput;
+import piotro15.symbiont.common.registry.ModBlockEntities;
+import piotro15.symbiont.common.registry.ModRecipeTypes;
+
+import java.util.List;
+import java.util.Optional;
+
+public class BioformerBlockEntity extends BasicMachineBlockEntity implements MenuProvider {
+    private final DynamicFluidTank inputTank = new DynamicFluidTank(4000, this);
+    private final EnergyStorage energyStorage = new EnergyStorage(10000, 100);
+
+    protected ItemStackHandler items;
+
+    private int progress;
+    private static final int MAX_PROGRESS = 200;
+
+    public BioformerBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.BIOFORMER.get(), pos, state);
+        items = new DynamicItemStackHandler(6, this) {
+            @Override
+            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+                return slot == 0 && !stack.is(Items.ALLIUM) || slot == 1 && stack.is(Items.ALLIUM);
+            }
+        };
+
+        data = new ContainerData() {
+            private final int[] ints = new int[4];
+
+            @Override
+            public int get(int i) {
+                return switch (i) {
+                    case 0 -> BioformerBlockEntity.this.progress;
+                    case 2 -> energyStorage.getEnergyStored();
+                    case 3 -> energyStorage.getMaxEnergyStored();
+                    default -> 0;
+                };
+            }
+
+            @Override
+            public void set(int i, int value) {
+                switch (i) {
+                    case 0 -> BioformerBlockEntity.this.progress = value;
+//                    case 1: BioreactorBlockEntity.this.maxProgress = value;
+                    default -> {}
+                }
+            }
+
+            @Override
+            public int getCount() {
+                return 4;
+            }
+        };
+    }
+
+    @Override
+    public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookup) {
+        super.loadAdditional(tag, lookup);
+
+        items.deserializeNBT(lookup, tag.getCompound("Items"));
+        progress = tag.getInt("Progress");
+        if (tag.contains("Energy")) {
+            energyStorage.deserializeNBT(lookup, tag.get("Energy"));
+        }
+        inputTank.readFromNBT(lookup, tag.getCompound("InputTank"));
+    }
+
+    @Override
+    public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookup) {
+        super.saveAdditional(tag, lookup);
+
+        tag.put("Items", items.serializeNBT(lookup));
+        tag.putInt("Progress", progress);
+        tag.put("Energy", energyStorage.serializeNBT(lookup));
+
+        CompoundTag inputTag = new CompoundTag();
+        inputTank.writeToNBT(lookup, inputTag);
+        tag.put("InputTank", inputTag);
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInv, @NotNull Player player) {
+        return new BioformerMenu(id, playerInv, this, this.data);
+    }
+
+    @Override
+    public @NotNull Component getDisplayName() {
+        return Component.translatable("container.bioformer");
+    }
+
+    private void craftRecipe(BioformerRecipe recipe) {
+        if (level == null) {
+            return;
+        }
+
+        ItemStack inputItem = items.getStackInSlot(0);
+
+        // consume inputs
+        items.extractItem(0, 1, false);
+        inputTank.drain(recipe.fluidInput().getStacks()[0].getAmount(), IFluidHandler.FluidAction.EXECUTE);
+
+        // produce outputs
+        List<ItemStack> output = recipe.output().stream().map(ItemStack::copy).toList();
+
+        for (ItemStack drop : output) {
+            boolean added = false;
+            for (int slot = 2; slot <= 5; slot++) {
+                ItemStack existing = items.getStackInSlot(slot);
+                if (!existing.isEmpty() && ItemStack.isSameItem(existing, drop)
+                        && existing.getCount() < existing.getMaxStackSize()) {
+                    int space = existing.getMaxStackSize() - existing.getCount();
+                    int toAdd = Math.min(space, drop.getCount());
+                    existing.grow(toAdd);
+                    drop.shrink(toAdd);
+                    if (drop.isEmpty()) {
+                        added = true;
+                        break;
+                    }
+                }
+            }
+            if (!added && !drop.isEmpty()) {
+                for (int slot = 2; slot <= 5; slot++) {
+                    if (items.getStackInSlot(slot).isEmpty()) {
+                        items.setStackInSlot(slot, drop);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean canAcceptOutput(BioformerRecipe recipe) {
+        if (level == null) {
+            return false;
+        }
+
+        ItemStack result = recipe.getResultItem(level.registryAccess());
+
+        // check item
+        ItemStack existing = items.getStackInSlot(1);
+
+        return (existing.isEmpty() || (ItemStack.isSameItem(existing, result)
+                && existing.getCount() + result.getCount() <= existing.getMaxStackSize()));
+    }
+
+    public ItemStackHandler getItems() {
+        return items;
+    }
+
+    public FluidTank getInputTank() {
+        return inputTank;
+    }
+
+    public EnergyStorage getEnergyStorage() {
+        return energyStorage;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public int getMaxProgress() {
+        return MAX_PROGRESS;
+    }
+
+    @Override
+    public void serverTick(Level level, BlockPos pos, BlockState state, BasicMachineBlockEntity blockEntity) {
+        if (energyStorage.getEnergyStored() < 20) {
+            progress = 0;
+            return;
+        }
+
+        BioformerRecipeInput input = new BioformerRecipeInput(items.getStackInSlot(0), items.getStackInSlot(1), inputTank.getFluid());
+
+        if (level == null) {
+            return;
+        }
+
+        Optional<RecipeHolder<BioformerRecipe>> recipeMatch = level.getRecipeManager()
+                .getRecipeFor(ModRecipeTypes.BIOFORMER.get(), input, level);
+
+        if (recipeMatch.isEmpty()) {
+            progress = 0;
+            return;
+        }
+
+        BioformerRecipe match = recipeMatch.get().value();
+
+        if (canAcceptOutput(match)) {
+            energyStorage.extractEnergy(20, false); // cost per tick
+            progress++;
+
+            if (progress >= MAX_PROGRESS) {
+                craftRecipe(match);
+                progress = 0;
+            }
+        }
+    }
+
+    @Nullable
+    public IItemHandler getItemHandlerForSide(@Nullable Direction side) {
+        return this.items; // simple default: all sides see the same handler
+    }
+
+    @Nullable
+    public IFluidHandler getFluidHandlerForSide(@Nullable Direction side) {
+        // You can add side-based rules here (e.g., only allow fill from UP, only allow drain from DOWN).
+        return inputTank;
+    }
+
+    @Nullable
+    public IEnergyStorage getEnergyStorageForSide(@Nullable Direction side) {
+        return this.energyStorage; // simple: same energy storage on all sides
+    }
+}

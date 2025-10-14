@@ -12,8 +12,8 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import org.jetbrains.annotations.NotNull;
-import piotro15.symbiont.common.registries.ModRecipeSerializers;
-import piotro15.symbiont.common.registries.ModRecipeTypes;
+import piotro15.symbiont.common.registry.ModRecipeSerializers;
+import piotro15.symbiont.common.registry.ModRecipeTypes;
 
 public record BioreactorRecipe(Ingredient input, FluidIngredient fluidInput, ItemStack output,
                                FluidStack fluidOutput) implements Recipe<BioreactorRecipeInput> {

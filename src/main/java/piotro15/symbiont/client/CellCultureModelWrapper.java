@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import org.jetbrains.annotations.NotNull;
-import piotro15.symbiont.common.registries.ModDataComponents;
+import piotro15.symbiont.common.registry.ModDataComponents;
 
 import javax.annotation.Nullable;
 

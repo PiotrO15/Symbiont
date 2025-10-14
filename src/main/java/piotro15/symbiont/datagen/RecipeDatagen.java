@@ -16,8 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.common.genetics.Biocode;
 import piotro15.symbiont.common.genetics.Biotrait;
-import piotro15.symbiont.common.registries.ModDataComponents;
-import piotro15.symbiont.common.registries.ModItems;
+import piotro15.symbiont.common.registry.ModDataComponents;
+import piotro15.symbiont.common.registry.ModItems;
+import piotro15.symbiont.datagen.builders.BioformerRecipeBuilder;
 import piotro15.symbiont.datagen.builders.BioreactorRecipeBuilder;
 import piotro15.symbiont.datagen.builders.MetabolizerRecipeBuilder;
 
@@ -51,6 +52,13 @@ public class RecipeDatagen extends RecipeProvider {
                         FluidIngredient.of(new FluidStack(Fluids.WATER, 1000)),
                         new ItemStack(ModItems.CELL_CULTURE.get(), 2),
                         new FluidStack(Fluids.WATER, 500)).build(consumer, ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "metabolizer/glucose"));
+
+        BioformerRecipeBuilder.newRecipe(
+                Ingredient.of(ModItems.CELL_CULTURE.get()),
+                Ingredient.EMPTY,
+                FluidIngredient.of(new FluidStack(Fluids.WATER, 1000)),
+                NonNullList.of(ItemStack.EMPTY, new ItemStack(Items.RAW_COPPER), new ItemStack(Items.RAW_GOLD))
+        ).build(consumer, ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "bioformer/aurum"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.CULTURE_STARTER)
                 .requires(Items.ROTTEN_FLESH)
