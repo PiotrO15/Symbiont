@@ -35,7 +35,7 @@ public class MetabolizerScreen extends BasicMachineScreen<MetabolizerMenu> {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        renderProgressArrow(gfx, 86 + x, 34 + y);
+        renderProgressArrow(gfx, 86 + x, 48 + y);
     }
 
     @Override

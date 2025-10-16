@@ -1,0 +1,26 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 250,
+    "fluid": "symbiont:nutritional_paste"
+  },
+  "fluid_output": {
+    "amount": 250,
+    "id": "symbiont:sweet_paste"
+  },
+  "item_input": [
+    {
+      "item": "symbiont:cell_culture"
+    },
+    {
+      "item": "minecraft:sweet_berries"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:glucose"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

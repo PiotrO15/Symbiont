@@ -126,7 +126,7 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
 
         // consume inputs
         items.extractItem(0, 1, false);
-        inputTank.drain(recipe.fluidInput().getStacks()[0].getAmount(), IFluidHandler.FluidAction.EXECUTE);
+        inputTank.drain(recipe.fluidInput().getFluids()[0].getAmount(), IFluidHandler.FluidAction.EXECUTE);
 
         // produce outputs
         ItemStack output = recipe.output().copy();
@@ -151,7 +151,7 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
             return false;
         }
 
-        ItemStack result = recipe.getResultItem(level.registryAccess());
+        ItemStack result = recipe.output();
         FluidStack fluidResult = recipe.fluidOutput();
 
         // check item
@@ -186,6 +186,10 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
     }
 
     public int getMaxProgress() {
+        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem cultureInput) {
+            double progressMultiplier = cultureInput.getGrowth(items.getStackInSlot(0));
+            return (int) (MAX_PROGRESS / progressMultiplier);
+        }
         return MAX_PROGRESS;
     }
 
@@ -216,7 +220,7 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
             energyStorage.extractEnergy(20, false); // cost per tick
             progress++;
 
-            if (progress >= MAX_PROGRESS) {
+            if (progress >= getMaxProgress()) {
                 craftRecipe(match);
                 progress = 0;
             }

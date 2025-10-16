@@ -13,16 +13,16 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.client.screen.BioformerScreen;
 import piotro15.symbiont.client.screen.BioreactorScreen;
 import piotro15.symbiont.client.screen.MetabolizerScreen;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.client.screen.RecombinatorScreen;
 import piotro15.symbiont.common.genetics.CellType;
-import piotro15.symbiont.common.registry.ModDataComponents;
-import piotro15.symbiont.common.registry.ModItems;
-import piotro15.symbiont.common.registry.ModMenuTypes;
-import piotro15.symbiont.common.registry.ModRegistries;
+import piotro15.symbiont.common.registry.*;
 
 import java.util.Map;
 
@@ -77,5 +77,30 @@ public class SymbiontClient {
                 ModelResourceLocation.inventory(ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "cell_culture")),
                 (location, model) -> new CellCultureModelWrapper(model)
         );
+    }
+
+    @SubscribeEvent
+    public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+        event.registerFluidType(createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xffff8fab), ModFluidTypes.NUTRITIONAL_PASTE);
+        event.registerFluidType(createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFB565A7), ModFluidTypes.SWEET_PASTE);
+    }
+
+    private static IClientFluidTypeExtensions createFluidType(ResourceLocation stillTexture, ResourceLocation flowingTexture, int color) {
+        return new IClientFluidTypeExtensions() {
+            @Override
+            public int getTintColor() {
+                return color;
+            }
+
+            @Override
+            public @NotNull ResourceLocation getStillTexture() {
+                return stillTexture;
+            }
+
+            @Override
+            public @NotNull ResourceLocation getFlowingTexture() {
+                return flowingTexture;
+            }
+        };
     }
 }

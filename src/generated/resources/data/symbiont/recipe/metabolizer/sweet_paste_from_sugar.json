@@ -1,0 +1,30 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 500,
+    "fluid": "symbiont:nutritional_paste"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "symbiont:sweet_paste"
+  },
+  "item_input": [
+    {
+      "type": "neoforge:components",
+      "components": {
+        "symbiont:cell_type": "symbiont:glucose"
+      },
+      "items": "symbiont:cell_culture"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:glucose"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

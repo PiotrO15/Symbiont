@@ -5,17 +5,22 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.common.genetics.Biocode;
 import piotro15.symbiont.common.genetics.Biotrait;
 import piotro15.symbiont.common.genetics.CellType;
 import piotro15.symbiont.common.genetics.IntegerTraitModifier;
 import piotro15.symbiont.common.registry.ModDataComponents;
+import piotro15.symbiont.common.registry.ModItems;
 import piotro15.symbiont.common.registry.ModRegistries;
 
 import java.util.HashMap;
@@ -126,5 +131,40 @@ public class CellCultureItem extends Item {
         }
 
         return Biocode.map(traits);
+    }
+
+    public int getCountChange(ItemStack itemStack, RandomSource random) {
+        int countChange = 0;
+        if (!(itemStack.getItem() instanceof CellCultureItem cellCulture))
+            return countChange;
+
+        double stability = cellCulture.getStability(itemStack);
+
+        if (stability < 1.0) {
+            if (random.nextDouble() > stability) {
+                countChange = -1;
+            }
+        } else if (stability > 1.0) {
+            double extra = stability - 1.0;
+
+            int guaranteedGrowth = (int) Math.floor(extra);
+            double fractionalGrowthChance = extra - guaranteedGrowth;
+
+            countChange = guaranteedGrowth;
+            if (random.nextDouble() < fractionalGrowthChance) {
+                countChange += 1;
+            }
+        }
+        return countChange;
+    }
+
+    public static ItemStack withCellType(ResourceLocation cellTypeId) {
+        ItemStack stack = new ItemStack(ModItems.CELL_CULTURE.get());
+        stack.set(ModDataComponents.CELL_TYPE.get(), cellTypeId);
+        return stack;
+    }
+
+    public static Ingredient asIngredient(ResourceLocation cellTypeId) {
+        return DataComponentIngredient.of(false, DataComponentMap.builder().set(ModDataComponents.CELL_TYPE.get(), cellTypeId).build(), ModItems.CELL_CULTURE.get());
     }
 }

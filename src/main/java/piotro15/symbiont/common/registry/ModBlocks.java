@@ -1,6 +1,12 @@
 package piotro15.symbiont.common.registry;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import piotro15.symbiont.common.Symbiont;
@@ -16,4 +22,7 @@ public class ModBlocks {
     public static final DeferredBlock<MetabolizerBlock> METABOLIZER = BLOCKS.register("metabolizer", () -> new MetabolizerBlock(Block.Properties.of().strength(3.5f).noOcclusion()));
     public static final DeferredBlock<BioformerBlock> BIOFORMER = BLOCKS.register("bioformer", () -> new BioformerBlock(Block.Properties.of().strength(3.5f).noOcclusion()));
     public static final DeferredBlock<RecombinatorBlock> RECOMBINATOR = BLOCKS.register("recombinator", () -> new RecombinatorBlock(Block.Properties.of().strength(3.5f).noOcclusion()));
+
+    public static final DeferredBlock<LiquidBlock> NUTRITIONAL_PASTE = BLOCKS.register("nutritional_paste", () -> new LiquidBlock(ModFluids.NUTRITIONAL_PASTE.get(), BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).replaceable().noCollission().randomTicks().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
+    public static final DeferredBlock<LiquidBlock> SWEET_PASTE = BLOCKS.register("sweet_paste", () -> new LiquidBlock(ModFluids.SWEET_PASTE.get(), BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).replaceable().noCollission().randomTicks().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
 }

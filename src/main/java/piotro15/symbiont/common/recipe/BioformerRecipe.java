@@ -3,13 +3,11 @@ package piotro15.symbiont.common.recipe;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -23,35 +21,12 @@ public record BioformerRecipe(
         Ingredient catalyst,
         FluidIngredient fluidInput,
         NonNullList<ItemStack> output
-) implements Recipe<BioformerRecipeInput> {
-
-    @Override
-    public @NotNull NonNullList<Ingredient> getIngredients() {
-        return NonNullList.of(itemInput, catalyst);
-    }
-
+) implements SymbiontRecipe<BioformerRecipeInput> {
     @Override
     public boolean matches(BioformerRecipeInput input, @NotNull Level level) {
         return itemInput.test(input.input())
                 && catalyst.test(input.catalyst())
                 && fluidInput.test(input.fluidInput());
-    }
-
-    @Override
-    public @NotNull ItemStack assemble(@NotNull BioformerRecipeInput recipeInput, HolderLookup.@NotNull Provider provider) {
-        // Required override, do not use
-        return this.output.getFirst().copy();
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 1;
-    }
-
-    @Override
-    public @NotNull ItemStack getResultItem(HolderLookup.@NotNull Provider provider) {
-        // Required override, do not use
-        return this.output.getFirst();
     }
 
     @Override

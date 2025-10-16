@@ -2,6 +2,7 @@ package piotro15.symbiont.common;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -27,7 +28,7 @@ import java.util.List;
 @Mod(Symbiont.MOD_ID)
 public class Symbiont {
     public static final String MOD_ID = "symbiont";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public Symbiont(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
@@ -36,6 +37,8 @@ public class Symbiont {
         ModDataComponents.REGISTRAR.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        ModFluidTypes.FLUID_TYPES.register(modEventBus);
+        ModFluids.FLUIDS.register(modEventBus);
         ModMenuTypes.MENU_TYPES.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITY_TYPE.register(modEventBus);
         ModRecipeTypes.RECIPE_TYPES.register(modEventBus);
@@ -51,6 +54,10 @@ public class Symbiont {
         NeoForge.EVENT_BUS.register(this);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
+
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, path);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

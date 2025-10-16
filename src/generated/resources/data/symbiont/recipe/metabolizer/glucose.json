@@ -1,22 +1,35 @@
 {
   "type": "symbiont:metabolizer",
   "fluid_input": {
+    "amount": 1000,
     "fluid": "minecraft:water"
   },
   "fluid_output": {
     "amount": 500,
-    "id": "minecraft:water"
+    "id": "symbiont:nutritional_paste"
   },
   "item_input": [
     {
-      "item": "symbiont:cell_culture"
+      "item": "minecraft:bowl"
     },
     {
-      "item": "minecraft:sugar"
+      "tag": "minecraft:anvil"
+    },
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "item": "minecraft:spider_eye"
+    },
+    {
+      "item": "minecraft:bone_meal"
     }
   ],
   "item_output": {
-    "count": 2,
+    "components": {
+      "symbiont:cell_type": "symbiont:proto"
+    },
+    "count": 1,
     "id": "symbiont:cell_culture"
   }
 }

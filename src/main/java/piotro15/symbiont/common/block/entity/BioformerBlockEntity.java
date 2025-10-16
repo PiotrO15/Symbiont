@@ -3,6 +3,7 @@ package piotro15.symbiont.common.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -26,12 +26,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import piotro15.symbiont.api.DynamicFluidTank;
 import piotro15.symbiont.api.DynamicItemStackHandler;
+import piotro15.symbiont.api.ItemApi;
 import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.menu.BioformerMenu;
 import piotro15.symbiont.common.recipe.BioformerRecipe;
 import piotro15.symbiont.common.recipe.BioformerRecipeInput;
-import piotro15.symbiont.common.recipe.MetabolizerRecipe;
-import piotro15.symbiont.common.recipe.MetabolizerRecipeInput;
 import piotro15.symbiont.common.registry.ModBlockEntities;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
 
@@ -127,37 +126,27 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
 
         ItemStack inputItem = items.getStackInSlot(0);
 
-        // consume inputs
-        items.extractItem(0, 1, false);
+        if (inputItem.getItem() instanceof CellCultureItem cellCultureItem) {
+            int countChange = cellCultureItem.getCountChange(inputItem, level.random);
+
+            if (countChange < 0) {
+                items.extractItem(0, 1, false);
+            } else if (countChange > 0) {
+                ItemStack toInsert = inputItem.copy();
+                toInsert.setCount(countChange);
+                ItemApi.insertIntoInventory(items, toInsert, 2, 6);
+            }
+        } else if (!recipe.itemInput().isEmpty()) {
+            items.extractItem(0, recipe.itemInput().getItems()[0].getCount(), false);
+        }
+
         inputTank.drain(recipe.fluidInput().getStacks()[0].getAmount(), IFluidHandler.FluidAction.EXECUTE);
 
         // produce outputs
         List<ItemStack> output = recipe.output().stream().map(ItemStack::copy).toList();
 
         for (ItemStack drop : output) {
-            boolean added = false;
-            for (int slot = 2; slot <= 5; slot++) {
-                ItemStack existing = items.getStackInSlot(slot);
-                if (!existing.isEmpty() && ItemStack.isSameItem(existing, drop)
-                        && existing.getCount() < existing.getMaxStackSize()) {
-                    int space = existing.getMaxStackSize() - existing.getCount();
-                    int toAdd = Math.min(space, drop.getCount());
-                    existing.grow(toAdd);
-                    drop.shrink(toAdd);
-                    if (drop.isEmpty()) {
-                        added = true;
-                        break;
-                    }
-                }
-            }
-            if (!added && !drop.isEmpty()) {
-                for (int slot = 2; slot <= 5; slot++) {
-                    if (items.getStackInSlot(slot).isEmpty()) {
-                        items.setStackInSlot(slot, drop);
-                        break;
-                    }
-                }
-            }
+            ItemApi.insertIntoInventory(items, drop, 2, 6);
         }
     }
 
@@ -166,13 +155,27 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
             return false;
         }
 
-        ItemStack result = recipe.getResultItem(level.registryAccess());
+        NonNullList<ItemStack> result = recipe.output();
 
-        // check item
-        ItemStack existing = items.getStackInSlot(1);
+        double growthMultiplier;
+        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem cultureInput) {
+            growthMultiplier = cultureInput.getMetabolism(items.getStackInSlot(0));
+        } else {
+            growthMultiplier = 1;
+        }
 
-        return (existing.isEmpty() || (ItemStack.isSameItem(existing, result)
-                && existing.getCount() + result.getCount() <= existing.getMaxStackSize()));
+        if (growthMultiplier != 1.0) {
+            NonNullList<ItemStack> adjustedResult = NonNullList.create();
+            for (ItemStack stack : result) {
+                ItemStack adjustedStack = stack.copy();
+                int newCount = (int) Math.ceil(stack.getCount() * growthMultiplier);
+                adjustedStack.setCount(newCount);
+                adjustedResult.add(adjustedStack);
+            }
+            result = adjustedResult;
+        }
+
+        return ItemApi.canFitOutputs(items, result, 2, 6);
     }
 
     public ItemStackHandler getItems() {
@@ -192,6 +195,10 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
     }
 
     public int getMaxProgress() {
+        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem cultureInput) {
+            double progressMultiplier = cultureInput.getGrowth(items.getStackInSlot(0));
+            return (int) (MAX_PROGRESS / progressMultiplier);
+        }
         return MAX_PROGRESS;
     }
 
@@ -222,7 +229,7 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
             energyStorage.extractEnergy(20, false); // cost per tick
             progress++;
 
-            if (progress >= MAX_PROGRESS) {
+            if (progress >= getMaxProgress()) {
                 craftRecipe(match);
                 progress = 0;
             }

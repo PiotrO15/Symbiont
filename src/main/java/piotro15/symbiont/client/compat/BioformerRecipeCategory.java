@@ -1,18 +1,18 @@
 package piotro15.symbiont.client.compat;
 
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.common.recipe.BioformerRecipe;
@@ -39,19 +39,16 @@ public class BioformerRecipeCategory extends AbstractRecipeCategory<BioformerRec
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, BioformerRecipe recipe, @NotNull IFocusGroup focuses) {
-        builder.addInputSlot(1, 1).addFluidStack(recipe.fluidInput().getStacks()[0].getFluid(), recipe.fluidInput().getStacks()[0].getAmount()).setFluidRenderer(1, false, 16, 52).setOverlay(tankOverlay, 0, 0);
-
-        if (recipe.itemInput() != null && recipe.itemInput().getItems().length > 0 && recipe.itemInput().getItems()[0] != null) {
-            builder.addInputSlot(28, 10).addIngredient(VanillaTypes.ITEM_STACK, recipe.itemInput().getItems()[0]);
-        } else {
-            builder.addInputSlot(28, 10);
+        IRecipeSlotBuilder fluidInputSlot = builder.addInputSlot(1, 1).setFluidRenderer(1, false, 16, 52).setOverlay(tankOverlay, 0, 0);
+        for (FluidStack fluid : recipe.fluidInput().getStacks()) {
+            fluidInputSlot.addFluidStack(fluid.getFluid(), fluid.getAmount());
         }
 
-        if (recipe.catalyst() != null && recipe.catalyst().getItems().length > 0 && recipe.catalyst().getItems()[0] != null) {
-            builder.addSlot(RecipeIngredientRole.CATALYST, 28, 28).addIngredient(VanillaTypes.ITEM_STACK, recipe.catalyst().getItems()[0]);
-        } else {
-            builder.addSlot(RecipeIngredientRole.CATALYST, 28, 28);
-        }
+        IRecipeSlotBuilder itemInput = builder.addInputSlot(28, 10);
+        itemInput.addIngredients(recipe.itemInput());
+
+        IRecipeSlotBuilder catalyst = builder.addInputSlot(28, 28);
+        catalyst.addIngredients(recipe.catalyst());
 
         for (int i = 0; i < 4; i++) {
             ItemStack stack = (recipe.output() != null && recipe.output().size() > i) ? recipe.output().get(i) : null;

@@ -3,9 +3,7 @@ package piotro15.symbiont.common.registry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -25,6 +23,10 @@ public class ModItems {
 
     public static final DeferredItem<Item> CELL_CULTURE = ITEMS.register("cell_culture", () -> new CellCultureItem(new Item.Properties()));
     public static final DeferredItem<Item> CULTURE_STARTER = ITEMS.register("culture_starter", () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> ORGANIC_BINDER = ITEMS.register("organic_binder", () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<BucketItem> NUTRITIONAL_PASTE_BUCKET = ITEMS.register("nutritional_paste_bucket", () -> new BucketItem(ModFluids.NUTRITIONAL_PASTE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final DeferredItem<BucketItem> SWEET_PASTE_BUCKET = ITEMS.register("sweet_paste_bucket", () -> new BucketItem(ModFluids.SWEET_PASTE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     @SubscribeEvent
     public static void buildContents(BuildCreativeModeTabContentsEvent event) {
@@ -34,6 +36,9 @@ public class ModItems {
             event.accept(BIOREACTOR);
             event.accept(RECOMBINATOR);
             event.accept(CULTURE_STARTER);
+            event.accept(ORGANIC_BINDER);
+            event.accept(NUTRITIONAL_PASTE_BUCKET);
+            event.accept(SWEET_PASTE_BUCKET);
         }
         if (event.getTabKey() == ModCreativeModeTabs.CELLS.getKey()) {
             Level level = Minecraft.getInstance().level;

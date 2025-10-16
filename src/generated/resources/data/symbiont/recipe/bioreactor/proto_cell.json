@@ -8,14 +8,11 @@
     "id": "minecraft:water"
   },
   "item_input": {
-    "item": "symbiont:culture_starter"
+    "item": "symbiont:cell_culture"
   },
   "item_output": {
     "components": {
-      "symbiont:biocode": {
-        "STABILITY": "symbiont:stable"
-      },
-      "symbiont:cell_type": "symbiont:glucose"
+      "symbiont:cell_type": "symbiont:proto"
     },
     "count": 1,
     "id": "symbiont:cell_culture"

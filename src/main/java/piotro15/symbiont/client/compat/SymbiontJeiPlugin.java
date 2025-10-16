@@ -6,6 +6,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.ingredients.subtypes.UidContext;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
@@ -65,5 +66,12 @@ public class SymbiontJeiPlugin implements IModPlugin {
         registration.addRecipes(ModJeiRecipeTypes.BIOREACTOR, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.BIOREACTOR.get()).stream().map(RecipeHolder::value).toList());
         registration.addRecipes(ModJeiRecipeTypes.METABOLIZER, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.METABOLIZER.get()).stream().map(RecipeHolder::value).toList());
         registration.addRecipes(ModJeiRecipeTypes.BIOFORMER, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.BIOFORMER.get()).stream().map(RecipeHolder::value).toList());
+    }
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(ModItems.METABOLIZER.get(), ModJeiRecipeTypes.METABOLIZER);
+        registration.addRecipeCatalyst(ModItems.BIOREACTOR.get(), ModJeiRecipeTypes.BIOREACTOR);
+        registration.addRecipeCatalyst(ModItems.BIOFORMER.get(), ModJeiRecipeTypes.BIOFORMER);
     }
 }

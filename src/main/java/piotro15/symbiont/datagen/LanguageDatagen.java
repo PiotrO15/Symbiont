@@ -20,8 +20,11 @@ public class LanguageDatagen extends LanguageProvider {
         add("container.bioformer", "Bioformer");
         add("container.recombinator", "Recombinator");
 
-        add("cell_type.symbiont.proto_cell", "Proto-Cell Culture");
+        add("cell_type.symbiont.proto", "Proto-Cell Culture");
         add("cell_type.symbiont.glucose", "Glucose Cell Culture");
+
+        add("cell_type.symbiont.ferrum", "Ferrum Cell Culture");
+        add("cell_type.symbiont.auric", "Auric Cell Culture");
 
         add("item.symbiont.cell_culture", "Unknown Cell Culture");
         add("item.symbiont.cell_culture.stability", "Stability: ");
@@ -29,8 +32,14 @@ public class LanguageDatagen extends LanguageProvider {
         add("item.symbiont.cell_culture.metabolism", "Metabolism: ");
         add("item.symbiont.cell_culture.environment", "Environment: ");
         add("item.symbiont.cell_culture.special", "Special: ");
+        add("item.symbiont.cell_culture.traits", "Traits:");
+
+        add("item.symbiont.culture_starter", "Culture Starter");
 
         add("itemGroup.symbiont.common", "Symbiont Common Items");
         add("itemGroup.symbiont.cells", "Symbiont Cells & Traits");
+
+        add("fluid_type.symbiont.nutritional_paste", "Nutritional Paste");
+        add("fluid_type.symbiont.sweet_paste", "Sweet Paste");
     }
 }

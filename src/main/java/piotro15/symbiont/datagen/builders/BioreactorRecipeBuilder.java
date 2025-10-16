@@ -6,18 +6,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import piotro15.symbiont.common.recipe.BioreactorRecipe;
 
 import java.util.ArrayList;
 
 public class BioreactorRecipeBuilder {
     private final Ingredient itemInput;
-    private final FluidIngredient fluidInput;
+    private final SizedFluidIngredient fluidInput;
     private final ItemStack itemOutput;
     private final FluidStack fluidOutput;
 
-    public BioreactorRecipeBuilder(Ingredient itemInput, FluidIngredient fluidInput, ItemStack itemOutput, FluidStack fluidOutput) {
+    public BioreactorRecipeBuilder(Ingredient itemInput, SizedFluidIngredient fluidInput, ItemStack itemOutput, FluidStack fluidOutput) {
         this.itemInput = itemInput;
         this.fluidInput = fluidInput;
         this.itemOutput = itemOutput;
@@ -28,7 +28,7 @@ public class BioreactorRecipeBuilder {
         consumer.accept(id, new BioreactorRecipe(itemInput, fluidInput, itemOutput, fluidOutput), null, new ArrayList<ICondition>().toArray(ICondition[]::new));
     }
 
-    public static BioreactorRecipeBuilder newBioreactorRecipe(Ingredient itemInput, FluidIngredient fluidInput, ItemStack itemOutput, FluidStack fluidOutput) {
+    public static BioreactorRecipeBuilder newBioreactorRecipe(Ingredient itemInput, SizedFluidIngredient fluidInput, ItemStack itemOutput, FluidStack fluidOutput) {
         return new BioreactorRecipeBuilder(itemInput, fluidInput, itemOutput, fluidOutput);
     }
 }

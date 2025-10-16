@@ -30,7 +30,6 @@ public record Biocode(Map<Biotrait.BiotraitType, ResourceLocation> traits) {
     }
 
     public static Biocode parse(String s) {
-        System.out.println(s);
         Map<Biotrait.BiotraitType, ResourceLocation> traits = new HashMap<>();
 
         s = s.replaceFirst("(Biocode\\[traits=\\{)", "");
@@ -49,7 +48,6 @@ public record Biocode(Map<Biotrait.BiotraitType, ResourceLocation> traits) {
                 }
             }
         }
-        System.out.println(new Biocode(traits));
         return new Biocode(traits);
     }
 

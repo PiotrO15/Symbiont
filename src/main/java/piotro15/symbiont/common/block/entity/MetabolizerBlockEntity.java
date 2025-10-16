@@ -19,6 +19,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -128,7 +129,8 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
 
         // consume inputs
         items.extractItem(0, 1, false);
-        inputTank.drain(recipe.fluidInput().getStacks()[0].getAmount(), IFluidHandler.FluidAction.EXECUTE);
+
+        inputTank.drain(recipe.fluidInput().amount(), IFluidHandler.FluidAction.EXECUTE);
 
         // produce outputs
         ItemStack output = recipe.output().copy();
@@ -153,7 +155,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             return false;
         }
 
-        ItemStack result = recipe.getResultItem(level.registryAccess());
+        ItemStack result = recipe.output();
         FluidStack fluidResult = recipe.fluidOutput();
 
         // check item
@@ -188,6 +190,10 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
     }
 
     public int getMaxProgress() {
+        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem cultureInput) {
+            double progressMultiplier = cultureInput.getGrowth(items.getStackInSlot(0));
+            return (int) (MAX_PROGRESS / progressMultiplier);
+        }
         return MAX_PROGRESS;
     }
 
@@ -198,7 +204,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             return;
         }
 
-        MetabolizerRecipeInput input = new MetabolizerRecipeInput(List.of(items.getStackInSlot(0), items.getStackInSlot(2)), inputTank.getFluid());
+        MetabolizerRecipeInput input = new MetabolizerRecipeInput(List.of(items.getStackInSlot(0), items.getStackInSlot(2)), inputTank.isEmpty() ? null : SizedFluidIngredient.of(inputTank.getFluid()));
 
         if (level == null) {
             return;
@@ -218,7 +224,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             energyStorage.extractEnergy(20, false); // cost per tick
             progress++;
 
-            if (progress >= MAX_PROGRESS) {
+            if (progress >= getMaxProgress()) {
                 craftRecipe(match);
                 progress = 0;
             }

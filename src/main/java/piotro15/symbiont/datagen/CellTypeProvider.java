@@ -13,7 +13,7 @@ import java.util.Map;
 public class CellTypeProvider {
     public static void registerCellTypes(BootstrapContext<CellType> bootstrapContext) {
         // Metabolic Cultures
-        register(bootstrapContext, "proto_cell", new CellType.CellTypeBuilder().build());
+        register(bootstrapContext, "proto", new CellType.CellTypeBuilder().build());
         register(bootstrapContext, "glucose", new CellType.CellTypeBuilder().setTraits(Map.of(Biotrait.BiotraitType.STABILITY, ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "instability"))).build());
 
         // Structural Cultures
@@ -21,7 +21,8 @@ public class CellTypeProvider {
         register(bootstrapContext, "fiber", new CellType.CellTypeBuilder().build());
 
         // Metalocell Cultures
-        register(bootstrapContext, "ferrocell", new CellType.CellTypeBuilder().build());
+        register(bootstrapContext, "ferrum", new CellType.CellTypeBuilder().build());
+        register(bootstrapContext, "auric", new CellType.CellTypeBuilder().build());
         register(bootstrapContext, "coral", new CellType.CellTypeBuilder().build());
         register(bootstrapContext, "silica", new CellType.CellTypeBuilder().build());
     }

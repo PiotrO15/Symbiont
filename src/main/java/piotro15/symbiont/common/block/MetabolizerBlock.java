@@ -29,9 +29,17 @@ public class MetabolizerBlock extends BaseEntityBlock {
     }
 
     private static final VoxelShape SHAPE = Shapes.or(
-            Block.box(1, 0, 1, 15, 13, 15),
-            Block.box(2, 13, 2, 14, 14, 14),
-            Block.box(1, 14, 1, 15, 16, 15)
+            Block.box(1, 0, 1, 7, 6, 7),
+            Block.box(2, 6, 2, 6, 7, 6),
+            Block.box(1, 7, 1, 7, 9, 7),
+            Block.box(9, 7, 1, 15, 9, 7),
+            Block.box(10, 6, 2, 14, 7, 6),
+            Block.box(9, 0, 1, 15, 6, 7),
+            Block.box(1, 0, 9, 15, 14, 15),
+            Block.box(3, 9, 3, 5, 12, 5),
+            Block.box(3, 10, 5, 5, 12, 9),
+            Block.box(11, 10, 5, 13, 12, 9),
+            Block.box(11, 9, 3, 13, 12, 5)
     );
 
     @Override
