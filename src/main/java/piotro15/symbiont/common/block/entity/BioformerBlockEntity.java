@@ -159,7 +159,7 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
 
         double growthMultiplier;
         if (items.getStackInSlot(0).getItem() instanceof CellCultureItem cultureInput) {
-            growthMultiplier = cultureInput.getMetabolism(items.getStackInSlot(0));
+            growthMultiplier = cultureInput.getProduction(items.getStackInSlot(0));
         } else {
             growthMultiplier = 1;
         }

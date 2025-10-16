@@ -75,8 +75,12 @@ public class CellCultureItem extends Item {
         return getStat(stack, IntegerTraitModifier.StatType.GROWTH);
     }
 
-    public double getMetabolism(ItemStack stack) {
-        return getStat(stack, IntegerTraitModifier.StatType.METABOLISM);
+    public double getProduction(ItemStack stack) {
+        return getStat(stack, IntegerTraitModifier.StatType.PRODUCTION);
+    }
+
+    public double getConsumption(ItemStack stack) {
+        return getStat(stack, IntegerTraitModifier.StatType.CONSUMPTION);
     }
 
     @Override
@@ -97,7 +101,8 @@ public class CellCultureItem extends Item {
         } else {
             tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.stability").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getStability(stack) * 100) + "%").withStyle(ChatFormatting.GREEN)));
             tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.growth").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getGrowth(stack) * 100) + "%").withStyle(ChatFormatting.AQUA)));
-            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.metabolism").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getMetabolism(stack) * 100) + "%").withStyle(ChatFormatting.DARK_AQUA)));
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.production").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getProduction(stack) * 100) + "%").withStyle(ChatFormatting.DARK_AQUA)));
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.consumption").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getConsumption(stack) * 100) + "%").withStyle(ChatFormatting.GOLD)));
         }
     }
 

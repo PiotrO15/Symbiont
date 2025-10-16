@@ -25,6 +25,7 @@ public record IntegerTraitModifier(StatType statType, double value) implements G
     public enum StatType {
         STABILITY,
         GROWTH,
-        METABOLISM
+        PRODUCTION,
+        CONSUMPTION
     }
 }

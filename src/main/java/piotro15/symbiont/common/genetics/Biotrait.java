@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
@@ -14,6 +13,10 @@ public record Biotrait(
 //        List<CellGroup> applicableGroups,
         List<GenericTraitModifier> modifiers
 ) {
+    public Biotrait(BiotraitType type, GenericTraitModifier... traitModifiers) {
+        this(type, List.of(traitModifiers));
+    }
+
     public static final Codec<Biotrait> CODEC;
     public static final StreamCodec<ByteBuf, Biotrait> STREAM_CODEC;
 

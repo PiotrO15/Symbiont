@@ -29,9 +29,8 @@ public class LanguageDatagen extends LanguageProvider {
         add("item.symbiont.cell_culture", "Unknown Cell Culture");
         add("item.symbiont.cell_culture.stability", "Stability: ");
         add("item.symbiont.cell_culture.growth", "Growth: ");
-        add("item.symbiont.cell_culture.metabolism", "Metabolism: ");
-        add("item.symbiont.cell_culture.environment", "Environment: ");
-        add("item.symbiont.cell_culture.special", "Special: ");
+        add("item.symbiont.cell_culture.production", "Production: ");
+        add("item.symbiont.cell_culture.consumption", "Consumption: ");
         add("item.symbiont.cell_culture.traits", "Traits:");
 
         add("item.symbiont.culture_starter", "Culture Starter");

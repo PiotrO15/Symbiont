@@ -1,6 +1,7 @@
 {
   "type": "symbiont:bioreactor",
   "fluid_input": {
+    "amount": 1000,
     "fluid": "minecraft:water"
   },
   "fluid_output": {

@@ -1,7 +1,9 @@
-// 1.21.1	2025-10-15T13:38:10.5119012	Registries
+// 1.21.1	2025-10-16T19:24:04.6005143	Registries
 4890c05cc89edc0c4b64166a143aff6c12ac7214 data/symbiont/symbiont/biotrait/instability.json
-354cd9fd6bda6fd3fe8c70db58039fa8e0312464 data/symbiont/symbiont/biotrait/metabolic.json
+684b0262320fcfeefc221f5383fd76c6cb28544e data/symbiont/symbiont/biotrait/metabolic.json
+5f430254cc432aa7e7e4bfcd7bba52a2a50fa270 data/symbiont/symbiont/biotrait/resilient_membrane.json
 2437aac49732987752a18aed772cd12c6b3f6c41 data/symbiont/symbiont/biotrait/stable.json
+eea7ffb5af57e1c8390e1bc5a9b626187003e23f data/symbiont/symbiont/biotrait/stable_division.json
 3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/auric.json
 3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/coral.json
 3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/ferrum.json

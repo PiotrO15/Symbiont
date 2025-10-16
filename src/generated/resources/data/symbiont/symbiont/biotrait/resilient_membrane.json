@@ -2,14 +2,14 @@
   "modifiers": [
     {
       "type": "symbiont:integer_trait_modifier",
-      "stat_type": "PRODUCTION",
-      "value": 1.5
+      "stat_type": "STABILITY",
+      "value": 1.1
     },
     {
       "type": "symbiont:integer_trait_modifier",
-      "stat_type": "CONSUMPTION",
-      "value": 1.5
+      "stat_type": "GROWTH",
+      "value": 0.85
     }
   ],
-  "trait_type": "METABOLISM"
+  "trait_type": "REPLICATION"
 }

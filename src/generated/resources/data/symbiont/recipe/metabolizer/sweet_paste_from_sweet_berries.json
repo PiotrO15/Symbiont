@@ -10,7 +10,11 @@
   },
   "item_input": [
     {
-      "item": "symbiont:cell_culture"
+      "type": "neoforge:components",
+      "components": {
+        "symbiont:cell_type": "symbiont:glucose"
+      },
+      "items": "symbiont:cell_culture"
     },
     {
       "item": "minecraft:sweet_berries"
