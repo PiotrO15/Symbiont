@@ -1,0 +1,9 @@
+{
+  "values": [
+    "symbiont:bioreactor",
+    "symbiont:metabolizer",
+    "symbiont:bioformer",
+    "symbiont:centrifuge",
+    "symbiont:recombinator"
+  ]
+}

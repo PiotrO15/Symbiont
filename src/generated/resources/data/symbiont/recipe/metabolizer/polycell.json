@@ -1,0 +1,32 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 2000,
+    "fluid": "symbiont:sticky_paste"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "symbiont:sticky_paste"
+  },
+  "item_input": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:honeycomb"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:poly"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

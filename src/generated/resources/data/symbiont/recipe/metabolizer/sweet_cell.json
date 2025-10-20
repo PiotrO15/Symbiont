@@ -6,23 +6,28 @@
   },
   "fluid_output": {
     "amount": 500,
-    "id": "symbiont:myogenic_biomass"
+    "id": "symbiont:sweet_paste"
   },
   "item_input": [
     {
-      "type": "neoforge:components",
-      "components": {
-        "symbiont:cell_type": "symbiont:proto"
-      },
-      "items": "symbiont:cell_culture"
+      "item": "minecraft:bowl"
     },
     {
-      "tag": "c:foods/raw_meat"
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:sugar"
     }
   ],
   "item_output": {
     "components": {
-      "symbiont:cell_type": "symbiont:myoblast"
+      "symbiont:cell_type": "symbiont:glucose"
     },
     "count": 1,
     "id": "symbiont:cell_culture"

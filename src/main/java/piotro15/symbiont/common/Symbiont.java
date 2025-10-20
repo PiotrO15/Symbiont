@@ -1,20 +1,14 @@
 package piotro15.symbiont.common;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 import piotro15.symbiont.common.block.entity.BasicMachineBlockEntity;
 import piotro15.symbiont.common.block.entity.MachineWorkerBlockEntity;
@@ -24,14 +18,12 @@ import piotro15.symbiont.common.registry.*;
 
 import java.util.List;
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(Symbiont.MOD_ID)
 public class Symbiont {
     public static final String MOD_ID = "symbiont";
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public Symbiont(IEventBus modEventBus, ModContainer modContainer) {
-        modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(ModRegistries::registerDataRegistry);
 
         ModDataComponents.REGISTRAR.register(modEventBus);
@@ -48,34 +40,11 @@ public class Symbiont {
         ModCreativeModeTabs.CREATIVE_TABS.register(modEventBus);
         modEventBus.addListener(ModItems::buildContents);
 
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (Plasmid) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
-        NeoForge.EVENT_BUS.register(this);
-
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, path);
-    }
-
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        // Some common setup code
-        LOGGER.info("HELLO FROM COMMON SETUP");
-
-        if (Config.logDirtBlock) LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
-
-        LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
-
-        Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
-    }
-
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
     }
 
     public void registerCapabilities(RegisterCapabilitiesEvent event) {

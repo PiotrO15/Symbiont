@@ -140,10 +140,10 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         );
 
         MetabolizerRecipeBuilder.newRecipe(
-                NonNullList.of(Ingredient.EMPTY, CellCultureItem.asIngredient(Symbiont.id("proto")), Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "foods/raw_meat")))),
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.BOWL), Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", "foods/raw_meat")))),
                 SizedFluidIngredient.of(new FluidStack(ModFluids.NUTRITIONAL_PASTE, 1000)),
                 CellCultureItem.withCellType(Symbiont.id("myoblast")),
-                new FluidStack(ModFluids.MYOGENIC_BIOMASS, 500)).build(consumer, Symbiont.id("metabolizer/myoblast")
+                new FluidStack(ModFluids.MYOGENIC_BIOMASS, 500)).build(consumer, Symbiont.id("metabolizer/myoblast_cell")
         );
 
         MetabolizerRecipeBuilder.newRecipe(
@@ -215,5 +215,19 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 SizedFluidIngredient.of(new FluidStack(ModFluids.BIOPOLYMER_SOLUTION, 1000)),
                 NonNullList.of(ItemStack.EMPTY, new ItemStack(ModItems.BIOPLASTIC_SHEET.get()))
         ).build(consumer, Symbiont.id("bioformer/bioplastic_sheet"));
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.BOWL), Ingredient.of(Items.SUGAR), Ingredient.of(Items.SUGAR), Ingredient.of(Items.SUGAR), Ingredient.of(Items.SUGAR)),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.NUTRITIONAL_PASTE, 1000)),
+                CellCultureItem.withCellType(Symbiont.id("glucose")),
+                new FluidStack(ModFluids.SWEET_PASTE, 500)).build(consumer, Symbiont.id("metabolizer/sweet_cell")
+        );
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.BOWL), Ingredient.of(Items.SLIME_BALL), Ingredient.of(Items.SUGAR), Ingredient.of(Items.HONEYCOMB)),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.STICKY_PASTE, 2000)),
+                CellCultureItem.withCellType(Symbiont.id("poly")),
+                new FluidStack(ModFluids.STICKY_PASTE, 500)).build(consumer, Symbiont.id("metabolizer/polycell")
+        );
     }
 }
