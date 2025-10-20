@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "symbiont:organic_binder"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "IBI",
+    "R R",
+    "IBI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "symbiont:bioreactor"
+  }
+}

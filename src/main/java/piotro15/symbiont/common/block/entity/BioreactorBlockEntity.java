@@ -26,11 +26,15 @@ import org.jetbrains.annotations.Nullable;
 import piotro15.symbiont.api.DynamicFluidTank;
 import piotro15.symbiont.api.DynamicItemStackHandler;
 import piotro15.symbiont.api.FluidApi;
+import piotro15.symbiont.api.ItemApi;
+import piotro15.symbiont.common.genetics.Biocode;
 import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.menu.BioreactorMenu;
 import piotro15.symbiont.common.recipe.BioreactorRecipe;
 import piotro15.symbiont.common.recipe.BioreactorRecipeInput;
 import piotro15.symbiont.common.registry.ModBlockEntities;
+import piotro15.symbiont.common.registry.ModDataComponents;
+import piotro15.symbiont.common.registry.ModItems;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
 
 import java.util.Optional;
@@ -122,28 +126,44 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
             return;
         }
 
-        ItemStack inputItem = items.getStackInSlot(0);
+        double productionMultiplier = 1.0;
+        double consumptionMultiplier = 1.0;
 
-        // consume inputs
-        items.extractItem(0, 1, false);
-        inputTank.drain(recipe.fluidInput().getFluids()[0].getAmount(), IFluidHandler.FluidAction.EXECUTE);
+        ItemStack inputItem = items.getStackInSlot(0);
+        int countChange = 0;
+
+        if (inputItem.getItem() instanceof CellCultureItem) {
+            productionMultiplier = CellCultureItem.getProduction(inputItem);
+            consumptionMultiplier = CellCultureItem.getConsumption(inputItem);
+
+            countChange = CellCultureItem.getCountChange(inputItem, level.random);
+            if (countChange < 0) {
+                items.extractItem(0, 1, false);
+            }
+        } else if (!recipe.input().isEmpty()) {
+            items.extractItem(0, 1, false);
+        }
+
+        inputTank.drain(ItemApi.randomCount(recipe.fluidInput().amount(), consumptionMultiplier, level.random), IFluidHandler.FluidAction.EXECUTE);
 
         // produce outputs
         ItemStack output = recipe.output().copy();
-        int outputCount = output.getCount();
+        if (output.is(ModItems.CELL_CULTURE) && inputItem.is(ModItems.CELL_CULTURE)) {
+            if (countChange > 0) {
 
-        if (inputItem.getItem() instanceof CellCultureItem cultureInput) {
-            double stability = cultureInput.getStability(inputItem);
-            outputCount = (int) Math.floor(stability);
-            if (getLevel().getRandom().nextDouble() > cultureInput.getStability(inputItem) % 1) {
-                outputCount++;
+                output.setCount(countChange);
+                Biocode biocode = inputItem.get(ModDataComponents.BIOCODE);
+                if (biocode != null) {
+                    output.set(ModDataComponents.BIOCODE, biocode);
+                }
             }
+        } else if (!inputItem.is(ModItems.CELL_CULTURE)) {
+            output.setCount(ItemApi.randomCount(output.getCount(), productionMultiplier, level.random));
         }
+        ItemApi.insertIntoInventory(items, output, 1, 2);
 
-        output.setCount(outputCount + items.getStackInSlot(1).getCount());
-
-        items.setStackInSlot(1, output);
-        outputTank.fill(recipe.fluidOutput(), IFluidHandler.FluidAction.EXECUTE);
+        FluidStack fluidOutput = recipe.fluidOutput().copyWithAmount(ItemApi.randomCount(recipe.fluidOutput().getAmount(), productionMultiplier, level.random));
+        outputTank.fill(fluidOutput, IFluidHandler.FluidAction.EXECUTE);
     }
 
     private boolean canAcceptOutput(BioreactorRecipe recipe) {

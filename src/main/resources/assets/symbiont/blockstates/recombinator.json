@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,triggered=true": {
+      "model": "symbiont:block/recombinator_triggered",
+      "y": 180
+    },
+    "facing=south,triggered=true": {
+      "model": "symbiont:block/recombinator_triggered"
+    },
+    "facing=west,triggered=true": {
+      "model": "symbiont:block/recombinator_triggered",
+      "y": 90
+    },
+    "facing=east,triggered=true": {
+      "model": "symbiont:block/recombinator_triggered",
+      "y": 270
+    },
+    "facing=north,triggered=false": {
+      "model": "symbiont:block/recombinator",
+      "y": 180
+    },
+    "facing=south,triggered=false": {
+      "model": "symbiont:block/recombinator"
+    },
+    "facing=west,triggered=false": {
+      "model": "symbiont:block/recombinator",
+      "y": 90
+    },
+    "facing=east,triggered=false": {
+      "model": "symbiont:block/recombinator",
+      "y": 270
+    }
+  }
+}

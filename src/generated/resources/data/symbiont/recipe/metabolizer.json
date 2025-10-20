@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "symbiont:organic_binder"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "pattern": [
+    "B B",
+    "IRI",
+    "IRI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "symbiont:metabolizer"
+  }
+}

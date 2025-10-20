@@ -29,4 +29,13 @@ public class ModDataComponents {
                     .cacheEncoding()
                     .build()
     );
+
+    public static final Supplier<DataComponentType<ResourceLocation>> BIOTRAIT = REGISTRAR.register(
+            "biotrait",
+            () -> DataComponentType.<ResourceLocation>builder()
+                    .persistent(ResourceLocation.CODEC)
+                    .networkSynchronized(ResourceLocation.STREAM_CODEC)
+                    .cacheEncoding()
+                    .build()
+    );
 }

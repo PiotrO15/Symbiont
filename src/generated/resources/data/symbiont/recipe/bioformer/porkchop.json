@@ -1,0 +1,28 @@
+{
+  "type": "symbiont:bioformer",
+  "catalyst": [],
+  "fluid_input": {
+    "amount": 500,
+    "fluid": "symbiont:myogenic_biomass"
+  },
+  "item_input": {
+    "type": "neoforge:components",
+    "components": {
+      "symbiont:cell_type": "symbiont:porcine"
+    },
+    "items": "symbiont:cell_culture"
+  },
+  "output": [
+    {
+      "components": {
+        "symbiont:cell_type": "symbiont:porcine"
+      },
+      "count": 1,
+      "id": "symbiont:cell_culture"
+    },
+    {
+      "count": 1,
+      "id": "minecraft:porkchop"
+    }
+  ]
+}

@@ -40,7 +40,7 @@ public class BioformerRecipeCategory extends AbstractRecipeCategory<BioformerRec
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, BioformerRecipe recipe, @NotNull IFocusGroup focuses) {
         IRecipeSlotBuilder fluidInputSlot = builder.addInputSlot(1, 1).setFluidRenderer(1, false, 16, 52).setOverlay(tankOverlay, 0, 0);
-        for (FluidStack fluid : recipe.fluidInput().getStacks()) {
+        for (FluidStack fluid : recipe.fluidInput().getFluids()) {
             fluidInputSlot.addFluidStack(fluid.getFluid(), fluid.getAmount());
         }
 

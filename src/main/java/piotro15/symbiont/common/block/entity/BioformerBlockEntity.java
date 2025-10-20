@@ -1,11 +1,10 @@
 package piotro15.symbiont.common.block.entity;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.*;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -27,11 +26,17 @@ import org.jetbrains.annotations.Nullable;
 import piotro15.symbiont.api.DynamicFluidTank;
 import piotro15.symbiont.api.DynamicItemStackHandler;
 import piotro15.symbiont.api.ItemApi;
+import piotro15.symbiont.common.Symbiont;
+import piotro15.symbiont.common.genetics.Biocode;
+import piotro15.symbiont.common.genetics.Biotrait;
+import piotro15.symbiont.common.item.BiotraitExtractItem;
 import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.menu.BioformerMenu;
 import piotro15.symbiont.common.recipe.BioformerRecipe;
 import piotro15.symbiont.common.recipe.BioformerRecipeInput;
 import piotro15.symbiont.common.registry.ModBlockEntities;
+import piotro15.symbiont.common.registry.ModDataComponents;
+import piotro15.symbiont.common.registry.ModItems;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
 
 import java.util.List;
@@ -48,12 +53,7 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
 
     public BioformerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BIOFORMER.get(), pos, state);
-        items = new DynamicItemStackHandler(6, this) {
-            @Override
-            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-                return slot == 0 && !stack.is(Items.ALLIUM) || slot == 1 && stack.is(Items.ALLIUM);
-            }
-        };
+        items = new DynamicItemStackHandler(6, this);
 
         data = new ContainerData() {
             private final int[] ints = new int[4];
@@ -124,28 +124,43 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
             return;
         }
 
+        double productionMultiplier = 1.0;
+        double consumptionMultiplier = 1.0;
+
         ItemStack inputItem = items.getStackInSlot(0);
+        int countChange = 0;
 
-        if (inputItem.getItem() instanceof CellCultureItem cellCultureItem) {
-            int countChange = cellCultureItem.getCountChange(inputItem, level.random);
+        if (inputItem.getItem() instanceof CellCultureItem) {
+            productionMultiplier = CellCultureItem.getProduction(inputItem);
+            consumptionMultiplier = CellCultureItem.getConsumption(inputItem);
 
+            countChange = CellCultureItem.getCountChange(inputItem, level.random);
             if (countChange < 0) {
                 items.extractItem(0, 1, false);
-            } else if (countChange > 0) {
-                ItemStack toInsert = inputItem.copy();
-                toInsert.setCount(countChange);
-                ItemApi.insertIntoInventory(items, toInsert, 2, 6);
             }
         } else if (!recipe.itemInput().isEmpty()) {
-            items.extractItem(0, recipe.itemInput().getItems()[0].getCount(), false);
+            items.extractItem(0, 1, false);
         }
 
-        inputTank.drain(recipe.fluidInput().getStacks()[0].getAmount(), IFluidHandler.FluidAction.EXECUTE);
+        inputTank.drain(ItemApi.randomCount(recipe.fluidInput().amount(), consumptionMultiplier, level.random), IFluidHandler.FluidAction.EXECUTE);
 
         // produce outputs
         List<ItemStack> output = recipe.output().stream().map(ItemStack::copy).toList();
 
         for (ItemStack drop : output) {
+            if (drop.is(ModItems.CELL_CULTURE) && inputItem.is(ModItems.CELL_CULTURE)) {
+                if (countChange <= 0) {
+                    continue;
+                }
+
+                drop.setCount(countChange);
+                Biocode biocode = inputItem.get(ModDataComponents.BIOCODE);
+                if (biocode != null) {
+                    drop.set(ModDataComponents.BIOCODE, biocode);
+                }
+            } else if (!inputItem.is(ModItems.CELL_CULTURE)) {
+                drop.setCount(ItemApi.randomCount(drop.getCount(), productionMultiplier, level.random));
+            }
             ItemApi.insertIntoInventory(items, drop, 2, 6);
         }
     }
@@ -158,8 +173,8 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
         NonNullList<ItemStack> result = recipe.output();
 
         double growthMultiplier;
-        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem cultureInput) {
-            growthMultiplier = cultureInput.getProduction(items.getStackInSlot(0));
+        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem) {
+            growthMultiplier = CellCultureItem.getProduction(items.getStackInSlot(0));
         } else {
             growthMultiplier = 1;
         }
@@ -195,8 +210,8 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
     }
 
     public int getMaxProgress() {
-        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem cultureInput) {
-            double progressMultiplier = cultureInput.getGrowth(items.getStackInSlot(0));
+        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem) {
+            double progressMultiplier = CellCultureItem.getGrowth(items.getStackInSlot(0));
             return (int) (MAX_PROGRESS / progressMultiplier);
         }
         return MAX_PROGRESS;

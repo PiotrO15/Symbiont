@@ -1,0 +1,25 @@
+{
+  "type": "symbiont:bioreactor",
+  "fluid_input": {
+    "amount": 500,
+    "fluid": "symbiont:protein_paste"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "symbiont:myogenic_biomass"
+  },
+  "item_input": {
+    "type": "neoforge:components",
+    "components": {
+      "symbiont:cell_type": "symbiont:myoblast"
+    },
+    "items": "symbiont:cell_culture"
+  },
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:myoblast"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

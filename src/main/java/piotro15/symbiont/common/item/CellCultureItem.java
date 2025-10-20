@@ -23,6 +23,7 @@ import piotro15.symbiont.common.registry.ModDataComponents;
 import piotro15.symbiont.common.registry.ModItems;
 import piotro15.symbiont.common.registry.ModRegistries;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class CellCultureItem extends Item {
         return super.getName(stack);
     }
 
-    private double getStat(ItemStack stack, IntegerTraitModifier.StatType statType) {
+    private static double getStat(ItemStack stack, IntegerTraitModifier.StatType statType) {
         AtomicReference<Double> stat = new AtomicReference<>(1.0);
 
         CellType cellType = getCellType(stack);
@@ -50,60 +51,107 @@ public class CellCultureItem extends Item {
         if (cellType == null)
             return stat.get();
 
-        Map<Biotrait.BiotraitType, Biotrait> traits = getBiocode(stack);
+        List<AppliedBiotrait> traits = getBiocode(stack);
 
         if (traits == null)
             return stat.get();
 
-        traits.forEach((type, trait) -> {
-            trait.modifiers().forEach(modifier -> {
+        return getStat(traits, statType);
+    }
+
+    public static double getStat(List<AppliedBiotrait> traits, IntegerTraitModifier.StatType statType) {
+        AtomicReference<Double> stat = new AtomicReference<>(1.0);
+
+        traits.forEach((appliedBiotrait) ->
+            appliedBiotrait.trait().modifiers().forEach(modifier -> {
                 if (modifier instanceof IntegerTraitModifier(IntegerTraitModifier.StatType integerStatType, double value)) {
                     if (integerStatType == statType) {
                         stat.updateAndGet(v -> v * value);
                     }
                 }
-            });
-        });
+            })
+        );
         return stat.get();
     }
 
-    public double getStability(ItemStack stack) {
+    public static double getStability(ItemStack stack) {
         return getStat(stack, IntegerTraitModifier.StatType.STABILITY);
     }
 
-    public double getGrowth(ItemStack stack) {
+    public static double getGrowth(ItemStack stack) {
         return getStat(stack, IntegerTraitModifier.StatType.GROWTH);
     }
 
-    public double getProduction(ItemStack stack) {
+    public static double getProduction(ItemStack stack) {
         return getStat(stack, IntegerTraitModifier.StatType.PRODUCTION);
     }
 
-    public double getConsumption(ItemStack stack) {
+    public static double getConsumption(ItemStack stack) {
         return getStat(stack, IntegerTraitModifier.StatType.CONSUMPTION);
     }
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag) {
+        tooltipComponents.addAll(getTooltipLines(stack, tooltipFlag));
+    }
+
+    public static List<Component> getTooltipLines(ItemStack stack, TooltipFlag tooltipFlag) {
+        List<Component> tooltipComponents = new ArrayList<>();
         CellType cellType = getCellType(stack);
         if (cellType == null) {
-            return;
+            return tooltipComponents;
         }
 
-        if (tooltipFlag.hasShiftDown()) {
-            Map<Biotrait.BiotraitType, Biotrait> traits = getBiocode(stack);
-            if (traits != null) {
-                tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.traits").withStyle(ChatFormatting.GRAY));
-                traits.forEach((type, trait) -> {
-                    tooltipComponents.add(Component.literal(type +" - " + trait).withStyle(ChatFormatting.DARK_GRAY));
-                });
-            }
+        if (tooltipFlag.hasControlDown()) {
+            List<AppliedBiotrait> traits = getBiocode(stack);
+            if (traits == null || traits.isEmpty()) return tooltipComponents;
+
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.traits")
+                    .withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
+
+            traits.forEach((appliedBiotrait) -> {
+                tooltipComponents.add(Component.literal("• ")
+                        .append(appliedBiotrait.type().getDisplayName())
+                        .append(Component.literal(": "))
+                        .append(Component.translatable("biotrait." + appliedBiotrait.traitId().getNamespace() + "." + appliedBiotrait.traitId().getPath())
+                                .withStyle(ChatFormatting.WHITE)));
+
+                appliedBiotrait.trait().modifiers().forEach(mod -> tooltipComponents.add(mod.getDisplayComponent()));
+            });
         } else {
             tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.stability").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getStability(stack) * 100) + "%").withStyle(ChatFormatting.GREEN)));
             tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.growth").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getGrowth(stack) * 100) + "%").withStyle(ChatFormatting.AQUA)));
             tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.production").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getProduction(stack) * 100) + "%").withStyle(ChatFormatting.DARK_AQUA)));
             tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.consumption").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getConsumption(stack) * 100) + "%").withStyle(ChatFormatting.GOLD)));
         }
+        return tooltipComponents;
+    }
+
+    public static List<Component> createTooltip(List<AppliedBiotrait> traits, boolean detailed) {
+        List<Component> tooltipComponents = new ArrayList<>();
+
+        if (detailed) {
+            if (traits == null || traits.isEmpty()) return tooltipComponents;
+
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.traits")
+                    .withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
+
+            traits.forEach((appliedBiotrait) -> {
+                tooltipComponents.add(Component.literal("• ")
+                        .append(appliedBiotrait.type().getDisplayName())
+                        .append(Component.literal(": "))
+                        .append(Component.translatable("biotrait." + appliedBiotrait.traitId().getNamespace() + "." + appliedBiotrait.traitId().getPath())
+                                .withStyle(ChatFormatting.WHITE)));
+
+                appliedBiotrait.trait().modifiers().forEach(mod -> tooltipComponents.add(mod.getDisplayComponent()));
+            });
+        } else {
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.stability").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getStat(traits, IntegerTraitModifier.StatType.STABILITY) * 100) + "%").withStyle(ChatFormatting.GREEN)));
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.growth").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getStat(traits, IntegerTraitModifier.StatType.GROWTH) * 100) + "%").withStyle(ChatFormatting.AQUA)));
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.production").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getStat(traits, IntegerTraitModifier.StatType.PRODUCTION) * 100) + "%").withStyle(ChatFormatting.DARK_AQUA)));
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.consumption").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getStat(traits, IntegerTraitModifier.StatType.CONSUMPTION) * 100) + "%").withStyle(ChatFormatting.GOLD)));
+        }
+        return tooltipComponents;
     }
 
     public static CellType getCellType(ItemStack stack) {
@@ -120,7 +168,7 @@ public class CellCultureItem extends Item {
         return registry.get(cellId);
     }
 
-    public static Map<Biotrait.BiotraitType, Biotrait> getBiocode(ItemStack stack) {
+    public static List<AppliedBiotrait> getBiocode(ItemStack stack) {
         CellType cellType = getCellType(stack);
 
         if (cellType == null) {
@@ -130,20 +178,36 @@ public class CellCultureItem extends Item {
         Biocode biocodeComponent = stack.get(ModDataComponents.BIOCODE);
 
         Map<Biotrait.BiotraitType, ResourceLocation> traits = new HashMap<>(cellType.biocode().traits());
-
         if (biocodeComponent != null) {
             traits.putAll(biocodeComponent.traits());
         }
 
-        return Biocode.map(traits);
+        List<AppliedBiotrait> result = new ArrayList<>();
+        for (Map.Entry<Biotrait.BiotraitType, ResourceLocation> entry : traits.entrySet()) {
+            Biotrait.BiotraitType type = entry.getKey();
+            ResourceLocation id = entry.getValue();
+
+            ClientPacketListener connection = Minecraft.getInstance().getConnection();
+            if (connection == null)
+                return null;
+
+            Registry<Biotrait> registry = connection.registryAccess().registryOrThrow(ModRegistries.BIOTRAIT);
+            Biotrait resolved = registry.get(id);
+
+            if (resolved != null) {
+                result.add(new AppliedBiotrait(type, id, resolved));
+            }
+        }
+
+        return result;
     }
 
-    public int getCountChange(ItemStack itemStack, RandomSource random) {
+    public static int getCountChange(ItemStack itemStack, RandomSource random) {
         int countChange = 0;
-        if (!(itemStack.getItem() instanceof CellCultureItem cellCulture))
+        if (!(itemStack.getItem() instanceof CellCultureItem))
             return countChange;
 
-        double stability = cellCulture.getStability(itemStack);
+        double stability = CellCultureItem.getStability(itemStack);
 
         if (stability < 1.0) {
             if (random.nextDouble() > stability) {
@@ -172,4 +236,6 @@ public class CellCultureItem extends Item {
     public static Ingredient asIngredient(ResourceLocation cellTypeId) {
         return DataComponentIngredient.of(false, DataComponentMap.builder().set(ModDataComponents.CELL_TYPE.get(), cellTypeId).build(), ModItems.CELL_CULTURE.get());
     }
+
+    public record AppliedBiotrait(Biotrait.BiotraitType type, ResourceLocation traitId, Biotrait trait) {}
 }

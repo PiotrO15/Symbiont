@@ -1,0 +1,33 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 250,
+    "fluid": "symbiont:nutritional_paste"
+  },
+  "fluid_output": {
+    "amount": 250,
+    "id": "symbiont:protein_paste"
+  },
+  "item_input": [
+    {
+      "type": "neoforge:components",
+      "components": {
+        "symbiont:cell_type": "symbiont:proto"
+      },
+      "items": "symbiont:cell_culture"
+    },
+    {
+      "item": "minecraft:chorus_fruit"
+    },
+    {
+      "item": "minecraft:wheat"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:proto"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

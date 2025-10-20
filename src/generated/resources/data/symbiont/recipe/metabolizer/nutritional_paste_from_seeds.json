@@ -1,0 +1,30 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 250,
+    "fluid": "minecraft:water"
+  },
+  "fluid_output": {
+    "amount": 250,
+    "id": "symbiont:nutritional_paste"
+  },
+  "item_input": [
+    {
+      "type": "neoforge:components",
+      "components": {
+        "symbiont:cell_type": "symbiont:proto"
+      },
+      "items": "symbiont:cell_culture"
+    },
+    {
+      "tag": "c:crops"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:proto"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

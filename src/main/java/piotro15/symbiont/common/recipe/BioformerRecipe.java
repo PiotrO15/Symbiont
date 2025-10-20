@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.common.registry.ModRecipeSerializers;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
@@ -19,7 +19,7 @@ import piotro15.symbiont.common.registry.ModRecipeTypes;
 public record BioformerRecipe(
         Ingredient itemInput,
         Ingredient catalyst,
-        FluidIngredient fluidInput,
+        SizedFluidIngredient fluidInput,
         NonNullList<ItemStack> output
 ) implements SymbiontRecipe<BioformerRecipeInput> {
     @Override
@@ -45,7 +45,7 @@ public record BioformerRecipe(
                         builder.group(
                                 Ingredient.CODEC.fieldOf("item_input").forGetter(BioformerRecipe::itemInput),
                                 Ingredient.CODEC.fieldOf("catalyst").forGetter(BioformerRecipe::catalyst),
-                                FluidIngredient.CODEC.fieldOf("fluid_input").forGetter(recipe -> recipe.fluidInput),
+                                SizedFluidIngredient.FLAT_CODEC.fieldOf("fluid_input").forGetter(recipe -> recipe.fluidInput),
                                 ItemStack.CODEC.listOf().fieldOf("output").flatXmap((outputs -> {
                                     ItemStack[] testOutput = outputs.toArray(ItemStack[]::new);
                                     if (testOutput.length == 0) {
@@ -73,7 +73,7 @@ public record BioformerRecipe(
         private static BioformerRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
             Ingredient itemInput = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
             Ingredient catalyst = Ingredient.CONTENTS_STREAM_CODEC.decode(buffer);
-            FluidIngredient fluidInput = FluidIngredient.STREAM_CODEC.decode(buffer);
+            SizedFluidIngredient fluidInput = SizedFluidIngredient.STREAM_CODEC.decode(buffer);
 
             int i = buffer.readVarInt();
             NonNullList<ItemStack> outputs = NonNullList.withSize(i, ItemStack.EMPTY);
@@ -85,7 +85,7 @@ public record BioformerRecipe(
         private static void toNetwork(RegistryFriendlyByteBuf buffer, BioformerRecipe recipe) {
             Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.itemInput);
             Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.catalyst);
-            FluidIngredient.STREAM_CODEC.encode(buffer, recipe.fluidInput);
+            SizedFluidIngredient.STREAM_CODEC.encode(buffer, recipe.fluidInput);
 
             buffer.writeVarInt(recipe.output.size());
             for(ItemStack outputItem : recipe.output) {

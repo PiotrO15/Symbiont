@@ -6,6 +6,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -15,19 +17,33 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.client.screen.BioformerScreen;
 import piotro15.symbiont.client.screen.BioreactorScreen;
 import piotro15.symbiont.client.screen.MetabolizerScreen;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.client.screen.RecombinatorScreen;
+import piotro15.symbiont.common.genetics.Biotrait;
 import piotro15.symbiont.common.genetics.CellType;
 import piotro15.symbiont.common.registry.*;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
 @EventBusSubscriber(modid = Symbiont.MOD_ID, value = Dist.CLIENT)
 public class SymbiontClient {
+    public static final Map<DeferredHolder<Fluid, FlowingFluid>, IClientFluidTypeExtensions> fluidTypeExtensions = Map.of(
+            ModFluids.NUTRITIONAL_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xffff8fab),
+            ModFluids.SWEET_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFA1C5FF),
+            ModFluids.PROTEIN_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFB565A7),
+            ModFluids.MYOGENIC_BIOMASS, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFc96363),
+            ModFluids.STICKY_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFD2B48C),
+            ModFluids.BIOPOLYMER_SOLUTION, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFF7FFFD4)
+    );
+
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
 
@@ -61,6 +77,27 @@ public class SymbiontClient {
             int color = cellType.color();
             return (color & 0xFF000000) == 0 ? color | 0xFF000000 : color;
         }, ModItems.CELL_CULTURE.get());
+
+        event.register((stack, tintIndex) -> {
+            ResourceLocation traitId = stack.getComponents().get(ModDataComponents.BIOTRAIT.get());
+            if (traitId == null)
+                return -1;
+
+            if (Minecraft.getInstance().getConnection() == null)
+                return -1;
+
+            Registry<Biotrait> registry = Minecraft.getInstance().getConnection()
+                    .registryAccess().registryOrThrow(ModRegistries.BIOTRAIT);
+
+            Biotrait biotrait = registry.get(traitId);
+            if (biotrait == null)
+                return -1;
+
+            int color = brightenColor(biotrait.type().getColor(), 1.5f);
+            return (color & 0xFF000000) == 0 ? color | 0xFF000000 : color;
+        }, ModItems.BIOTRAIT_EXTRACT.get());
+
+        fluidTypeExtensions.forEach((fluid, extension) -> event.register((stack, tintIndex) -> tintIndex == 1 ? extension.getTintColor() : -1, fluid.get().getBucket()));
     }
 
     @SubscribeEvent
@@ -81,8 +118,7 @@ public class SymbiontClient {
 
     @SubscribeEvent
     public static void registerClientExtensions(RegisterClientExtensionsEvent event) {
-        event.registerFluidType(createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xffff8fab), ModFluidTypes.NUTRITIONAL_PASTE);
-        event.registerFluidType(createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFB565A7), ModFluidTypes.SWEET_PASTE);
+        fluidTypeExtensions.forEach((fluid, extension) -> event.registerFluidType(extension, fluid.get().getFluidType()));
     }
 
     private static IClientFluidTypeExtensions createFluidType(ResourceLocation stillTexture, ResourceLocation flowingTexture, int color) {
@@ -102,5 +138,19 @@ public class SymbiontClient {
                 return flowingTexture;
             }
         };
+    }
+
+    private static int brightenColor(int color, float factor) {
+        int a = (color >>> 24) & 0xFF;
+        int r = (color >>> 16) & 0xFF;
+        int g = (color >>> 8) & 0xFF;
+        int b = color & 0xFF;
+
+        r = Math.min(255, (int)(r * factor));
+        g = Math.min(255, (int)(g * factor));
+        b = Math.min(255, (int)(b * factor));
+
+        if (a == 0) a = 0xFF;
+        return (a << 24) | (r << 16) | (g << 8) | b;
     }
 }

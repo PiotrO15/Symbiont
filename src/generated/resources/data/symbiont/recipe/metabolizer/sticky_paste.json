@@ -1,0 +1,36 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 500,
+    "fluid": "symbiont:sweet_paste"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "symbiont:sticky_paste"
+  },
+  "item_input": [
+    {
+      "type": "neoforge:components",
+      "components": {
+        "symbiont:cell_type": "symbiont:proto"
+      },
+      "items": "symbiont:cell_culture"
+    },
+    {
+      "item": "minecraft:honeycomb"
+    },
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:proto"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

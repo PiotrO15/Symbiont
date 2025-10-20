@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,7 +20,6 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -27,13 +27,18 @@ import org.jetbrains.annotations.Nullable;
 import piotro15.symbiont.api.DynamicFluidTank;
 import piotro15.symbiont.api.DynamicItemStackHandler;
 import piotro15.symbiont.api.FluidApi;
+import piotro15.symbiont.api.ItemApi;
+import piotro15.symbiont.common.genetics.Biocode;
 import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.menu.MetabolizerMenu;
 import piotro15.symbiont.common.recipe.MetabolizerRecipe;
 import piotro15.symbiont.common.recipe.MetabolizerRecipeInput;
 import piotro15.symbiont.common.registry.ModBlockEntities;
+import piotro15.symbiont.common.registry.ModDataComponents;
+import piotro15.symbiont.common.registry.ModItems;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +47,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
     private final DynamicFluidTank outputTank = new DynamicFluidTank(4000, this);
     private final EnergyStorage energyStorage = new EnergyStorage(10000, 100);
 
-    protected ItemStackHandler items;
+    private final ItemStackHandler items;
 
     private int progress;
     private static final int MAX_PROGRESS = 200;
@@ -52,12 +57,11 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
         items = new DynamicItemStackHandler(6, this);
 
         data = new ContainerData() {
-            private final int[] ints = new int[4];
-
             @Override
             public int get(int i) {
                 return switch (i) {
                     case 0 -> MetabolizerBlockEntity.this.progress;
+                    case 1 -> getMaxProgress();
                     case 2 -> energyStorage.getEnergyStored();
                     case 3 -> energyStorage.getMaxEnergyStored();
                     default -> 0;
@@ -65,13 +69,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             }
 
             @Override
-            public void set(int i, int value) {
-                switch (i) {
-                    case 0 -> MetabolizerBlockEntity.this.progress = value;
-//                    case 1: BioreactorBlockEntity.this.maxProgress = value;
-                    default -> {}
-                }
-            }
+            public void set(int i, int value) {}
 
             @Override
             public int getCount() {
@@ -84,10 +82,14 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
     public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookup) {
         super.loadAdditional(tag, lookup);
 
-        items.deserializeNBT(lookup, tag.getCompound("Items"));
+        items.deserializeNBT(lookup, tag.getCompound("Inventory"));
         progress = tag.getInt("Progress");
         if (tag.contains("Energy")) {
-            energyStorage.deserializeNBT(lookup, tag.get("Energy"));
+            Tag energy = tag.get("Energy");
+
+            if (energy != null) {
+                energyStorage.deserializeNBT(lookup, energy);
+            }
         }
         inputTank.readFromNBT(lookup, tag.getCompound("InputTank"));
         outputTank.readFromNBT(lookup, tag.getCompound("OutputTank"));
@@ -97,7 +99,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
     public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookup) {
         super.saveAdditional(tag, lookup);
 
-        tag.put("Items", items.serializeNBT(lookup));
+        tag.put("Inventory", items.serializeNBT(lookup));
         tag.putInt("Progress", progress);
         tag.put("Energy", energyStorage.serializeNBT(lookup));
 
@@ -126,28 +128,43 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
         }
 
         ItemStack inputItem = items.getStackInSlot(0);
+        ItemStack resultItem = recipe.output();
+        if (inputItem.is(ModItems.CELL_CULTURE) && resultItem.is(ModItems.CELL_CULTURE)) {
+            double productionMultiplier = CellCultureItem.getProduction(inputItem);
+            double consumptionMultiplier = CellCultureItem.getConsumption(inputItem);
+            int countChange = CellCultureItem.getCountChange(inputItem, level.random);
 
-        // consume inputs
-        items.extractItem(0, 1, false);
-
-        inputTank.drain(recipe.fluidInput().amount(), IFluidHandler.FluidAction.EXECUTE);
-
-        // produce outputs
-        ItemStack output = recipe.output().copy();
-        int outputCount = output.getCount();
-
-        if (inputItem.getItem() instanceof CellCultureItem cultureInput) {
-            double stability = cultureInput.getStability(inputItem);
-            outputCount = (int) Math.floor(stability);
-            if (getLevel().getRandom().nextDouble() > cultureInput.getStability(inputItem) % 1) {
-                outputCount++;
+            if (countChange < 0) {
+                items.extractItem(0, 1, false);
             }
+            inputTank.drain(ItemApi.randomCount(recipe.fluidInput().amount(), consumptionMultiplier, level.random), IFluidHandler.FluidAction.EXECUTE);
+
+            for (int i = 1; i < recipe.ingredients().size(); i++) {
+                ItemApi.extractFromInventory(items, recipe.ingredients().get(i), 1, 5);
+            }
+
+            if (countChange > 0) {
+                Biocode biocode = inputItem.get(ModDataComponents.BIOCODE);
+
+                resultItem = resultItem.copyWithCount(countChange);
+                if (biocode != null) {
+                    resultItem.set(ModDataComponents.BIOCODE, biocode);
+                }
+
+                items.insertItem(5, resultItem, false);
+            }
+            outputTank.fill(recipe.fluidOutput().copyWithAmount(ItemApi.randomCount(recipe.fluidOutput().getAmount(), productionMultiplier, level.random)), IFluidHandler.FluidAction.EXECUTE);
+        } else {
+            items.extractItem(0, 1, false);
+            inputTank.drain(recipe.fluidInput().amount(), IFluidHandler.FluidAction.EXECUTE);
+
+            for (int i = 1; i < recipe.ingredients().size(); i++) {
+                ItemApi.extractFromInventory(items, recipe.ingredients().get(i), 1, 5);
+            }
+
+            items.insertItem(5, recipe.output(), false);
+            outputTank.fill(recipe.fluidOutput(), IFluidHandler.FluidAction.EXECUTE);
         }
-
-        output.setCount(outputCount + items.getStackInSlot(1).getCount());
-
-        items.setStackInSlot(1, output);
-        outputTank.fill(recipe.fluidOutput(), IFluidHandler.FluidAction.EXECUTE);
     }
 
     private boolean canAcceptOutput(MetabolizerRecipe recipe) {
@@ -155,15 +172,31 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             return false;
         }
 
-        ItemStack result = recipe.output();
-        FluidStack fluidResult = recipe.fluidOutput();
+        ItemStack inputItem = items.getStackInSlot(0);
+        ItemStack resultItem = recipe.output();
 
-        // check item
-        ItemStack existing = items.getStackInSlot(1);
-        boolean itemsFit = (existing.isEmpty() || (ItemStack.isSameItem(existing, result)
-                && existing.getCount() + result.getCount() <= existing.getMaxStackSize()));
+        ItemStack result = ItemStack.EMPTY;
+        FluidStack fluidResult;
 
-        // check fluid
+        if (inputItem.is(ModItems.CELL_CULTURE) && resultItem.is(ModItems.CELL_CULTURE)) {
+            double productionMultiplier = CellCultureItem.getProduction(inputItem);
+            double stability = CellCultureItem.getStability(inputItem);
+
+            if (stability > 1.0) {
+                Biocode biocode = inputItem.get(ModDataComponents.BIOCODE);
+
+                result = resultItem.copyWithCount((int) Math.ceil(stability - 1.0));
+                if (biocode != null) {
+                    result.set(ModDataComponents.BIOCODE, biocode);
+                }
+            }
+            fluidResult = recipe.fluidOutput().copyWithAmount((int) Math.ceil(recipe.fluidOutput().getAmount() * productionMultiplier));
+        } else {
+            result = resultItem;
+            fluidResult = recipe.fluidOutput();
+        }
+
+        boolean itemsFit = items.insertItem(5, result, true).isEmpty();
         boolean fluidsFit = outputTank.fill(fluidResult, IFluidHandler.FluidAction.SIMULATE) == fluidResult.getAmount();
 
         return itemsFit && fluidsFit;
@@ -181,17 +214,9 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
         return outputTank;
     }
 
-    public EnergyStorage getEnergyStorage() {
-        return energyStorage;
-    }
-
-    public int getProgress() {
-        return progress;
-    }
-
-    public int getMaxProgress() {
-        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem cultureInput) {
-            double progressMultiplier = cultureInput.getGrowth(items.getStackInSlot(0));
+    private int getMaxProgress() {
+        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem) {
+            double progressMultiplier = CellCultureItem.getGrowth(items.getStackInSlot(0));
             return (int) (MAX_PROGRESS / progressMultiplier);
         }
         return MAX_PROGRESS;
@@ -204,7 +229,14 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             return;
         }
 
-        MetabolizerRecipeInput input = new MetabolizerRecipeInput(List.of(items.getStackInSlot(0), items.getStackInSlot(2)), inputTank.isEmpty() ? null : SizedFluidIngredient.of(inputTank.getFluid()));
+        List<ItemStack> inputItems = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            ItemStack stackInSlot = items.getStackInSlot(i);
+            if (!stackInSlot.isEmpty()) {
+                inputItems.add(stackInSlot);
+            }
+        }
+        MetabolizerRecipeInput input = new MetabolizerRecipeInput(inputItems, inputTank.getFluid());
 
         if (level == null) {
             return;
@@ -221,7 +253,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
         MetabolizerRecipe match = recipeMatch.get().value();
 
         if (canAcceptOutput(match)) {
-            energyStorage.extractEnergy(20, false); // cost per tick
+            energyStorage.extractEnergy(20, false);
             progress++;
 
             if (progress >= getMaxProgress()) {
@@ -233,17 +265,16 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
 
     @Nullable
     public IItemHandler getItemHandlerForSide(@Nullable Direction side) {
-        return this.items; // simple default: all sides see the same handler
+        return this.items;
     }
 
     @Nullable
     public IFluidHandler getFluidHandlerForSide(@Nullable Direction side) {
-        // You can add side-based rules here (e.g., only allow fill from UP, only allow drain from DOWN).
         return new FluidApi.CombinedFluidHandler(inputTank, outputTank);
     }
 
     @Nullable
     public IEnergyStorage getEnergyStorageForSide(@Nullable Direction side) {
-        return this.energyStorage; // simple: same energy storage on all sides
+        return this.energyStorage;
     }
 }

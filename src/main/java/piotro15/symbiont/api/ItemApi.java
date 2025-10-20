@@ -1,10 +1,13 @@
 package piotro15.symbiont.api;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import piotro15.symbiont.common.Symbiont;
 
 import java.util.List;
+import java.util.Random;
 
 public class ItemApi {
     public static boolean canFitOutputs(ItemStackHandler handler, List<ItemStack> results, int outputStart, int outputEnd) {
@@ -29,19 +32,6 @@ public class ItemApi {
         return true;
     }
 
-    public static boolean canFit(ItemStackHandler handler, ItemStack stack, int outputStart, int outputEnd) {
-        if (stack.isEmpty())
-            return true;
-
-        ItemStack remaining = stack.copy();
-
-        for (int i = outputStart; i < outputEnd && !remaining.isEmpty(); i++) {
-            remaining = handler.insertItem(i, remaining, true);
-        }
-
-        return remaining.isEmpty();
-    }
-
     public static void insertIntoInventory(ItemStackHandler handler, ItemStack stack, int outputStart, int outputEnd) {
         if (stack.isEmpty())
             return;
@@ -50,9 +40,32 @@ public class ItemApi {
 
         for (int i = outputStart; i < outputEnd && !remaining.isEmpty(); i++) {
             remaining = handler.insertItem(i, remaining, false);
+            System.out.println("Inserted into slot " + i + ", remaining: " + remaining.getCount());
         }
 
         if (!remaining.isEmpty())
             Symbiont.LOGGER.warn("Couldn't input {}x {}, deleting the item!", remaining.getCount(), remaining.getItem());
+    }
+
+    public static void extractFromInventory(ItemStackHandler handler, Ingredient ingredient, int inputStart, int inputEnd) {
+        for (int i = inputStart; i < inputEnd; i++) {
+            ItemStack stackInSlot = handler.getStackInSlot(i);
+            if (ingredient.test(stackInSlot)) {
+                handler.extractItem(i, 1, false);
+                return;
+            }
+        }
+    }
+
+    public static int randomCount(int count, double multiplier, RandomSource random) {
+        if (multiplier == 1.0) {
+            return count;
+        }
+
+        int newCount = (int) Math.floor(count * multiplier);
+        if (random.nextDouble() < (count * multiplier - newCount)) {
+            newCount++;
+        }
+        return newCount;
     }
 }

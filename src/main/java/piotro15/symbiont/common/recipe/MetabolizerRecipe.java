@@ -17,6 +17,7 @@ import piotro15.symbiont.common.registry.ModRecipeSerializers;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public record MetabolizerRecipe(
         NonNullList<Ingredient> ingredients,
@@ -26,19 +27,23 @@ public record MetabolizerRecipe(
 ) implements SymbiontRecipe<MetabolizerRecipeInput> {
     @Override
     public boolean matches(MetabolizerRecipeInput input, @NotNull Level level) {
+        if (!fluidInput.test(input.fluidInput())) {
+            return false;
+        }
+
         if (input.size() != this.ingredients.size()) {
             return false;
-        } else {
-            ArrayList<ItemStack> nonEmptyItems = new ArrayList(input.size());
-
-            for(ItemStack item : input.getItems()) {
-                if (!item.isEmpty()) {
-                    nonEmptyItems.add(item);
-                }
-            }
-
-            return RecipeMatcher.findMatches(nonEmptyItems, this.ingredients) != null;
         }
+
+        ArrayList<ItemStack> nonEmptyItems = new ArrayList<>(input.size());
+
+        for(ItemStack item : input.stacks()) {
+            if (!item.isEmpty()) {
+                nonEmptyItems.add(item);
+            }
+        }
+
+        return RecipeMatcher.findMatches(nonEmptyItems, this.ingredients) != null;
     }
 
     @Override

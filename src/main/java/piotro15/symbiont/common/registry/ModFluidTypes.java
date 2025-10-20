@@ -14,4 +14,16 @@ public class ModFluidTypes {
 
     public static final DeferredHolder<FluidType, FluidType> SWEET_PASTE =
             FLUID_TYPES.register("sweet_paste", () -> new FluidType(FluidType.Properties.create()));
+
+    public static final DeferredHolder<FluidType, FluidType> PROTEIN_PASTE =
+            FLUID_TYPES.register("protein_paste", () -> new FluidType(FluidType.Properties.create()));
+
+    public static final DeferredHolder<FluidType, FluidType> MYOGENIC_BIOMASS =
+            FLUID_TYPES.register("myogenic_biomass", () -> new FluidType(FluidType.Properties.create()));
+
+    public static final DeferredHolder<FluidType, FluidType> STICKY_PASTE =
+            FLUID_TYPES.register("sticky_paste", () -> new FluidType(FluidType.Properties.create()));
+
+    public static final DeferredHolder<FluidType, FluidType> BIOPOLYMER_SOLUTION =
+            FLUID_TYPES.register("biopolymer_solution", () -> new FluidType(FluidType.Properties.create()));
 }

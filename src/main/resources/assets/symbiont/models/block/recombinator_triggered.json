@@ -1,0 +1,7 @@
+{
+  "parent": "symbiont:block/recombinator",
+  "textures": {
+    "0": "symbiont:block/recombinator_triggered",
+    "particle": "symbiont:block/recombinator_triggered"
+  }
+}

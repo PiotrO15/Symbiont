@@ -60,11 +60,12 @@ public record Biocode(Map<Biotrait.BiotraitType, ResourceLocation> traits) {
     }
 
     public static Map<Biotrait.BiotraitType, Biotrait> map(Map<Biotrait.BiotraitType, ResourceLocation> traitIds) {
+        ClientPacketListener connection = Minecraft.getInstance().getConnection();
+        if (connection == null)
+            return null;
+
         return traitIds.entrySet().stream().map(entry -> {
             ResourceLocation traitId = entry.getValue();
-            ClientPacketListener connection = Minecraft.getInstance().getConnection();
-            if (connection == null)
-                return null;
 
             Registry<Biotrait> registry = connection.registryAccess().registryOrThrow(ModRegistries.BIOTRAIT);
             Biotrait trait = registry.get(traitId);

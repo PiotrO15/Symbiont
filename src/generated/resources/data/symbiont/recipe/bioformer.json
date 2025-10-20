@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "symbiont:organic_binder"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    }
+  },
+  "pattern": [
+    "BPB",
+    "I I",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "symbiont:bioformer"
+  }
+}

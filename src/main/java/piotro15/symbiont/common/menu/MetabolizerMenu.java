@@ -7,6 +7,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
+import piotro15.symbiont.api.OutputSlotItemHandler;
 import piotro15.symbiont.common.block.entity.MetabolizerBlockEntity;
 import piotro15.symbiont.common.registry.ModMenuTypes;
 
@@ -20,12 +21,13 @@ public class MetabolizerMenu extends BasicMachineMenu {
         this.data = data;
 
         this.addSlot(new SlotItemHandler(blockEntity.getItems(), 0, 63, 49));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 1, 121, 49));
 
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 2, 67, 17));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 3, 85, 17));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 4, 103, 17));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 5, 121, 17));
+        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 1, 67, 17));
+        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 2, 85, 17));
+        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 3, 103, 17));
+        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 4, 121, 17));
+
+        this.addSlot(new OutputSlotItemHandler(blockEntity.getItems(), 5, 121, 49));
 
         this.addPlayerInventory(playerInv);
         this.addPlayerHotbar(playerInv);
@@ -61,7 +63,7 @@ public class MetabolizerMenu extends BasicMachineMenu {
 
     public int getScaledArrowProgress() {
         int progress = data.get(0);
-        int maxProgress = blockEntity.getMaxProgress();
+        int maxProgress = data.get(1);
         int arrowPixelSize = 24;
 
         return maxProgress != 0 && progress != 0 ? progress * arrowPixelSize / maxProgress : 0;

@@ -6,6 +6,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
+import piotro15.symbiont.api.OutputSlotItemHandler;
 import piotro15.symbiont.common.block.entity.BioformerBlockEntity;
 import piotro15.symbiont.common.registry.ModMenuTypes;
 
@@ -21,10 +22,10 @@ public class BioformerMenu extends BasicMachineMenu {
         this.addSlot(new SlotItemHandler(blockEntity.getItems(), 0, 62, 26));
         this.addSlot(new SlotItemHandler(blockEntity.getItems(), 1, 62, 44));
 
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 2, 125, 26));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 3, 143, 26));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 4, 125, 44));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 5, 143, 44));
+        this.addSlot(new OutputSlotItemHandler(blockEntity.getItems(), 2, 125, 26));
+        this.addSlot(new OutputSlotItemHandler(blockEntity.getItems(), 3, 143, 26));
+        this.addSlot(new OutputSlotItemHandler(blockEntity.getItems(), 4, 125, 44));
+        this.addSlot(new OutputSlotItemHandler(blockEntity.getItems(), 5, 143, 44));
 
         this.addPlayerInventory(playerInv);
         this.addPlayerHotbar(playerInv);

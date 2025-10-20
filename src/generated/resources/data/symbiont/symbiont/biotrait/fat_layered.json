@@ -1,0 +1,15 @@
+{
+  "modifiers": [
+    {
+      "type": "symbiont:integer_trait_modifier",
+      "stat_type": "CONSUMPTION",
+      "value": 1.05
+    },
+    {
+      "type": "symbiont:integer_trait_modifier",
+      "stat_type": "PRODUCTION",
+      "value": 1.1
+    }
+  ],
+  "trait_type": "METABOLISM"
+}

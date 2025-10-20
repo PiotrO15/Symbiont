@@ -3,6 +3,7 @@ package piotro15.symbiont.common.recipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.neoforged.neoforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 public record BioformerRecipeInput(
         ItemStack input,
@@ -11,7 +12,7 @@ public record BioformerRecipeInput(
 ) implements RecipeInput {
 
     @Override
-    public ItemStack getItem(int slot) {
+    public @NotNull ItemStack getItem(int slot) {
         if (slot < 0 || slot > 1) throw new IllegalArgumentException("No item for index " + slot);
         return slot == 0 ? input : catalyst;
     }
@@ -26,5 +27,10 @@ public record BioformerRecipeInput(
             size++;
 
         return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return RecipeInput.super.isEmpty() && (fluidInput == null || fluidInput.isEmpty());
     }
 }

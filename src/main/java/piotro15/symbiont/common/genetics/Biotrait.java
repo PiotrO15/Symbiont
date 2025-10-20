@@ -3,6 +3,8 @@ package piotro15.symbiont.common.genetics;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
@@ -39,10 +41,27 @@ public record Biotrait(
     }
 
     public enum BiotraitType {
-        STABILITY,
-        METABOLISM,
-        REPLICATION,
-        ADAPTABILITY,
-        SPECIAL
+        STABILITY(0xDC267F, "symbiont.trait_type.stability"),
+        METABOLISM(0xFFB000, "symbiont.trait_type.metabolism"),
+        REPLICATION(0x785EF0, "symbiont.trait_type.replication"),
+        ADAPTABILITY(0x648FFF, "symbiont.trait_type.adaptability"),
+        SPECIAL(0xFE6100, "symbiont.trait_type.special");
+
+        private final int color;
+        private final String translationKey;
+
+        BiotraitType(int color, String translationKey) {
+            this.color = color;
+            this.translationKey = translationKey;
+        }
+
+        public int getColor() {
+            return color;
+        }
+
+        public Component getDisplayName() {
+            return Component.translatable(translationKey).withColor(color);
+        }
     }
+
 }
