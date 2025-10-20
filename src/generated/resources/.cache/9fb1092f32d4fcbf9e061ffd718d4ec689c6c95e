@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-20T00:05:20.5290973	Recipes
+// 1.21.1	2025-10-20T11:12:59.0927129	Recipes
 628152130e7b5c38a9fd72416c9a6f9777cab307 data/symbiont/advancement/recipes/misc/bioformer.json
 16d96ae1de2848df82d3538defe9da39651b16ba data/symbiont/advancement/recipes/misc/bioreactor.json
 82bae1d5e40a91fd24e3d0d38fa18faab6443c12 data/symbiont/advancement/recipes/misc/bone_sampler.json
@@ -15,7 +15,6 @@ c4cc66a2fedef2fa7f6704fffee6fbf966b33185 data/symbiont/recipe/bioformer/rabbit.j
 b31db3fe3241421872fbe4155081911b90670737 data/symbiont/recipe/bioreactor.json
 bef186c147f829d1b509e655d1340dd6b88986ab data/symbiont/recipe/bioreactor/biopolymer_solution.json
 fb12af04e68e6152a4e8dbb826c97e95579b46c5 data/symbiont/recipe/bioreactor/myogenic_biomass.json
-ac86cdcebcdbde29df576415bb804cd898f01f43 data/symbiont/recipe/bioreactor/proto_cell.json
 1d20c0d12141dcdf9ee25b8a85fc7b0f9ae0b899 data/symbiont/recipe/bone_sampler.json
 d5f551329c4f7cf991d2f552e87b1e9eeeb1d98a data/symbiont/recipe/metabolizer.json
 6de0faaee6503f10eaa2361161373648e41d4bd4 data/symbiont/recipe/metabolizer/myoblast.json

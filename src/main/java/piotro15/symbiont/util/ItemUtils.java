@@ -1,4 +1,4 @@
-package piotro15.symbiont.api;
+package piotro15.symbiont.util;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -7,9 +7,8 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import piotro15.symbiont.common.Symbiont;
 
 import java.util.List;
-import java.util.Random;
 
-public class ItemApi {
+public class ItemUtils {
     public static boolean canFitOutputs(ItemStackHandler handler, List<ItemStack> results, int outputStart, int outputEnd) {
         ItemStackHandler simulated = new ItemStackHandler(handler.getSlots());
         for (int i = 0; i < handler.getSlots(); i++) {
@@ -40,11 +39,10 @@ public class ItemApi {
 
         for (int i = outputStart; i < outputEnd && !remaining.isEmpty(); i++) {
             remaining = handler.insertItem(i, remaining, false);
-            System.out.println("Inserted into slot " + i + ", remaining: " + remaining.getCount());
         }
 
         if (!remaining.isEmpty())
-            Symbiont.LOGGER.warn("Couldn't input {}x {}, deleting the item!", remaining.getCount(), remaining.getItem());
+            Symbiont.LOGGER.warn("Couldn't itemInput {}x {}, deleting the item!", remaining.getCount(), remaining.getItem());
     }
 
     public static void extractFromInventory(ItemStackHandler handler, Ingredient ingredient, int inputStart, int inputEnd) {

@@ -3,7 +3,6 @@ package piotro15.symbiont.common.menu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -19,8 +18,8 @@ public class BioreactorMenu extends BasicMachineMenu {
         this.blockEntity = blockEntity;
         this.data = data;
 
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 0, 63, 35));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 1, 121, 35));
+        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 0, 63, 35));
+        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 1, 121, 35));
 
         this.addPlayerInventory(playerInv);
         this.addPlayerHotbar(playerInv);
@@ -28,16 +27,10 @@ public class BioreactorMenu extends BasicMachineMenu {
         addDataSlots(data);
     }
 
-
-
     @Override
     public boolean stillValid(@NotNull Player player) {
         return this.blockEntity != null &&
                 this.blockEntity.getBlockPos().closerThan(player.blockPosition(), 8);
-    }
-
-    public FluidStack getInputFluid() {
-        return blockEntity.getInputTank().getFluid();
     }
 
     public FluidTank getInputFluidTank() {
@@ -46,10 +39,6 @@ public class BioreactorMenu extends BasicMachineMenu {
 
     public FluidTank getOutputFluidTank() {
         return blockEntity.getOutputTank();
-    }
-
-    public FluidStack getOutputFluid() {
-        return blockEntity.getOutputTank().getFluid();
     }
 
     public boolean isCrafting() {

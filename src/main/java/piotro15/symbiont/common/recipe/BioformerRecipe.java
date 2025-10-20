@@ -13,6 +13,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;
+import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.registry.ModRecipeSerializers;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
 
@@ -24,9 +25,20 @@ public record BioformerRecipe(
 ) implements SymbiontRecipe<BioformerRecipeInput> {
     @Override
     public boolean matches(BioformerRecipeInput input, @NotNull Level level) {
-        return itemInput.test(input.input())
-                && catalyst.test(input.catalyst())
-                && fluidInput.test(input.fluidInput());
+        double consumptionModifier = CellCultureItem.getConsumption(input.getItem(0));
+
+        int amountNeeded;
+        if (consumptionModifier != 1.0) {
+            amountNeeded = (int) (fluidInput.amount() * consumptionModifier);
+        } else {
+            amountNeeded = fluidInput.amount();
+        }
+
+        if (!fluidInput.test(input.fluidInput()) || amountNeeded > input.fluidInput().getAmount()) {
+            return false;
+        }
+
+        return itemInput.test(input.input()) && catalyst.test(input.catalyst());
     }
 
     @Override

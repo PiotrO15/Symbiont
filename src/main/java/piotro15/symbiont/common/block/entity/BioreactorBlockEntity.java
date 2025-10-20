@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,10 +24,10 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import piotro15.symbiont.api.DynamicFluidTank;
-import piotro15.symbiont.api.DynamicItemStackHandler;
-import piotro15.symbiont.api.FluidApi;
-import piotro15.symbiont.api.ItemApi;
+import piotro15.symbiont.util.DynamicFluidTank;
+import piotro15.symbiont.util.DynamicItemStackHandler;
+import piotro15.symbiont.util.FluidUtils;
+import piotro15.symbiont.util.ItemUtils;
 import piotro15.symbiont.common.genetics.Biocode;
 import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.menu.BioreactorMenu;
@@ -43,22 +44,21 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
     private final DynamicFluidTank inputTank = new DynamicFluidTank(4000, this);
     private final DynamicFluidTank outputTank = new DynamicFluidTank(4000, this);
     private final EnergyStorage energyStorage = new EnergyStorage(10000, 100);
-    protected ItemStackHandler items;
+    protected ItemStackHandler inventory;
 
     private int progress;
     private static final int MAX_PROGRESS = 200;
 
     public BioreactorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BIOREACTOR.get(), pos, state);
-        items = new DynamicItemStackHandler(2, this);
+        inventory = new DynamicItemStackHandler(2, this);
 
         data = new ContainerData() {
-            private final int[] ints = new int[4];
-
             @Override
             public int get(int i) {
                 return switch (i) {
                     case 0 -> BioreactorBlockEntity.this.progress;
+                    case 1 -> getMaxProgress();
                     case 2 -> energyStorage.getEnergyStored();
                     case 3 -> energyStorage.getMaxEnergyStored();
                     default -> 0;
@@ -66,13 +66,7 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
             }
 
             @Override
-            public void set(int i, int value) {
-                switch (i) {
-                    case 0 -> BioreactorBlockEntity.this.progress = value;
-//                    case 1: BioreactorBlockEntity.this.maxProgress = value;
-                    default -> {}
-                }
-            }
+            public void set(int i, int value) {}
 
             @Override
             public int getCount() {
@@ -85,10 +79,14 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
     public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookup) {
         super.loadAdditional(tag, lookup);
 
-        items.deserializeNBT(lookup, tag.getCompound("Items"));
+        inventory.deserializeNBT(lookup, tag.getCompound("Inventory"));
         progress = tag.getInt("Progress");
         if (tag.contains("Energy")) {
-            energyStorage.deserializeNBT(lookup, tag.get("Energy"));
+            Tag energy = tag.get("Energy");
+
+            if (energy != null) {
+                energyStorage.deserializeNBT(lookup, energy);
+            }
         }
         inputTank.readFromNBT(lookup, tag.getCompound("InputTank"));
         outputTank.readFromNBT(lookup, tag.getCompound("OutputTank"));
@@ -98,7 +96,7 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
     public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookup) {
         super.saveAdditional(tag, lookup);
 
-        tag.put("Items", items.serializeNBT(lookup));
+        tag.put("Inventory", inventory.serializeNBT(lookup));
         tag.putInt("Progress", progress);
         tag.put("Energy", energyStorage.serializeNBT(lookup));
 
@@ -126,44 +124,36 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
             return;
         }
 
-        double productionMultiplier = 1.0;
-        double consumptionMultiplier = 1.0;
+        ItemStack inputItem = inventory.getStackInSlot(0);
+        ItemStack resultItem = recipe.output();
+        if (inputItem.is(ModItems.CELL_CULTURE) && resultItem.is(ModItems.CELL_CULTURE)) {
+            double productionMultiplier = CellCultureItem.getProduction(inputItem);
+            double consumptionMultiplier = CellCultureItem.getConsumption(inputItem);
+            int countChange = CellCultureItem.getCountChange(inputItem, level.random);
 
-        ItemStack inputItem = items.getStackInSlot(0);
-        int countChange = 0;
-
-        if (inputItem.getItem() instanceof CellCultureItem) {
-            productionMultiplier = CellCultureItem.getProduction(inputItem);
-            consumptionMultiplier = CellCultureItem.getConsumption(inputItem);
-
-            countChange = CellCultureItem.getCountChange(inputItem, level.random);
             if (countChange < 0) {
-                items.extractItem(0, 1, false);
+                inventory.extractItem(0, 1, false);
             }
-        } else if (!recipe.input().isEmpty()) {
-            items.extractItem(0, 1, false);
-        }
+            inputTank.drain(ItemUtils.randomCount(recipe.fluidInput().amount(), consumptionMultiplier, level.random), IFluidHandler.FluidAction.EXECUTE);
 
-        inputTank.drain(ItemApi.randomCount(recipe.fluidInput().amount(), consumptionMultiplier, level.random), IFluidHandler.FluidAction.EXECUTE);
-
-        // produce outputs
-        ItemStack output = recipe.output().copy();
-        if (output.is(ModItems.CELL_CULTURE) && inputItem.is(ModItems.CELL_CULTURE)) {
             if (countChange > 0) {
-
-                output.setCount(countChange);
                 Biocode biocode = inputItem.get(ModDataComponents.BIOCODE);
-                if (biocode != null) {
-                    output.set(ModDataComponents.BIOCODE, biocode);
-                }
-            }
-        } else if (!inputItem.is(ModItems.CELL_CULTURE)) {
-            output.setCount(ItemApi.randomCount(output.getCount(), productionMultiplier, level.random));
-        }
-        ItemApi.insertIntoInventory(items, output, 1, 2);
 
-        FluidStack fluidOutput = recipe.fluidOutput().copyWithAmount(ItemApi.randomCount(recipe.fluidOutput().getAmount(), productionMultiplier, level.random));
-        outputTank.fill(fluidOutput, IFluidHandler.FluidAction.EXECUTE);
+                resultItem = resultItem.copyWithCount(countChange);
+                if (biocode != null) {
+                    resultItem.set(ModDataComponents.BIOCODE, biocode);
+                }
+
+                inventory.insertItem(1, resultItem, false);
+            }
+            outputTank.fill(recipe.fluidOutput().copyWithAmount(ItemUtils.randomCount(recipe.fluidOutput().getAmount(), productionMultiplier, level.random)), IFluidHandler.FluidAction.EXECUTE);
+        } else {
+            inventory.extractItem(0, 1, false);
+            inputTank.drain(recipe.fluidInput().amount(), IFluidHandler.FluidAction.EXECUTE);
+
+            inventory.insertItem(1, recipe.output(), false);
+            outputTank.fill(recipe.fluidOutput(), IFluidHandler.FluidAction.EXECUTE);
+        }
     }
 
     private boolean canAcceptOutput(BioreactorRecipe recipe) {
@@ -171,22 +161,38 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
             return false;
         }
 
-        ItemStack result = recipe.output();
-        FluidStack fluidResult = recipe.fluidOutput();
+        ItemStack inputItem = inventory.getStackInSlot(0);
+        ItemStack resultItem = recipe.output();
 
-        // check item
-        ItemStack existing = items.getStackInSlot(1);
-        boolean itemsFit = (existing.isEmpty() || (ItemStack.isSameItem(existing, result)
-                && existing.getCount() + result.getCount() <= existing.getMaxStackSize()));
+        ItemStack result = ItemStack.EMPTY;
+        FluidStack fluidResult;
 
-        // check fluid
+        if (inputItem.is(ModItems.CELL_CULTURE) && resultItem.is(ModItems.CELL_CULTURE)) {
+            double productionMultiplier = CellCultureItem.getProduction(inputItem);
+            double stability = CellCultureItem.getStability(inputItem);
+
+            if (stability > 1.0) {
+                Biocode biocode = inputItem.get(ModDataComponents.BIOCODE);
+
+                result = resultItem.copyWithCount((int) Math.ceil(stability - 1.0));
+                if (biocode != null) {
+                    result.set(ModDataComponents.BIOCODE, biocode);
+                }
+            }
+            fluidResult = recipe.fluidOutput().copyWithAmount((int) Math.ceil(recipe.fluidOutput().getAmount() * productionMultiplier));
+        } else {
+            result = resultItem;
+            fluidResult = recipe.fluidOutput();
+        }
+
+        boolean itemsFit = inventory.insertItem(1, result, true).isEmpty();
         boolean fluidsFit = outputTank.fill(fluidResult, IFluidHandler.FluidAction.SIMULATE) == fluidResult.getAmount();
 
         return itemsFit && fluidsFit;
     }
 
-    public ItemStackHandler getItems() {
-        return items;
+    public ItemStackHandler getInventory() {
+        return inventory;
     }
 
     public FluidTank getInputTank() {
@@ -201,13 +207,9 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
         return energyStorage;
     }
 
-    public int getProgress() {
-        return progress;
-    }
-
     public int getMaxProgress() {
-        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem cultureInput) {
-            double progressMultiplier = cultureInput.getGrowth(items.getStackInSlot(0));
+        if (inventory.getStackInSlot(0).is(ModItems.CELL_CULTURE)) {
+            double progressMultiplier = CellCultureItem.getGrowth(inventory.getStackInSlot(0));
             return (int) (MAX_PROGRESS / progressMultiplier);
         }
         return MAX_PROGRESS;
@@ -220,7 +222,7 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
             return;
         }
 
-        BioreactorRecipeInput input = new BioreactorRecipeInput(items.getStackInSlot(0), inputTank.getFluid());
+        BioreactorRecipeInput input = new BioreactorRecipeInput(inventory.getStackInSlot(0), inputTank.getFluid());
 
         if (level == null) {
             return;
@@ -237,7 +239,7 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
         BioreactorRecipe match = recipeMatch.get().value();
 
         if (canAcceptOutput(match)) {
-            energyStorage.extractEnergy(20, false); // cost per tick
+            energyStorage.extractEnergy(20, false);
             progress++;
 
             if (progress >= getMaxProgress()) {
@@ -249,20 +251,17 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
 
     @Nullable
     public IItemHandler getItemHandlerForSide(@Nullable Direction side) {
-        return this.items; // simple default: all sides see the same handler
+        return this.inventory;
     }
 
     @Nullable
     public IFluidHandler getFluidHandlerForSide(@Nullable Direction side) {
-        // You can add side-based rules here (e.g., only allow fill from UP, only allow drain from DOWN).
-        return new FluidApi.CombinedFluidHandler(inputTank, outputTank);
+        return new FluidUtils.CombinedFluidHandler(inputTank, outputTank);
     }
 
     @Nullable
     public IEnergyStorage getEnergyStorageForSide(@Nullable Direction side) {
-        return this.energyStorage; // simple: same energy storage on all sides
+        return this.energyStorage;
     }
-
-
 }
 

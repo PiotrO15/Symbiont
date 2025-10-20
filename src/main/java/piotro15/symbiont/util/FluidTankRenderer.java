@@ -1,4 +1,4 @@
-package piotro15.symbiont.api;
+package piotro15.symbiont.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -53,9 +53,7 @@ public class FluidTankRenderer implements BarRenderer {
         // Draw fluid bottom-up
         for (int dy = 0; dy < scaled; dy += 16) {
             int drawHeight = Math.min(16, scaled - dy);
-//            gfx.blit(x, y + height - dy - drawHeight, 0, width, drawHeight, sprite);
             FluidTankRenderer.drawSprite(x, y + height - dy - drawHeight, 0, width, drawHeight, sprite, gfx.pose());
-//            gfx.blit(attributes.getStillTexture(), x, y + height - dy - drawHeight, 0, 0, width, drawHeight, 16, 16);
         }
         gfx.pose().popPose();
         RenderSystem.setShaderColor(1, 1, 1, 1);

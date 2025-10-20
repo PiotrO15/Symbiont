@@ -13,11 +13,11 @@ import net.neoforged.neoforge.common.util.RecipeMatcher;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;
+import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.registry.ModRecipeSerializers;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public record MetabolizerRecipe(
         NonNullList<Ingredient> ingredients,
@@ -27,7 +27,16 @@ public record MetabolizerRecipe(
 ) implements SymbiontRecipe<MetabolizerRecipeInput> {
     @Override
     public boolean matches(MetabolizerRecipeInput input, @NotNull Level level) {
-        if (!fluidInput.test(input.fluidInput())) {
+        double consumptionModifier = CellCultureItem.getConsumption(input.getItem(0));
+
+        int amountNeeded;
+        if (consumptionModifier != 1.0) {
+            amountNeeded = (int) (fluidInput.amount() * consumptionModifier);
+        } else {
+            amountNeeded = fluidInput.amount();
+        }
+
+        if (!fluidInput.test(input.fluidInput()) || amountNeeded > input.fluidInput().getAmount()) {
             return false;
         }
 

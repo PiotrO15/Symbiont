@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
-import piotro15.symbiont.api.BarRenderer;
+import piotro15.symbiont.util.BarRenderer;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.common.menu.BasicMachineMenu;
 

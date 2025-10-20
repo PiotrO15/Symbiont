@@ -10,18 +10,32 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.NotNull;
+import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.registry.ModRecipeSerializers;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
 
 public record BioreactorRecipe(
-        Ingredient input,
+        Ingredient itemInput,
         SizedFluidIngredient fluidInput,
         ItemStack output,
         FluidStack fluidOutput
 ) implements SymbiontRecipe<BioreactorRecipeInput> {
     @Override
-    public boolean matches(BioreactorRecipeInput bioreactorRecipeInput, @NotNull Level level) {
-        return input.test(bioreactorRecipeInput.stack()) && fluidInput.test(bioreactorRecipeInput.fluidInput());
+    public boolean matches(@NotNull BioreactorRecipeInput input, @NotNull Level level) {
+        double consumptionModifier = CellCultureItem.getConsumption(input.getItem(0));
+
+        int amountNeeded;
+        if (consumptionModifier != 1.0) {
+            amountNeeded = (int) (fluidInput.amount() * consumptionModifier);
+        } else {
+            amountNeeded = fluidInput.amount();
+        }
+
+        if (!fluidInput.test(input.fluidInput()) || amountNeeded > input.fluidInput().getAmount()) {
+            return false;
+        }
+
+        return itemInput.test(input.stack());
     }
 
     @Override
@@ -38,7 +52,7 @@ public record BioreactorRecipe(
         public static final MapCodec<BioreactorRecipe> CODEC =
                 RecordCodecBuilder.mapCodec(builder ->
                         builder.group(
-                                Ingredient.CODEC_NONEMPTY.fieldOf("item_input").forGetter(recipe -> recipe.input),
+                                Ingredient.CODEC_NONEMPTY.fieldOf("item_input").forGetter(recipe -> recipe.itemInput),
                                 SizedFluidIngredient.FLAT_CODEC.fieldOf("fluid_input").forGetter(recipe -> recipe.fluidInput),
                                 ItemStack.CODEC.fieldOf("item_output").forGetter(recipe -> recipe.output),
                                 FluidStack.CODEC.fieldOf("fluid_output").forGetter(recipe -> recipe.fluidOutput)
@@ -67,7 +81,7 @@ public record BioreactorRecipe(
         }
 
         private static void toNetwork(RegistryFriendlyByteBuf buffer, BioreactorRecipe recipe) {
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.input);
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, recipe.itemInput);
             SizedFluidIngredient.STREAM_CODEC.encode(buffer, recipe.fluidInput);
             ItemStack.STREAM_CODEC.encode(buffer, recipe.output);
             FluidStack.STREAM_CODEC.encode(buffer, recipe.fluidOutput);

@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
-import piotro15.symbiont.api.DynamicItemStackHandler;
+import piotro15.symbiont.util.DynamicItemStackHandler;
 import piotro15.symbiont.common.genetics.Biocode;
 import piotro15.symbiont.common.genetics.Biotrait;
 import piotro15.symbiont.common.item.BiotraitExtractItem;
@@ -104,7 +104,7 @@ public class RecombinatorBlockEntity extends BlockEntity implements MenuProvider
     }
 
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInv, @NotNull Player player) {
         return new RecombinatorMenu(id, playerInv, this.getBlockPos());
     }
 

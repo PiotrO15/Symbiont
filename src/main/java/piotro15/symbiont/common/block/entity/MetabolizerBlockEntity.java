@@ -24,10 +24,10 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import piotro15.symbiont.api.DynamicFluidTank;
-import piotro15.symbiont.api.DynamicItemStackHandler;
-import piotro15.symbiont.api.FluidApi;
-import piotro15.symbiont.api.ItemApi;
+import piotro15.symbiont.util.DynamicFluidTank;
+import piotro15.symbiont.util.DynamicItemStackHandler;
+import piotro15.symbiont.util.FluidUtils;
+import piotro15.symbiont.util.ItemUtils;
 import piotro15.symbiont.common.genetics.Biocode;
 import piotro15.symbiont.common.item.CellCultureItem;
 import piotro15.symbiont.common.menu.MetabolizerMenu;
@@ -47,14 +47,14 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
     private final DynamicFluidTank outputTank = new DynamicFluidTank(4000, this);
     private final EnergyStorage energyStorage = new EnergyStorage(10000, 100);
 
-    private final ItemStackHandler items;
+    private final ItemStackHandler inventory;
 
     private int progress;
     private static final int MAX_PROGRESS = 200;
 
     public MetabolizerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.METABOLIZER.get(), pos, state);
-        items = new DynamicItemStackHandler(6, this);
+        inventory = new DynamicItemStackHandler(6, this);
 
         data = new ContainerData() {
             @Override
@@ -82,7 +82,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
     public void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookup) {
         super.loadAdditional(tag, lookup);
 
-        items.deserializeNBT(lookup, tag.getCompound("Inventory"));
+        inventory.deserializeNBT(lookup, tag.getCompound("Inventory"));
         progress = tag.getInt("Progress");
         if (tag.contains("Energy")) {
             Tag energy = tag.get("Energy");
@@ -99,7 +99,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
     public void saveAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookup) {
         super.saveAdditional(tag, lookup);
 
-        tag.put("Inventory", items.serializeNBT(lookup));
+        tag.put("Inventory", inventory.serializeNBT(lookup));
         tag.putInt("Progress", progress);
         tag.put("Energy", energyStorage.serializeNBT(lookup));
 
@@ -127,7 +127,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             return;
         }
 
-        ItemStack inputItem = items.getStackInSlot(0);
+        ItemStack inputItem = inventory.getStackInSlot(0);
         ItemStack resultItem = recipe.output();
         if (inputItem.is(ModItems.CELL_CULTURE) && resultItem.is(ModItems.CELL_CULTURE)) {
             double productionMultiplier = CellCultureItem.getProduction(inputItem);
@@ -135,12 +135,12 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             int countChange = CellCultureItem.getCountChange(inputItem, level.random);
 
             if (countChange < 0) {
-                items.extractItem(0, 1, false);
+                inventory.extractItem(0, 1, false);
             }
-            inputTank.drain(ItemApi.randomCount(recipe.fluidInput().amount(), consumptionMultiplier, level.random), IFluidHandler.FluidAction.EXECUTE);
+            inputTank.drain(ItemUtils.randomCount(recipe.fluidInput().amount(), consumptionMultiplier, level.random), IFluidHandler.FluidAction.EXECUTE);
 
             for (int i = 1; i < recipe.ingredients().size(); i++) {
-                ItemApi.extractFromInventory(items, recipe.ingredients().get(i), 1, 5);
+                ItemUtils.extractFromInventory(inventory, recipe.ingredients().get(i), 1, 5);
             }
 
             if (countChange > 0) {
@@ -151,18 +151,18 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
                     resultItem.set(ModDataComponents.BIOCODE, biocode);
                 }
 
-                items.insertItem(5, resultItem, false);
+                inventory.insertItem(5, resultItem, false);
             }
-            outputTank.fill(recipe.fluidOutput().copyWithAmount(ItemApi.randomCount(recipe.fluidOutput().getAmount(), productionMultiplier, level.random)), IFluidHandler.FluidAction.EXECUTE);
+            outputTank.fill(recipe.fluidOutput().copyWithAmount(ItemUtils.randomCount(recipe.fluidOutput().getAmount(), productionMultiplier, level.random)), IFluidHandler.FluidAction.EXECUTE);
         } else {
-            items.extractItem(0, 1, false);
+            inventory.extractItem(0, 1, false);
             inputTank.drain(recipe.fluidInput().amount(), IFluidHandler.FluidAction.EXECUTE);
 
             for (int i = 1; i < recipe.ingredients().size(); i++) {
-                ItemApi.extractFromInventory(items, recipe.ingredients().get(i), 1, 5);
+                ItemUtils.extractFromInventory(inventory, recipe.ingredients().get(i), 1, 5);
             }
 
-            items.insertItem(5, recipe.output(), false);
+            inventory.insertItem(5, recipe.output(), false);
             outputTank.fill(recipe.fluidOutput(), IFluidHandler.FluidAction.EXECUTE);
         }
     }
@@ -172,7 +172,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             return false;
         }
 
-        ItemStack inputItem = items.getStackInSlot(0);
+        ItemStack inputItem = inventory.getStackInSlot(0);
         ItemStack resultItem = recipe.output();
 
         ItemStack result = ItemStack.EMPTY;
@@ -196,14 +196,14 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
             fluidResult = recipe.fluidOutput();
         }
 
-        boolean itemsFit = items.insertItem(5, result, true).isEmpty();
+        boolean itemsFit = inventory.insertItem(5, result, true).isEmpty();
         boolean fluidsFit = outputTank.fill(fluidResult, IFluidHandler.FluidAction.SIMULATE) == fluidResult.getAmount();
 
         return itemsFit && fluidsFit;
     }
 
-    public ItemStackHandler getItems() {
-        return items;
+    public ItemStackHandler getInventory() {
+        return inventory;
     }
 
     public FluidTank getInputTank() {
@@ -215,8 +215,8 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
     }
 
     private int getMaxProgress() {
-        if (items.getStackInSlot(0).getItem() instanceof CellCultureItem) {
-            double progressMultiplier = CellCultureItem.getGrowth(items.getStackInSlot(0));
+        if (inventory.getStackInSlot(0).is(ModItems.CELL_CULTURE)) {
+            double progressMultiplier = CellCultureItem.getGrowth(inventory.getStackInSlot(0));
             return (int) (MAX_PROGRESS / progressMultiplier);
         }
         return MAX_PROGRESS;
@@ -231,7 +231,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
 
         List<ItemStack> inputItems = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            ItemStack stackInSlot = items.getStackInSlot(i);
+            ItemStack stackInSlot = inventory.getStackInSlot(i);
             if (!stackInSlot.isEmpty()) {
                 inputItems.add(stackInSlot);
             }
@@ -265,12 +265,12 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
 
     @Nullable
     public IItemHandler getItemHandlerForSide(@Nullable Direction side) {
-        return this.items;
+        return this.inventory;
     }
 
     @Nullable
     public IFluidHandler getFluidHandlerForSide(@Nullable Direction side) {
-        return new FluidApi.CombinedFluidHandler(inputTank, outputTank);
+        return new FluidUtils.CombinedFluidHandler(inputTank, outputTank);
     }
 
     @Nullable

@@ -45,7 +45,7 @@ public class BioreactorRecipeCategory extends AbstractRecipeCategory<BioreactorR
         }
 
         IRecipeSlotBuilder input = builder.addInputSlot(29, 19);
-        input.addIngredients(recipe.input());
+        input.addIngredients(recipe.itemInput());
 
         if (recipe.output() != null) {
             builder.addOutputSlot(87, 19).addIngredient(VanillaTypes.ITEM_STACK, recipe.output());

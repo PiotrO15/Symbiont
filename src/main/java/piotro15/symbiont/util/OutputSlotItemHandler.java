@@ -1,4 +1,4 @@
-package piotro15.symbiont.api;
+package piotro15.symbiont.util;
 
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;

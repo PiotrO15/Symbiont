@@ -3,11 +3,10 @@ package piotro15.symbiont.common.menu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
-import piotro15.symbiont.api.OutputSlotItemHandler;
+import piotro15.symbiont.util.OutputSlotItemHandler;
 import piotro15.symbiont.common.block.entity.MetabolizerBlockEntity;
 import piotro15.symbiont.common.registry.ModMenuTypes;
 
@@ -20,14 +19,14 @@ public class MetabolizerMenu extends BasicMachineMenu {
         this.blockEntity = blockEntity;
         this.data = data;
 
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 0, 63, 49));
+        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 0, 63, 49));
 
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 1, 67, 17));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 2, 85, 17));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 3, 103, 17));
-        this.addSlot(new SlotItemHandler(blockEntity.getItems(), 4, 121, 17));
+        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 1, 67, 17));
+        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 2, 85, 17));
+        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 3, 103, 17));
+        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 4, 121, 17));
 
-        this.addSlot(new OutputSlotItemHandler(blockEntity.getItems(), 5, 121, 49));
+        this.addSlot(new OutputSlotItemHandler(blockEntity.getInventory(), 5, 121, 49));
 
         this.addPlayerInventory(playerInv);
         this.addPlayerHotbar(playerInv);
@@ -41,20 +40,12 @@ public class MetabolizerMenu extends BasicMachineMenu {
                 this.blockEntity.getBlockPos().closerThan(player.blockPosition(), 8);
     }
 
-    public FluidStack getInputFluid() {
-        return blockEntity.getInputTank().getFluid();
-    }
-
     public FluidTank getInputFluidTank() {
         return blockEntity.getInputTank();
     }
 
     public FluidTank getOutputFluidTank() {
         return blockEntity.getOutputTank();
-    }
-
-    public FluidStack getOutputFluid() {
-        return blockEntity.getOutputTank().getFluid();
     }
 
     public boolean isCrafting() {

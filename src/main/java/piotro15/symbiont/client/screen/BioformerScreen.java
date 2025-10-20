@@ -6,8 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import piotro15.symbiont.api.EnergyBarRenderer;
-import piotro15.symbiont.api.FluidTankRenderer;
+import piotro15.symbiont.util.EnergyBarRenderer;
+import piotro15.symbiont.util.FluidTankRenderer;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.common.menu.BioformerMenu;
 

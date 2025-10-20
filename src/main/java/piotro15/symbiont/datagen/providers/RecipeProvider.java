@@ -102,7 +102,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         );
 
         MetabolizerRecipeBuilder.newRecipe(
-                NonNullList.of(Ingredient.EMPTY, CellCultureItem.asIngredient(Symbiont.id("proto")), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "crops")))),
+                NonNullList.of(Ingredient.EMPTY, CellCultureItem.asIngredient(Symbiont.id("proto")), Ingredient.of(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "seeds")))),
                 SizedFluidIngredient.of(new FluidStack(Fluids.WATER, 250)),
                 CellCultureItem.withCellType(Symbiont.id("proto")),
                 new FluidStack(ModFluids.NUTRITIONAL_PASTE, 250)).build(consumer, Symbiont.id("metabolizer/nutritional_paste_from_seeds")
