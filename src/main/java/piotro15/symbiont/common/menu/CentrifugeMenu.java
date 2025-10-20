@@ -6,21 +6,22 @@ import net.minecraft.world.inventory.ContainerData;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
-import piotro15.symbiont.common.block.entity.BioreactorBlockEntity;
+import piotro15.symbiont.common.block.entity.CentrifugeBlockEntity;
 import piotro15.symbiont.common.registry.ModMenuTypes;
 import piotro15.symbiont.util.OutputSlotItemHandler;
 
-public class BioreactorMenu extends BasicMachineMenu {
-    private final BioreactorBlockEntity blockEntity;
+public class CentrifugeMenu extends BasicMachineMenu {
+    private final CentrifugeBlockEntity blockEntity;
     private final ContainerData data;
 
-    public BioreactorMenu(int id, Inventory playerInv, BioreactorBlockEntity blockEntity, ContainerData data) {
-        super(ModMenuTypes.BIOREACTOR.get(), id, 2, 1);
+    public CentrifugeMenu(int id, Inventory playerInv, CentrifugeBlockEntity blockEntity, ContainerData data) {
+        super(ModMenuTypes.CENTRIFUGE.get(), id, 3, 2);
         this.blockEntity = blockEntity;
         this.data = data;
 
-        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 0, 63, 35));
-        this.addSlot(new OutputSlotItemHandler(blockEntity.getInventory(), 1, 121, 35));
+        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 0, 63, 25));
+        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 1, 63, 43));
+        this.addSlot(new OutputSlotItemHandler(blockEntity.getInventory(), 2, 121, 35));
 
         this.addPlayerInventory(playerInv);
         this.addPlayerHotbar(playerInv);
@@ -52,7 +53,7 @@ public class BioreactorMenu extends BasicMachineMenu {
 
     public int getScaledArrowProgress() {
         int progress = data.get(0);
-        int maxProgress = blockEntity.getMaxProgress();
+        int maxProgress = data.get(1);
         int arrowPixelSize = 24;
 
         return maxProgress != 0 && progress != 0 ? progress * arrowPixelSize / maxProgress : 0;

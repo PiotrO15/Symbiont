@@ -21,6 +21,7 @@ public class ItemModelProvider extends net.neoforged.neoforge.client.model.gener
         withExistingParent("metabolizer", Symbiont.id("block/metabolizer"));
         withExistingParent("bioreactor", Symbiont.id("block/bioreactor"));
         withExistingParent("bioformer", Symbiont.id("block/bioformer"));
+        withExistingParent("centrifuge", Symbiont.id("block/centrifuge"));
         withExistingParent("recombinator", Symbiont.id("block/recombinator"));
 
         basicItem(ModItems.CELL_CULTURE.get());

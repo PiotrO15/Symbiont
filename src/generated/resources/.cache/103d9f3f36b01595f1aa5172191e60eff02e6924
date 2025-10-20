@@ -1,15 +1,11 @@
-// 1.21.1	2025-10-19T23:29:55.7928644	Registries
+// 1.21.1	2025-10-20T14:36:32.2459708	Registries
 4bbf0cccb232f30b69e6de6f0068438f596917e9 data/symbiont/symbiont/biotrait/fat_layered.json
 67ff8553683b1774362c0f500f80dd77306b90a6 data/symbiont/symbiont/biotrait/light_tissue.json
 5f430254cc432aa7e7e4bfcd7bba52a2a50fa270 data/symbiont/symbiont/biotrait/resilient_membrane.json
 c7f94d2bf3733e68be0f79b6ba12c709588bb824 data/symbiont/symbiont/biotrait/resource_aggression.json
 eea7ffb5af57e1c8390e1bc5a9b626187003e23f data/symbiont/symbiont/biotrait/stable_division.json
-3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/auric.json
 b793979d1c1562faf6b9f656e3915c8844926712 data/symbiont/symbiont/cell_type/avian.json
 0afc5ebe8eaa7b2a7780c961e77062c0bafefbae data/symbiont/symbiont/cell_type/bovine.json
-3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/coral.json
-3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/ferric.json
-3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/fiber.json
 3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/glucose.json
 47a8828339cdbd4049cf17ac00d191f0f242d74f data/symbiont/symbiont/cell_type/leporine.json
 3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/myoblast.json
@@ -17,4 +13,3 @@ b793979d1c1562faf6b9f656e3915c8844926712 data/symbiont/symbiont/cell_type/avian.
 24881b203557c0b6d60f95a6297ef386d6729b44 data/symbiont/symbiont/cell_type/poly.json
 0f4974ad040ef26d91b01b018bbaa606fbe578a4 data/symbiont/symbiont/cell_type/porcine.json
 3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/proto.json
-3167a639eccb6c399951a9903c6fbe7e024730b1 data/symbiont/symbiont/cell_type/silica.json

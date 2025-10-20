@@ -17,21 +17,15 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
-import piotro15.symbiont.client.screen.BioformerScreen;
-import piotro15.symbiont.client.screen.BioreactorScreen;
-import piotro15.symbiont.client.screen.MetabolizerScreen;
+import piotro15.symbiont.client.screen.*;
 import piotro15.symbiont.common.Symbiont;
-import piotro15.symbiont.client.screen.RecombinatorScreen;
 import piotro15.symbiont.common.genetics.Biotrait;
 import piotro15.symbiont.common.genetics.CellType;
 import piotro15.symbiont.common.registry.*;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 @EventBusSubscriber(modid = Symbiont.MOD_ID, value = Dist.CLIENT)
 public class SymbiontClient {
@@ -54,6 +48,7 @@ public class SymbiontClient {
         event.register(ModMenuTypes.BIOREACTOR.get(), BioreactorScreen::new);
         event.register(ModMenuTypes.RECOMBINATOR.get(), RecombinatorScreen::new);
         event.register(ModMenuTypes.METABOLIZER.get(), MetabolizerScreen::new);
+        event.register(ModMenuTypes.CENTRIFUGE.get(), CentrifugeScreen::new);
         event.register(ModMenuTypes.BIOFORMER.get(), BioformerScreen::new);
     }
 

@@ -101,7 +101,8 @@ public class Symbiont {
         List<BlockEntityType<?>> registeredBlockEntities = List.of(
                 ModBlockEntities.BIOREACTOR.get(),
                 ModBlockEntities.METABOLIZER.get(),
-                ModBlockEntities.BIOFORMER.get()
+                ModBlockEntities.BIOFORMER.get(),
+                ModBlockEntities.CENTRIFUGE.get()
         );
 
         for (BlockEntityType<?> type : registeredBlockEntities) {

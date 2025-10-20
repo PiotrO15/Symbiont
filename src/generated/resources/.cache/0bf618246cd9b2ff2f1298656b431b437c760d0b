@@ -1,0 +1,7 @@
+// 1.21.1	2025-10-20T14:28:29.0689752	Tags for minecraft:item mod id symbiont
+b76502c972581f92dcba20d4c807a529afec8297 data/symbiont/tags/item/adaptability_catalysts.json
+d976e142c0e15eebc8f12a622988e04d99a1b3fb data/symbiont/tags/item/centrifuge_catalysts.json
+33221392eaadbbebce9b701da69e2f20fd46c490 data/symbiont/tags/item/metabolism_catalysts.json
+bde6ca31173d1f22d5f6fe355dc90c9faa35b239 data/symbiont/tags/item/replication_catalysts.json
+56b4a544d73640d96a671356852ca835567213e3 data/symbiont/tags/item/special_catalysts.json
+5db69586b6c50b2befacf44de1aedc4a5af092fe data/symbiont/tags/item/stability_catalysts.json

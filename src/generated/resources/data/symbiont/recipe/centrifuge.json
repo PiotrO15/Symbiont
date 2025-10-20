@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "symbiont:bioplastic_sheet"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "O": {
+      "item": "minecraft:glass_bottle"
+    }
+  },
+  "pattern": [
+    "BBB",
+    "OIO",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "symbiont:centrifuge"
+  }
+}

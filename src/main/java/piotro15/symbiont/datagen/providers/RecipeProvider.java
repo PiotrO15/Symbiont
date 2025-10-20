@@ -70,6 +70,16 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 .unlockedBy("has_iron_ingot", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
                 .save(consumer, Symbiont.id("bioformer"));
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.CENTRIFUGE)
+                .pattern("BBB")
+                .pattern("OIO")
+                .pattern(" I ")
+                .define('I', Items.IRON_INGOT)
+                .define('O', Items.GLASS_BOTTLE)
+                .define('B', ModItems.BIOPLASTIC_SHEET)
+                .unlockedBy("has_bioplastic_sheet", InventoryChangeTrigger.TriggerInstance.hasItems(ModItems.BIOPLASTIC_SHEET)
+                ).save(consumer, Symbiont.id("centrifuge"));
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.RECOMBINATOR)
                 .pattern("BIB")
                 .pattern("BDB")

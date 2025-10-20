@@ -12,11 +12,13 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("block.symbiont.bioreactor", "Bioreactor");
         add("block.symbiont.metabolizer", "Metabolizer");
         add("block.symbiont.bioformer", "Bioformer");
+        add("block.symbiont.centrifuge", "Centrifuge");
         add("block.symbiont.recombinator", "Recombinator");
 
         add("container.bioreactor", "Bioreactor");
         add("container.metabolizer", "Metabolizer");
         add("container.bioformer", "Bioformer");
+        add("container.centrifuge", "Centrifuge");
         add("container.recombinator", "Recombinator");
 
         add("symbiont.trait_type.stability", "Stability");

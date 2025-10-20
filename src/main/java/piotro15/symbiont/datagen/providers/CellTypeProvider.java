@@ -18,7 +18,7 @@ public class CellTypeProvider {
 
         // Structural Cultures
         register(bootstrapContext, "poly", new CellType.CellTypeBuilder().setColor(0xa3b18a).setTraits(Map.of(Biotrait.BiotraitType.METABOLISM, Symbiont.id("resource_aggression"))).build());
-        register(bootstrapContext, "fiber", new CellType.CellTypeBuilder().build());
+//        register(bootstrapContext, "fiber", new CellType.CellTypeBuilder().build());
         register(bootstrapContext, "myoblast", new CellType.CellTypeBuilder().build());
 
         // Animal Cultures
@@ -29,11 +29,11 @@ public class CellTypeProvider {
         register(bootstrapContext, "leporine", new CellType.CellTypeBuilder().setColor(0xefd6b8).build());
 
         // Metalocell Cultures
-        register(bootstrapContext, "ferric", new CellType.CellTypeBuilder().build());
-        register(bootstrapContext, "auric", new CellType.CellTypeBuilder().build());
-
-        register(bootstrapContext, "coral", new CellType.CellTypeBuilder().build());
-        register(bootstrapContext, "silica", new CellType.CellTypeBuilder().build());
+//        register(bootstrapContext, "ferric", new CellType.CellTypeBuilder().build());
+//        register(bootstrapContext, "auric", new CellType.CellTypeBuilder().build());
+//
+//        register(bootstrapContext, "coral", new CellType.CellTypeBuilder().build());
+//        register(bootstrapContext, "silica", new CellType.CellTypeBuilder().build());
     }
 
     private static void register(BootstrapContext<CellType> bootstrapContext, String name, CellType cellType) {

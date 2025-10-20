@@ -22,6 +22,8 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BioformerBlockEntity>> BIOFORMER = BLOCK_ENTITY_TYPE.register("bioformer", () ->
             BlockEntityType.Builder.of(BioformerBlockEntity::new, ModBlocks.BIOFORMER.get()).build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CentrifugeBlockEntity>> CENTRIFUGE = BLOCK_ENTITY_TYPE.register("centrifuge", () ->
+            BlockEntityType.Builder.of(CentrifugeBlockEntity::new, ModBlocks.CENTRIFUGE.get()).build(null));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RecombinatorBlockEntity>> RECOMBINATOR = BLOCK_ENTITY_TYPE.register("recombinator", () ->
             BlockEntityType.Builder.of(RecombinatorBlockEntity::new, ModBlocks.RECOMBINATOR.get()).build(null));

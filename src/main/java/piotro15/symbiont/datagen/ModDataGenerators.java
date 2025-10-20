@@ -5,7 +5,6 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.flag.FeatureFlags;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
@@ -15,7 +14,6 @@ import piotro15.symbiont.common.registry.ModRegistries;
 import piotro15.symbiont.datagen.providers.*;
 
 import java.util.Collections;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber(modid = Symbiont.MOD_ID)
@@ -35,5 +33,8 @@ public class ModDataGenerators {
         dataGenerator.addProvider(event.includeClient(), new LanguageProvider(packOutput, Symbiont.MOD_ID, "en_us"));
 
         dataGenerator.addProvider(event.includeClient(), new ItemModelProvider(packOutput, Symbiont.MOD_ID, event.getExistingFileHelper()));
+
+        ModBlockTagsProvider blockTagsProvider = dataGenerator.addProvider(true, new ModBlockTagsProvider(packOutput, lookupProvider, event.getExistingFileHelper()));
+        dataGenerator.addProvider(event.includeServer(), new ModItemTagsProvider(packOutput, lookupProvider, event.getExistingFileHelper(), blockTagsProvider.contentsGetter()));
     }
 }

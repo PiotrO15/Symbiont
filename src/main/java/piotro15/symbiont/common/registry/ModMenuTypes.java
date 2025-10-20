@@ -45,26 +45,23 @@ public class ModMenuTypes {
                 return null;
             }));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<CentrifugeMenu>> CENTRIFUGE = MENU_TYPES.register("centrifuge",
+            () -> IMenuTypeExtension.create((id, inv, buf) ->
+            {
+                BlockPos pos = buf.readBlockPos();
+                BlockEntity be = inv.player.level().getBlockEntity(pos);
+                if (be instanceof CentrifugeBlockEntity ceb)
+                    return new CentrifugeMenu(id, inv, ceb, new SimpleContainerData(4));
+                return null;
+            }));
+
     public static final DeferredHolder<MenuType<?>, MenuType<RecombinatorMenu>> RECOMBINATOR = MENU_TYPES.register("recombinator",
             () -> IMenuTypeExtension.create((id, inv, buf) ->
             {
                 BlockPos pos = buf.readBlockPos();
                 BlockEntity be = inv.player.level().getBlockEntity(pos);
-                if (be instanceof RecombinatorBlockEntity ceb)
+                if (be instanceof RecombinatorBlockEntity)
                     return new RecombinatorMenu(id, inv, pos);
                 return null;
             }));
-
-//    private static <T extends BasicMachineBlockEntity, M extends BasicMachineMenu> DeferredHolder<MenuType<?>, MenuType<M>> registerMachineMenu(
-//            String name, Class<T> entityClass, int dataSize
-//    ) {
-//        MENU_TYPES.register(name, () -> IMenuTypeExtension.create((id, inv, buf) -> {
-//            BlockPos pos = buf.readBlockPos();
-//            BlockEntity be = inv.player.level().getBlockEntity(pos);
-//            if (entityClass.isInstance(be)) {
-//                return new
-//            }
-//        }));
-//        return null;
-//    }
 }

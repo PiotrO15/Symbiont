@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-19T23:29:55.7938649	Item Models: symbiont
+// 1.21.1	2025-10-20T12:38:32.9733308	Item Models: symbiont
 7a6e946ef029f5932da81d68318b771399f39535 assets/symbiont/models/cell_type/avian.json
 7a6e946ef029f5932da81d68318b771399f39535 assets/symbiont/models/cell_type/bovine.json
 02a3c64cb5c3b8257dffd650b245824477fee003 assets/symbiont/models/cell_type/glucose.json
@@ -15,6 +15,7 @@ ddcc07005fb740685060c64a021263432c85b2d1 assets/symbiont/models/cell_type/proto.
 1d71c28f612cdd163f447d65a0883688965bea1d assets/symbiont/models/item/biotrait_extract.json
 ddf4c345493bc6ade88f0188d4ff7f1d1a3a7e1f assets/symbiont/models/item/bone_sampler.json
 ff7f08b26971d2f42187d5841a69ea8429d9b22f assets/symbiont/models/item/cell_culture.json
+059300c3ac8b2e2161287c6879401234cbbbd3dc assets/symbiont/models/item/centrifuge.json
 c23dd0b1de50f87668531956b46dd6bda2cd7f45 assets/symbiont/models/item/metabolizer.json
 0aab11a5c432c967beca49b7041d630fb7f4713c assets/symbiont/models/item/myogenic_biomass_bucket.json
 0aab11a5c432c967beca49b7041d630fb7f4713c assets/symbiont/models/item/nutritional_paste_bucket.json

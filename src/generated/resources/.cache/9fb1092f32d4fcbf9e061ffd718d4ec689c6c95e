@@ -1,7 +1,8 @@
-// 1.21.1	2025-10-20T11:12:59.0927129	Recipes
+// 1.21.1	2025-10-20T14:32:24.9317898	Recipes
 628152130e7b5c38a9fd72416c9a6f9777cab307 data/symbiont/advancement/recipes/misc/bioformer.json
 16d96ae1de2848df82d3538defe9da39651b16ba data/symbiont/advancement/recipes/misc/bioreactor.json
 82bae1d5e40a91fd24e3d0d38fa18faab6443c12 data/symbiont/advancement/recipes/misc/bone_sampler.json
+e535214949219a5c10e4bd52a1af5654899c6584 data/symbiont/advancement/recipes/misc/centrifuge.json
 73b87170bf6cdd3421642b331e2ec55146015fb8 data/symbiont/advancement/recipes/misc/metabolizer.json
 a9e2862ed792f2da6445f9e0c0895523e9b157af data/symbiont/advancement/recipes/misc/organic_binder.json
 1f75e1da72b6859492a50646768a1e39190bef8d data/symbiont/advancement/recipes/misc/recombinator.json
@@ -16,10 +17,11 @@ b31db3fe3241421872fbe4155081911b90670737 data/symbiont/recipe/bioreactor.json
 bef186c147f829d1b509e655d1340dd6b88986ab data/symbiont/recipe/bioreactor/biopolymer_solution.json
 fb12af04e68e6152a4e8dbb826c97e95579b46c5 data/symbiont/recipe/bioreactor/myogenic_biomass.json
 1d20c0d12141dcdf9ee25b8a85fc7b0f9ae0b899 data/symbiont/recipe/bone_sampler.json
+f33dbc70f2ed233cb321ca0bc984934bf14bc237 data/symbiont/recipe/centrifuge.json
 d5f551329c4f7cf991d2f552e87b1e9eeeb1d98a data/symbiont/recipe/metabolizer.json
 6de0faaee6503f10eaa2361161373648e41d4bd4 data/symbiont/recipe/metabolizer/myoblast.json
 464dc0f8ffa0b28e4b04ef429cde7da87d1f686f data/symbiont/recipe/metabolizer/nutritional_paste_from_crops.json
-baa9fd7084feaef985c38cb68aff169c09f6ee98 data/symbiont/recipe/metabolizer/nutritional_paste_from_seeds.json
+08f7479f1c86e73a9b6f5a1ed049d79d4b27db55 data/symbiont/recipe/metabolizer/nutritional_paste_from_seeds.json
 07de1c3490159e70a71fca9ed465c40944596406 data/symbiont/recipe/metabolizer/protein_paste.json
 689255721594cf63b130e902438cf0f2df69806d data/symbiont/recipe/metabolizer/proto_cell.json
 360f75f27802a3e5979e3640e32ef502cd35c627 data/symbiont/recipe/metabolizer/sticky_paste.json
