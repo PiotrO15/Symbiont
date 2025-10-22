@@ -1,0 +1,25 @@
+{
+  "type": "symbiont:bioreactor",
+  "fluid_input": {
+    "amount": 250,
+    "fluid": "symbiont:ferric_paste"
+  },
+  "fluid_output": {
+    "amount": 250,
+    "id": "symbiont:ferric_solution"
+  },
+  "item_input": {
+    "type": "neoforge:components",
+    "components": {
+      "symbiont:cell_type": "symbiont:ferric"
+    },
+    "items": "symbiont:cell_culture"
+  },
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:ferric"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

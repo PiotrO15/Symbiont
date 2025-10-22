@@ -1,0 +1,30 @@
+{
+  "type": "symbiont:bioformer",
+  "catalyst": {
+    "item": "minecraft:red_dye"
+  },
+  "fluid_input": {
+    "amount": 500,
+    "fluid": "symbiont:marine_extract"
+  },
+  "item_input": {
+    "type": "neoforge:components",
+    "components": {
+      "symbiont:cell_type": "symbiont:coral"
+    },
+    "items": "symbiont:cell_culture"
+  },
+  "output": [
+    {
+      "components": {
+        "symbiont:cell_type": "symbiont:coral"
+      },
+      "count": 1,
+      "id": "symbiont:cell_culture"
+    },
+    {
+      "count": 1,
+      "id": "minecraft:fire_coral"
+    }
+  ]
+}

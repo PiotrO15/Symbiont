@@ -1,133 +1,65 @@
 package piotro15.symbiont.common.registry;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import piotro15.symbiont.common.Symbiont;
+
+import java.util.function.Supplier;
 
 public class ModFluids {
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(Registries.FLUID, Symbiont.MOD_ID);
 
-    public static final DeferredHolder<Fluid, FlowingFluid> NUTRITIONAL_PASTE =
-            FLUIDS.register("nutritional_paste",
-                    () -> new BaseFlowingFluid.Source(ModFluids.NUTRITIONAL_PASTE_PROPERTIES));
-    public static final DeferredHolder<Fluid, FlowingFluid> FLOWING_NUTRITIONAL_PASTE =
-            FLUIDS.register("flowing_nutritional_paste",
-                    () -> new BaseFlowingFluid.Flowing(ModFluids.NUTRITIONAL_PASTE_PROPERTIES));
+    public static final DeferredHolder<Fluid, FlowingFluid> NUTRITIONAL_PASTE = registerFlowingFluid("nutritional_paste");
+    public static final DeferredHolder<Fluid, FlowingFluid> SWEET_PASTE = registerFlowingFluid("sweet_paste");
+    public static final DeferredHolder<Fluid, FlowingFluid> PROTEIN_PASTE = registerFlowingFluid("protein_paste");
+    public static final DeferredHolder<Fluid, FlowingFluid> MYOGENIC_BIOMASS = registerFlowingFluid("myogenic_biomass");
+    public static final DeferredHolder<Fluid, FlowingFluid> BIOPOLYMER_SOLUTION = registerFlowingFluid("biopolymer_solution");
+    public static final DeferredHolder<Fluid, FlowingFluid> STICKY_PASTE = registerFlowingFluid("sticky_paste");
+    public static final DeferredHolder<Fluid, FlowingFluid> FERRIC_SOLUTION = registerFlowingFluid("ferric_solution");
+    public static final DeferredHolder<Fluid, FlowingFluid> CUPRIC_SOLUTION = registerFlowingFluid("cupric_solution");
+    public static final DeferredHolder<Fluid, FlowingFluid> AURIC_SOLUTION = registerFlowingFluid("auric_solution");
+    public static final DeferredHolder<Fluid, FlowingFluid> FERRIC_PASTE = registerFlowingFluid("ferric_paste");
+    public static final DeferredHolder<Fluid, FlowingFluid> CUPRIC_PASTE = registerFlowingFluid("cupric_paste");
+    public static final DeferredHolder<Fluid, FlowingFluid> ENRICHED_CUPRIC_SOLUTION = registerFlowingFluid("enriched_cupric_solution");
+    public static final DeferredHolder<Fluid, FlowingFluid> MARINE_EXTRACT = registerFlowingFluid("marine_extract");
 
-    private static final BaseFlowingFluid.Properties NUTRITIONAL_PASTE_PROPERTIES =
-            new BaseFlowingFluid.Properties(
-                    ModFluidTypes.NUTRITIONAL_PASTE,
-                    NUTRITIONAL_PASTE,
-                    FLOWING_NUTRITIONAL_PASTE
-            )
-                    .block(ModBlocks.NUTRITIONAL_PASTE)
-                    .bucket(ModItems.NUTRITIONAL_PASTE_BUCKET)
-                    .slopeFindDistance(4)
-                    .levelDecreasePerBlock(2)
-                    .explosionResistance(100f)
-                    .tickRate(30);
+    private static DeferredHolder<Fluid, FlowingFluid> registerFlowingFluid(String name) {
+        final DeferredHolder<Fluid, FlowingFluid>[] sourceHolder = new DeferredHolder[1];
+        final DeferredHolder<Fluid, FlowingFluid>[] flowingHolder = new DeferredHolder[1];
+        final DeferredBlock<LiquidBlock>[] blockHolder = new DeferredBlock[1];
+        final DeferredItem<BucketItem>[] bucketHolder = new DeferredItem[1];
+        final DeferredHolder<FluidType, FluidType> fluidTypeHolder = ModFluidTypes.FLUID_TYPES.register(name, () -> new FluidType(FluidType.Properties.create()));
 
-    public static final DeferredHolder<Fluid, FlowingFluid> SWEET_PASTE =
-            FLUIDS.register("sweet_paste",
-                    () -> new BaseFlowingFluid.Source(ModFluids.SWEET_PASTE_PROPERTIES));
-    public static final DeferredHolder<Fluid, FlowingFluid> FLOWING_SWEET_PASTE =
-            FLUIDS.register("flowing_sweet_paste",
-                    () -> new BaseFlowingFluid.Flowing(ModFluids.SWEET_PASTE_PROPERTIES));
+        Supplier<BaseFlowingFluid.Properties> propertiesSupplier = () ->
+                new BaseFlowingFluid.Properties(fluidTypeHolder, sourceHolder[0], flowingHolder[0])
+                        .block(blockHolder[0])
+                        .bucket(bucketHolder[0])
+                        .slopeFindDistance(4)
+                        .levelDecreasePerBlock(2)
+                        .explosionResistance(100f)
+                        .tickRate(30);
 
-    private static final BaseFlowingFluid.Properties SWEET_PASTE_PROPERTIES =
-            new BaseFlowingFluid.Properties(
-                    ModFluidTypes.SWEET_PASTE,
-                    SWEET_PASTE,
-                    FLOWING_SWEET_PASTE
-            )
-                    .block(ModBlocks.SWEET_PASTE)
-                    .bucket(ModItems.SWEET_PASTE_BUCKET)
-                    .slopeFindDistance(4)
-                    .levelDecreasePerBlock(2)
-                    .explosionResistance(100f)
-                    .tickRate(30);
-
-    public static final DeferredHolder<Fluid, FlowingFluid> PROTEIN_PASTE =
-            FLUIDS.register("protein_paste",
-                    () -> new BaseFlowingFluid.Source(ModFluids.PROTEIN_PASTE_PROPERTIES));
-    public static final DeferredHolder<Fluid, FlowingFluid> FLOWING_PROTEIN_PASTE =
-            FLUIDS.register("flowing_protein_paste",
-                    () -> new BaseFlowingFluid.Flowing(ModFluids.PROTEIN_PASTE_PROPERTIES));
-
-    private static final BaseFlowingFluid.Properties PROTEIN_PASTE_PROPERTIES =
-            new BaseFlowingFluid.Properties(
-                    ModFluidTypes.PROTEIN_PASTE,
-                    PROTEIN_PASTE,
-                    FLOWING_PROTEIN_PASTE
-            )
-                    .block(ModBlocks.PROTEIN_PASTE)
-                    .bucket(ModItems.PROTEIN_PASTE_BUCKET)
-                    .slopeFindDistance(4)
-                    .levelDecreasePerBlock(2)
-                    .explosionResistance(100f)
-                    .tickRate(30);
-
-    public static final DeferredHolder<Fluid, FlowingFluid> MYOGENIC_BIOMASS =
-            FLUIDS.register("myogenic_biomass",
-                    () -> new BaseFlowingFluid.Source(ModFluids.MYOGENIC_BIOMASS_PROPERTIES));
-    public static final DeferredHolder<Fluid, FlowingFluid> FLOWING_MYOGENIC_BIOMASS =
-            FLUIDS.register("flowing_myogenic_biomass",
-                    () -> new BaseFlowingFluid.Flowing(ModFluids.MYOGENIC_BIOMASS_PROPERTIES));
-
-    private static final BaseFlowingFluid.Properties MYOGENIC_BIOMASS_PROPERTIES =
-            new BaseFlowingFluid.Properties(
-                    ModFluidTypes.MYOGENIC_BIOMASS,
-                    MYOGENIC_BIOMASS,
-                    FLOWING_MYOGENIC_BIOMASS
-            )
-                    .block(ModBlocks.MYOGENIC_BIOMASS)
-                    .bucket(ModItems.MYOGENIC_BIOMASS_BUCKET)
-                    .slopeFindDistance(4)
-                    .levelDecreasePerBlock(2)
-                    .explosionResistance(100f)
-                    .tickRate(30);
-
-    public static final DeferredHolder<Fluid, FlowingFluid> BIOPOLYMER_SOLUTION =
-            FLUIDS.register("biopolymer_solution",
-                    () -> new BaseFlowingFluid.Source(ModFluids.BIOPOLYMER_SOLUTION_PROPERTIES));
-    public static final DeferredHolder<Fluid, FlowingFluid> FLOWING_BIOPOLYMER_SOLUTION =
-            FLUIDS.register("flowing_biopolymer_solution",
-                    () -> new BaseFlowingFluid.Flowing(ModFluids.BIOPOLYMER_SOLUTION_PROPERTIES));
-
-    private static final BaseFlowingFluid.Properties BIOPOLYMER_SOLUTION_PROPERTIES =
-            new BaseFlowingFluid.Properties(
-                    ModFluidTypes.BIOPOLYMER_SOLUTION,
-                    BIOPOLYMER_SOLUTION,
-                    FLOWING_BIOPOLYMER_SOLUTION
-            )
-                    .block(ModBlocks.BIOPOLYMER_SOLUTION)
-                    .bucket(ModItems.BIOPOLYMER_SOLUTION_BUCKET)
-                    .slopeFindDistance(4)
-                    .levelDecreasePerBlock(2)
-                    .explosionResistance(100f)
-                    .tickRate(30);
-
-    public static final DeferredHolder<Fluid, FlowingFluid> STICKY_PASTE =
-            FLUIDS.register("sticky_paste",
-                    () -> new BaseFlowingFluid.Source(ModFluids.STICKY_PASTE_PROPERTIES));
-    public static final DeferredHolder<Fluid, FlowingFluid> FLOWING_STICKY_PASTE =
-            FLUIDS.register("flowing_sticky_paste",
-                    () -> new BaseFlowingFluid.Flowing(ModFluids.STICKY_PASTE_PROPERTIES));
-
-    private static final BaseFlowingFluid.Properties STICKY_PASTE_PROPERTIES =
-            new BaseFlowingFluid.Properties(
-                    ModFluidTypes.STICKY_PASTE,
-                    STICKY_PASTE,
-                    FLOWING_STICKY_PASTE
-            )
-                    .block(ModBlocks.STICKY_PASTE)
-                    .bucket(ModItems.STICKY_PASTE_BUCKET)
-                    .slopeFindDistance(4)
-                    .levelDecreasePerBlock(2)
-                    .explosionResistance(100f)
-                    .tickRate(30);
+        sourceHolder[0] = FLUIDS.register(name,
+                () -> new BaseFlowingFluid.Source(propertiesSupplier.get()));
+        flowingHolder[0] = FLUIDS.register("flowing_" + name,
+                () -> new BaseFlowingFluid.Flowing(propertiesSupplier.get()));
+        blockHolder[0] = ModBlocks.BLOCKS.register(name, () -> new LiquidBlock(sourceHolder[0].get(), BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).replaceable().noCollission().randomTicks().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)));
+        bucketHolder[0] = ModItems.ITEMS.register(name + "_bucket", () -> new BucketItem(sourceHolder[0].get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+        return sourceHolder[0];
+    }
 }

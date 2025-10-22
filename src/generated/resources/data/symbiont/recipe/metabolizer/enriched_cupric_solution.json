@@ -1,0 +1,30 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 1000,
+    "fluid": "symbiont:cupric_solution"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "symbiont:enriched_cupric_solution"
+  },
+  "item_input": [
+    {
+      "type": "neoforge:components",
+      "components": {
+        "symbiont:cell_type": "symbiont:glucose"
+      },
+      "items": "symbiont:cell_culture"
+    },
+    {
+      "item": "minecraft:pumpkin"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:glucose"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

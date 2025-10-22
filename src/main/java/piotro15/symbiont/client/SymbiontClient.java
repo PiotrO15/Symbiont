@@ -29,13 +29,20 @@ import java.util.Map;
 
 @EventBusSubscriber(modid = Symbiont.MOD_ID, value = Dist.CLIENT)
 public class SymbiontClient {
-    public static final Map<DeferredHolder<Fluid, FlowingFluid>, IClientFluidTypeExtensions> fluidTypeExtensions = Map.of(
-            ModFluids.NUTRITIONAL_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xffff8fab),
-            ModFluids.SWEET_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFA1C5FF),
-            ModFluids.PROTEIN_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFB565A7),
-            ModFluids.MYOGENIC_BIOMASS, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFc96363),
-            ModFluids.STICKY_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFD2B48C),
-            ModFluids.BIOPOLYMER_SOLUTION, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFF7FFFD4)
+    public static final Map<DeferredHolder<Fluid, FlowingFluid>, IClientFluidTypeExtensions> fluidTypeExtensions = Map.ofEntries(
+            Map.entry(ModFluids.NUTRITIONAL_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xffff8fab)),
+            Map.entry(ModFluids.SWEET_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFA1C5FF)),
+            Map.entry(ModFluids.PROTEIN_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFB565A7)),
+            Map.entry(ModFluids.MYOGENIC_BIOMASS, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFc96363)),
+            Map.entry(ModFluids.STICKY_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFD2B48C)),
+            Map.entry(ModFluids.BIOPOLYMER_SOLUTION, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFF7FFFD4)),
+            Map.entry(ModFluids.CUPRIC_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFDA7B5C)),
+            Map.entry(ModFluids.FERRIC_PASTE, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFF8B0000)),
+            Map.entry(ModFluids.ENRICHED_CUPRIC_SOLUTION, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFFF7F50)),
+            Map.entry(ModFluids.FERRIC_SOLUTION, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFB7410E)),
+            Map.entry(ModFluids.CUPRIC_SOLUTION, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFCE702B)),
+            Map.entry(ModFluids.AURIC_SOLUTION, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFFFD700)),
+            Map.entry(ModFluids.MARINE_EXTRACT, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFF298860))
     );
 
     @SubscribeEvent

@@ -1,0 +1,29 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 1000,
+    "fluid": "symbiont:cupric_paste"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "symbiont:cupric_solution"
+  },
+  "item_input": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:copper_ingot"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:auric"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

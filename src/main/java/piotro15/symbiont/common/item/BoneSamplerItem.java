@@ -28,6 +28,8 @@ public class BoneSamplerItem extends Item {
             product = CellCultureItem.withCellType(Symbiont.id("avian"));
         } else if (interactionTarget.getType() == EntityType.RABBIT) {
             product = CellCultureItem.withCellType(Symbiont.id("leporine"));
+        } else if (interactionTarget.getType() == EntityType.SNIFFER) {
+            product = CellCultureItem.withCellType(Symbiont.id("mossling"));
         } else {
             return InteractionResult.PASS;
         }

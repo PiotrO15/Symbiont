@@ -229,5 +229,145 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 CellCultureItem.withCellType(Symbiont.id("poly")),
                 new FluidStack(ModFluids.STICKY_PASTE, 500)).build(consumer, Symbiont.id("metabolizer/polycell")
         );
+
+        BioformerRecipeBuilder.newRecipe(
+                CellCultureItem.asIngredient(Symbiont.id("mossling")),
+                Ingredient.of(Items.COBBLESTONE),
+                SizedFluidIngredient.of(new FluidStack(Fluids.WATER, 1000)),
+                NonNullList.of(ItemStack.EMPTY, new ItemStack(Items.MOSS_BLOCK))
+        ).build(consumer, Symbiont.id("bioformer/moss_block"));
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, CellCultureItem.asIngredient(Symbiont.id("glucose")), Ingredient.of(Items.MELON_SLICE)),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.SWEET_PASTE, 1000)),
+                CellCultureItem.withCellType(Symbiont.id("glucose")),
+                new FluidStack(ModFluids.FERRIC_PASTE, 1000)
+        ).build(consumer, Symbiont.id("metabolizer/ferric_paste"));
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, CellCultureItem.asIngredient(Symbiont.id("glucose")), Ingredient.of(Items.CARROT)),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.SWEET_PASTE, 1000)),
+                CellCultureItem.withCellType(Symbiont.id("glucose")),
+                new FluidStack(ModFluids.CUPRIC_PASTE, 1000)
+        ).build(consumer, Symbiont.id("metabolizer/cupric_paste"));
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, CellCultureItem.asIngredient(Symbiont.id("glucose")), Ingredient.of(Items.PUMPKIN)),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.CUPRIC_SOLUTION, 1000)),
+                CellCultureItem.withCellType(Symbiont.id("glucose")),
+                new FluidStack(ModFluids.ENRICHED_CUPRIC_SOLUTION, 500)
+        ).build(consumer, Symbiont.id("metabolizer/enriched_cupric_solution"));
+
+        BioreactorRecipeBuilder.newBioreactorRecipe(
+                CellCultureItem.asIngredient(Symbiont.id("ferric")),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.FERRIC_PASTE, 250)),
+                CellCultureItem.withCellType(Symbiont.id("ferric")),
+                new FluidStack(ModFluids.FERRIC_SOLUTION, 250)
+        ).build(consumer, Symbiont.id("bioreactor/ferric_solution"));
+
+        BioreactorRecipeBuilder.newBioreactorRecipe(
+                CellCultureItem.asIngredient(Symbiont.id("auric")),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.CUPRIC_PASTE, 250)),
+                CellCultureItem.withCellType(Symbiont.id("auric")),
+                new FluidStack(ModFluids.CUPRIC_SOLUTION, 250)
+        ).build(consumer, Symbiont.id("bioreactor/cupric_solution"));
+
+        BioreactorRecipeBuilder.newBioreactorRecipe(
+                CellCultureItem.asIngredient(Symbiont.id("auric")),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.ENRICHED_CUPRIC_SOLUTION, 250)),
+                CellCultureItem.withCellType(Symbiont.id("auric")),
+                new FluidStack(ModFluids.AURIC_SOLUTION, 250)
+        ).build(consumer, Symbiont.id("bioreactor/auric_solution"));
+
+        BioformerRecipeBuilder.newRecipe(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                SizedFluidIngredient.of(new FluidStack(ModFluids.FERRIC_SOLUTION, 1000)),
+                NonNullList.of(ItemStack.EMPTY, new ItemStack(Items.RAW_IRON))
+        ).build(consumer, Symbiont.id("bioformer/raw_iron"));
+
+        BioformerRecipeBuilder.newRecipe(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                SizedFluidIngredient.of(new FluidStack(ModFluids.CUPRIC_SOLUTION, 1000)),
+                NonNullList.of(ItemStack.EMPTY, new ItemStack(Items.RAW_COPPER))
+        ).build(consumer, Symbiont.id("bioformer/raw_copper"));
+
+        BioformerRecipeBuilder.newRecipe(
+                Ingredient.EMPTY,
+                Ingredient.EMPTY,
+                SizedFluidIngredient.of(new FluidStack(ModFluids.AURIC_SOLUTION, 1000)),
+                NonNullList.of(ItemStack.EMPTY, new ItemStack(Items.RAW_GOLD))
+        ).build(consumer, Symbiont.id("bioformer/raw_gold"));
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.BOWL), Ingredient.of(Items.IRON_INGOT)),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.FERRIC_PASTE, 1000)),
+                CellCultureItem.withCellType(Symbiont.id("ferric")),
+                new FluidStack(ModFluids.FERRIC_PASTE, 500)
+        ).build(consumer, Symbiont.id("metabolizer/ferric_cell"));
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.BOWL), Ingredient.of(Items.COPPER_INGOT), Ingredient.of(Items.GOLD_INGOT)),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.CUPRIC_PASTE, 1000)),
+                CellCultureItem.withCellType(Symbiont.id("auric")),
+                new FluidStack(ModFluids.CUPRIC_SOLUTION, 500)
+        ).build(consumer, Symbiont.id("metabolizer/auric_cell"));
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.BOWL), Ingredient.of(Items.SEAGRASS), Ingredient.of(Items.KELP)),
+                SizedFluidIngredient.of(new FluidStack(Fluids.WATER, 1000)),
+                CellCultureItem.withCellType(Symbiont.id("marine")),
+                new FluidStack(ModFluids.MARINE_EXTRACT, 500)
+        ).build(consumer, Symbiont.id("metabolizer/marine_cell"));
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, CellCultureItem.asIngredient(Symbiont.id("marine")), Ingredient.of(Items.KELP)),
+                SizedFluidIngredient.of(new FluidStack(Fluids.WATER, 1000)),
+                CellCultureItem.withCellType(Symbiont.id("marine")),
+                new FluidStack(ModFluids.MARINE_EXTRACT, 1000)
+        ).build(consumer, Symbiont.id("metabolizer/marine_extract"));
+
+        MetabolizerRecipeBuilder.newRecipe(
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.BOWL), Ingredient.of(Items.NAUTILUS_SHELL)),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.MARINE_EXTRACT, 1000)),
+                CellCultureItem.withCellType(Symbiont.id("coral")),
+                new FluidStack(ModFluids.MARINE_EXTRACT, 500)
+        ).build(consumer, Symbiont.id("metabolizer/coral_cell"));
+
+        BioformerRecipeBuilder.newRecipe(
+                CellCultureItem.asIngredient(Symbiont.id("coral")),
+                Ingredient.of(Items.PINK_DYE),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.MARINE_EXTRACT, 500)),
+                NonNullList.of(ItemStack.EMPTY, CellCultureItem.withCellType(Symbiont.id("coral")), new ItemStack(Items.BRAIN_CORAL))
+        ).build(consumer, Symbiont.id("bioformer/brain_coral"));
+
+        BioformerRecipeBuilder.newRecipe(
+                CellCultureItem.asIngredient(Symbiont.id("coral")),
+                Ingredient.of(Items.PURPLE_DYE),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.MARINE_EXTRACT, 500)),
+                NonNullList.of(ItemStack.EMPTY, CellCultureItem.withCellType(Symbiont.id("coral")), new ItemStack(Items.BUBBLE_CORAL))
+        ).build(consumer, Symbiont.id("bioformer/bubble_coral"));
+
+        BioformerRecipeBuilder.newRecipe(
+                CellCultureItem.asIngredient(Symbiont.id("coral")),
+                Ingredient.of(Items.RED_DYE),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.MARINE_EXTRACT, 500)),
+                NonNullList.of(ItemStack.EMPTY, CellCultureItem.withCellType(Symbiont.id("coral")), new ItemStack(Items.FIRE_CORAL))
+        ).build(consumer, Symbiont.id("bioformer/fire_coral"));
+
+        BioformerRecipeBuilder.newRecipe(
+                CellCultureItem.asIngredient(Symbiont.id("coral")),
+                Ingredient.of(Items.YELLOW_DYE),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.MARINE_EXTRACT, 500)),
+                NonNullList.of(ItemStack.EMPTY, CellCultureItem.withCellType(Symbiont.id("coral")), new ItemStack(Items.HORN_CORAL))
+        ).build(consumer, Symbiont.id("bioformer/horn_coral"));
+
+        BioformerRecipeBuilder.newRecipe(
+                CellCultureItem.asIngredient(Symbiont.id("coral")),
+                Ingredient.of(Items.BLUE_DYE),
+                SizedFluidIngredient.of(new FluidStack(ModFluids.MARINE_EXTRACT, 500)),
+                NonNullList.of(ItemStack.EMPTY, CellCultureItem.withCellType(Symbiont.id("coral")), new ItemStack(Items.TUBE_CORAL))
+        ).build(consumer, Symbiont.id("bioformer/tube_coral"));
     }
 }

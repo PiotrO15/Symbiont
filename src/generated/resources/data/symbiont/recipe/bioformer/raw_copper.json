@@ -1,0 +1,15 @@
+{
+  "type": "symbiont:bioformer",
+  "catalyst": [],
+  "fluid_input": {
+    "amount": 1000,
+    "fluid": "symbiont:cupric_solution"
+  },
+  "item_input": [],
+  "output": [
+    {
+      "count": 1,
+      "id": "minecraft:raw_copper"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 1000,
+    "fluid": "minecraft:water"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "symbiont:marine_extract"
+  },
+  "item_input": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:seagrass"
+    },
+    {
+      "item": "minecraft:kelp"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:marine"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

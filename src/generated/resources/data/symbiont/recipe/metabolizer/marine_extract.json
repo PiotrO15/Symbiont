@@ -1,0 +1,30 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 1000,
+    "fluid": "minecraft:water"
+  },
+  "fluid_output": {
+    "amount": 1000,
+    "id": "symbiont:marine_extract"
+  },
+  "item_input": [
+    {
+      "type": "neoforge:components",
+      "components": {
+        "symbiont:cell_type": "symbiont:marine"
+      },
+      "items": "symbiont:cell_culture"
+    },
+    {
+      "item": "minecraft:kelp"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:marine"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

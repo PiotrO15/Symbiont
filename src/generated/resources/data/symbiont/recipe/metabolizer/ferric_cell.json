@@ -1,0 +1,26 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 1000,
+    "fluid": "symbiont:ferric_paste"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "symbiont:ferric_paste"
+  },
+  "item_input": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:ferric"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

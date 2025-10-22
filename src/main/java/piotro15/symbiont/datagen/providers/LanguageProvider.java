@@ -55,12 +55,27 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("fluid_type.symbiont.myogenic_biomass", "Myogenic Biomass");
         add("fluid_type.symbiont.sticky_paste", "Sticky Paste");
         add("fluid_type.symbiont.biopolymer_solution", "Biopolymer Solution");
+        add("fluid_type.symbiont.ferric_paste", "Ferric Paste");
+        add("fluid_type.symbiont.cupric_paste", "Cupric Paste");
+        add("fluid_type.symbiont.enriched_cupric_solution", "Enriched Cupric Solution");
+        add("fluid_type.symbiont.ferric_solution", "Ferric Solution");
+        add("fluid_type.symbiont.cupric_solution", "Cupric Solution");
+        add("fluid_type.symbiont.auric_solution", "Auric Solution");
+        add("fluid_type.symbiont.marine_extract", "Marine Extract");
 
         add("item.symbiont.nutritional_paste_bucket", "Nutritional Paste Bucket");
         add("item.symbiont.sweet_paste_bucket", "Sweet Paste Bucket");
         add("item.symbiont.protein_paste_bucket", "Protein Paste Bucket");
         add("item.symbiont.myogenic_biomass_bucket", "Myogenic Biomass Bucket");
+        add("item.symbiont.sticky_paste_bucket", "Sticky Paste Bucket");
         add("item.symbiont.biopolymer_solution_bucket", "Biopolymer Solution Bucket");
+        add("item.symbiont.ferric_paste_bucket", "Ferric Paste Bucket");
+        add("item.symbiont.cupric_paste_bucket", "Cupric Paste Bucket");
+        add("item.symbiont.enriched_cupric_solution_bucket", "Enriched Cupric Solution Bucket");
+        add("item.symbiont.ferric_solution_bucket", "Ferric Solution Bucket");
+        add("item.symbiont.cupric_solution_bucket", "Cupric Solution Bucket");
+        add("item.symbiont.auric_solution_bucket", "Auric Solution Bucket");
+        add("item.symbiont.marine_extract_bucket", "Marine Extract Bucket");
 
         add("cell_type.symbiont.proto", "Proto-Cell Culture");
         add("cell_type.symbiont.glucose", "Glucose Cell Culture");
@@ -73,11 +88,21 @@ public class LanguageProvider extends net.neoforged.neoforge.common.data.Languag
         add("cell_type.symbiont.avian", "Avian Cell Culture");
         add("cell_type.symbiont.porcine", "Porcine Cell Culture");
         add("cell_type.symbiont.leporine", "Leporine Cell Culture");
+        add("cell_type.symbiont.mossling", "Mossling Cell Culture");
+        add("cell_type.symbiont.marine", "Marine Cell Culture");
+        add("cell_type.symbiont.coral", "Coral Cell Culture");
 
         add("biotrait.symbiont.stable_division", "Stable Division");
         add("biotrait.symbiont.light_tissue", "Light Tissue");
         add("biotrait.symbiont.fat_layered", "Fat-Layered");
+        add("biotrait.symbiont.photosynthetic", "Photosynthetic");
         add("biotrait.symbiont.resilient_membrane", "Resilient Membrane");
         add("biotrait.symbiont.resource_aggression", "Resource Aggression");
+        add("biotrait.symbiont.patterned_synthesis", "Patterned Synthesis");
+        add("biotrait.symbiont.hyper_division", "Hyper Division");
+        add("biotrait.symbiont.selective_uptake", "Selective Uptake");
+        add("biotrait.symbiont.ancient_growth", "Ancient Growth");
+        add("biotrait.symbiont.old_world_metabolism", "Old World Metabolism");
+        add("biotrait.symbiont.mutation_prone", "Mutation Prone");
     }
 }

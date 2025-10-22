@@ -1,0 +1,23 @@
+{
+  "type": "symbiont:bioformer",
+  "catalyst": {
+    "item": "minecraft:cobblestone"
+  },
+  "fluid_input": {
+    "amount": 1000,
+    "fluid": "minecraft:water"
+  },
+  "item_input": {
+    "type": "neoforge:components",
+    "components": {
+      "symbiont:cell_type": "symbiont:mossling"
+    },
+    "items": "symbiont:cell_culture"
+  },
+  "output": [
+    {
+      "count": 1,
+      "id": "minecraft:moss_block"
+    }
+  ]
+}

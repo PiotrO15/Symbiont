@@ -33,13 +33,6 @@ public class ModItems {
 
     public static final DeferredItem<Item> BONE_SAMPLER = ITEMS.register("bone_sampler", () -> new BoneSamplerItem(new Item.Properties().durability(16)));
 
-    public static final DeferredItem<BucketItem> NUTRITIONAL_PASTE_BUCKET = ITEMS.register("nutritional_paste_bucket", () -> new BucketItem(ModFluids.NUTRITIONAL_PASTE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-    public static final DeferredItem<BucketItem> SWEET_PASTE_BUCKET = ITEMS.register("sweet_paste_bucket", () -> new BucketItem(ModFluids.SWEET_PASTE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-    public static final DeferredItem<BucketItem> PROTEIN_PASTE_BUCKET = ITEMS.register("protein_paste_bucket", () -> new BucketItem(ModFluids.PROTEIN_PASTE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-    public static final DeferredItem<BucketItem> MYOGENIC_BIOMASS_BUCKET = ITEMS.register("myogenic_biomass_bucket", () -> new BucketItem(ModFluids.MYOGENIC_BIOMASS.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-    public static final DeferredItem<BucketItem> STICKY_PASTE_BUCKET = ITEMS.register("sticky_paste_bucket", () -> new BucketItem(ModFluids.STICKY_PASTE.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-    public static final DeferredItem<BucketItem> BIOPOLYMER_SOLUTION_BUCKET = ITEMS.register("biopolymer_solution_bucket", () -> new BucketItem(ModFluids.BIOPOLYMER_SOLUTION.get(), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-
     @SubscribeEvent
     public static void buildContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == ModCreativeModeTabs.COMMON.getKey()) {

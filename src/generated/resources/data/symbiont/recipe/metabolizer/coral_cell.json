@@ -1,0 +1,26 @@
+{
+  "type": "symbiont:metabolizer",
+  "fluid_input": {
+    "amount": 1000,
+    "fluid": "symbiont:marine_extract"
+  },
+  "fluid_output": {
+    "amount": 500,
+    "id": "symbiont:marine_extract"
+  },
+  "item_input": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:nautilus_shell"
+    }
+  ],
+  "item_output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:coral"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

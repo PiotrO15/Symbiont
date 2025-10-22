@@ -40,6 +40,12 @@ public class ItemModelProvider extends net.neoforged.neoforge.client.model.gener
         cellCultureItem(Symbiont.id("avian"), Symbiont.id("animal"));
         cellCultureItem(Symbiont.id("porcine"), Symbiont.id("animal"));
         cellCultureItem(Symbiont.id("leporine"), Symbiont.id("animal"));
+        cellCultureItem(Symbiont.id("mossling"), Symbiont.id("generic_2"));
+
+        cellCultureItem(Symbiont.id("marine"), Symbiont.id("circular"));
+        cellCultureItem(Symbiont.id("coral"), Symbiont.id("generic_2"));
+        cellCultureItem(Symbiont.id("ferric"), Symbiont.id("metalocell"));
+        cellCultureItem(Symbiont.id("auric"), Symbiont.id("metalocell"));
     }
 
     private void cellCultureItem(ResourceLocation itemId) {
