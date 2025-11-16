@@ -9,8 +9,10 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -27,6 +29,7 @@ import piotro15.symbiont.common.registry.*;
 
 import java.util.Map;
 
+@Mod(value = Symbiont.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = Symbiont.MOD_ID, value = Dist.CLIENT)
 public class SymbiontClient {
     public static final Map<DeferredHolder<Fluid, FlowingFluid>, IClientFluidTypeExtensions> fluidTypeExtensions = Map.ofEntries(
@@ -44,6 +47,10 @@ public class SymbiontClient {
             Map.entry(ModFluids.AURIC_SOLUTION, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFFFFD700)),
             Map.entry(ModFluids.MARINE_EXTRACT, createFluidType(Symbiont.id("block/thick_fluid_still"), Symbiont.id("block/thick_fluid_flow"), 0xFF298860))
     );
+
+    public SymbiontClient(IEventBus modEventBus) {
+        modEventBus.addListener(ModCreativeModeTabContents::buildContents);
+    }
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {

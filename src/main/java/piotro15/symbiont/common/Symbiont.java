@@ -38,7 +38,6 @@ public class Symbiont {
         modEventBus.addListener(this::registerCapabilities);
         TraitModifierRegistry.registerConditions();
         ModCreativeModeTabs.CREATIVE_TABS.register(modEventBus);
-        modEventBus.addListener(ModItems::buildContents);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
