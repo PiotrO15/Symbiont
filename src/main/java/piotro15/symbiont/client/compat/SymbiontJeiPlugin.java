@@ -11,14 +11,12 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import piotro15.symbiont.common.Symbiont;
-import piotro15.symbiont.common.recipe.BioformerRecipe;
 import piotro15.symbiont.common.registry.ModDataComponents;
 import piotro15.symbiont.common.registry.ModItems;
 import piotro15.symbiont.common.registry.ModRecipeTypes;
@@ -78,6 +76,7 @@ public class SymbiontJeiPlugin implements IModPlugin {
         registration.addRecipeCategories(new BioreactorRecipeCategory(guiHelper));
         registration.addRecipeCategories(new MetabolizerRecipeCategory(guiHelper));
         registration.addRecipeCategories(new BioformerRecipeCategory(guiHelper));
+        registration.addRecipeCategories(new BoneSamplingRecipeCategory(guiHelper));
     }
 
     @Override
@@ -85,12 +84,7 @@ public class SymbiontJeiPlugin implements IModPlugin {
         registration.addRecipes(ModJeiRecipeTypes.BIOREACTOR, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.BIOREACTOR.get()).stream().map(RecipeHolder::value).toList());
         registration.addRecipes(ModJeiRecipeTypes.METABOLIZER, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.METABOLIZER.get()).stream().map(RecipeHolder::value).toList());
         registration.addRecipes(ModJeiRecipeTypes.BIOFORMER, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.BIOFORMER.get()).stream().map(RecipeHolder::value).toList());
-//        registration.addRecipes(ModJeiRecipeTypes.BIOFORMER, new BioformerRecipe(
-//                null,
-//                null,
-//                null,
-//                NonNullList.of(ItemStack.EMPTY, new ItemStack(ModItems.BIOTRAIT_EXTRACT.get()))
-//        ));
+        registration.addRecipes(ModJeiRecipeTypes.BONE_SAMPLING, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.BONE_SAMPLING.get()).stream().map(RecipeHolder::value).toList());
     }
 
     @Override
@@ -98,5 +92,6 @@ public class SymbiontJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(ModItems.METABOLIZER.get(), ModJeiRecipeTypes.METABOLIZER);
         registration.addRecipeCatalyst(ModItems.BIOREACTOR.get(), ModJeiRecipeTypes.BIOREACTOR);
         registration.addRecipeCatalyst(ModItems.BIOFORMER.get(), ModJeiRecipeTypes.BIOFORMER);
+        registration.addRecipeCatalyst(ModItems.BONE_SAMPLER.get(), ModJeiRecipeTypes.BONE_SAMPLING);
     }
 }

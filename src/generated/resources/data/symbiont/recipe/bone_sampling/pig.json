@@ -1,0 +1,11 @@
+{
+  "type": "symbiont:bone_sampling",
+  "entity_type": "minecraft:pig",
+  "output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:porcine"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

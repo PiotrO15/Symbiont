@@ -2,13 +2,15 @@ package piotro15.symbiont.common.item;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import piotro15.symbiont.common.Symbiont;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.Level;
+import piotro15.symbiont.common.recipe.BoneSamplingRecipe;
+import piotro15.symbiont.common.registry.ModRecipeTypes;
 
 public class BoneSamplerItem extends Item {
     public BoneSamplerItem(Properties properties) {
@@ -17,20 +19,17 @@ public class BoneSamplerItem extends Item {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity interactionTarget, InteractionHand usedHand) {
-        ItemStack product;
-        if (interactionTarget.getType() == EntityType.COW) {
-            product = CellCultureItem.withCellType(Symbiont.id("bovine"));
-        } else if (interactionTarget.getType() == EntityType.SHEEP) {
-            product = CellCultureItem.withCellType(Symbiont.id("ovine"));
-        } else if (interactionTarget.getType() == EntityType.PIG) {
-            product = CellCultureItem.withCellType(Symbiont.id("porcine"));
-        } else if (interactionTarget.getType() == EntityType.CHICKEN) {
-            product = CellCultureItem.withCellType(Symbiont.id("avian"));
-        } else if (interactionTarget.getType() == EntityType.RABBIT) {
-            product = CellCultureItem.withCellType(Symbiont.id("leporine"));
-        } else if (interactionTarget.getType() == EntityType.SNIFFER) {
-            product = CellCultureItem.withCellType(Symbiont.id("mossling"));
-        } else {
+        ItemStack product = null;
+        Level level = interactionTarget.level();
+        for (RecipeHolder<BoneSamplingRecipe> holder : level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.BONE_SAMPLING.get())) {
+            BoneSamplingRecipe recipe = holder.value();
+            if (recipe.matches(interactionTarget)) {
+                product = recipe.getResultItem(level.registryAccess());
+                break;
+            }
+        }
+
+        if (product == null) {
             return InteractionResult.PASS;
         }
 

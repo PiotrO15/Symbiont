@@ -1,4 +1,4 @@
-// 1.21.1	2025-10-22T12:42:17.1227751	Recipes
+// 1.21.1	2025-11-18T17:34:34.9341095	Recipes
 628152130e7b5c38a9fd72416c9a6f9777cab307 data/symbiont/advancement/recipes/misc/bioformer.json
 16d96ae1de2848df82d3538defe9da39651b16ba data/symbiont/advancement/recipes/misc/bioreactor.json
 82bae1d5e40a91fd24e3d0d38fa18faab6443c12 data/symbiont/advancement/recipes/misc/bone_sampler.json
@@ -29,6 +29,12 @@ bef186c147f829d1b509e655d1340dd6b88986ab data/symbiont/recipe/bioreactor/biopoly
 7e69dffa2b84f20631ab67e0c118b621d63722e0 data/symbiont/recipe/bioreactor/ferric_solution.json
 fb12af04e68e6152a4e8dbb826c97e95579b46c5 data/symbiont/recipe/bioreactor/myogenic_biomass.json
 1d20c0d12141dcdf9ee25b8a85fc7b0f9ae0b899 data/symbiont/recipe/bone_sampler.json
+8a722a4975ec35c25ca397b5e3b32f637e39136f data/symbiont/recipe/bone_sampling/chicken.json
+546ed649f9dd7e22eba88d3d8ec97c1100671db2 data/symbiont/recipe/bone_sampling/cow.json
+a0c93bddcd8d40e081eb82fdf84252cda6cd890c data/symbiont/recipe/bone_sampling/pig.json
+9708c6d3473e54e592f42f0390d3d7d4cadf8b2a data/symbiont/recipe/bone_sampling/rabbit.json
+126c8f963b0d62808ed0f0c5c48f4e90bb5ce8d5 data/symbiont/recipe/bone_sampling/sheep.json
+938f6f21faacd320dc2392e93b6f8461eb7f5945 data/symbiont/recipe/bone_sampling/sniffer.json
 f33dbc70f2ed233cb321ca0bc984934bf14bc237 data/symbiont/recipe/centrifuge.json
 d5f551329c4f7cf991d2f552e87b1e9eeeb1d98a data/symbiont/recipe/metabolizer.json
 3b3891fda7ec3039734964891938cc02f8e60710 data/symbiont/recipe/metabolizer/auric_cell.json

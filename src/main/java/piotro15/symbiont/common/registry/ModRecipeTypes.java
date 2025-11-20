@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import piotro15.symbiont.common.Symbiont;
 import piotro15.symbiont.common.recipe.BioformerRecipe;
 import piotro15.symbiont.common.recipe.BioreactorRecipe;
+import piotro15.symbiont.common.recipe.BoneSamplingRecipe;
 import piotro15.symbiont.common.recipe.MetabolizerRecipe;
 
 import java.util.function.Supplier;
@@ -31,5 +32,11 @@ public class ModRecipeTypes {
             RECIPE_TYPES.register(
                     "bioformer",
                     () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "bioformer"))
+            );
+
+    public static final Supplier<RecipeType<BoneSamplingRecipe>> BONE_SAMPLING =
+            RECIPE_TYPES.register(
+                    "bone_sampling",
+                    () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Symbiont.MOD_ID, "bone_sampling"))
             );
 }

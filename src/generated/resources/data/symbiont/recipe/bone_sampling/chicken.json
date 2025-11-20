@@ -1,0 +1,11 @@
+{
+  "type": "symbiont:bone_sampling",
+  "entity_type": "minecraft:chicken",
+  "output": {
+    "components": {
+      "symbiont:cell_type": "symbiont:avian"
+    },
+    "count": 1,
+    "id": "symbiont:cell_culture"
+  }
+}

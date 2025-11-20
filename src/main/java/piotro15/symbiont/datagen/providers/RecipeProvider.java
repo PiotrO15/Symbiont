@@ -9,6 +9,7 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -22,6 +23,7 @@ import piotro15.symbiont.common.registry.ModFluids;
 import piotro15.symbiont.common.registry.ModItems;
 import piotro15.symbiont.datagen.builders.BioformerRecipeBuilder;
 import piotro15.symbiont.datagen.builders.BioreactorRecipeBuilder;
+import piotro15.symbiont.datagen.builders.BoneSamplingRecipeBuilder;
 import piotro15.symbiont.datagen.builders.MetabolizerRecipeBuilder;
 
 import java.util.concurrent.CompletableFuture;
@@ -369,5 +371,35 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
                 SizedFluidIngredient.of(new FluidStack(ModFluids.MARINE_EXTRACT, 500)),
                 NonNullList.of(ItemStack.EMPTY, CellCultureItem.withCellType(Symbiont.id("coral")), new ItemStack(Items.TUBE_CORAL))
         ).build(consumer, Symbiont.id("bioformer/tube_coral"));
+
+        BoneSamplingRecipeBuilder.newRecipe(
+                EntityType.COW,
+                CellCultureItem.withCellType(Symbiont.id("bovine"))
+        ).build(consumer, Symbiont.id("bone_sampling/cow"));
+
+        BoneSamplingRecipeBuilder.newRecipe(
+                EntityType.SHEEP,
+                CellCultureItem.withCellType(Symbiont.id("ovine"))
+        ).build(consumer, Symbiont.id("bone_sampling/sheep"));
+
+        BoneSamplingRecipeBuilder.newRecipe(
+                EntityType.PIG,
+                CellCultureItem.withCellType(Symbiont.id("porcine"))
+        ).build(consumer, Symbiont.id("bone_sampling/pig"));
+
+        BoneSamplingRecipeBuilder.newRecipe(
+                EntityType.CHICKEN,
+                CellCultureItem.withCellType(Symbiont.id("avian"))
+        ).build(consumer, Symbiont.id("bone_sampling/chicken"));
+
+        BoneSamplingRecipeBuilder.newRecipe(
+                EntityType.RABBIT,
+                CellCultureItem.withCellType(Symbiont.id("leporine"))
+        ).build(consumer, Symbiont.id("bone_sampling/rabbit"));
+
+        BoneSamplingRecipeBuilder.newRecipe(
+                EntityType.SNIFFER,
+                CellCultureItem.withCellType(Symbiont.id("mossling"))
+        ).build(consumer, Symbiont.id("bone_sampling/sniffer"));
     }
 }
