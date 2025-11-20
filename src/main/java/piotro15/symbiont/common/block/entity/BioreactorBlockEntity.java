@@ -181,7 +181,7 @@ public class BioreactorBlockEntity extends BasicMachineBlockEntity implements Me
             }
             fluidResult = recipe.fluidOutput().copyWithAmount((int) Math.ceil(recipe.fluidOutput().getAmount() * productionMultiplier));
         } else {
-            result = resultItem;
+            result = resultItem.copy();
             fluidResult = recipe.fluidOutput();
         }
 

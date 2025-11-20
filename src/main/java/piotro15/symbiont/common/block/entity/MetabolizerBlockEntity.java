@@ -162,7 +162,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
                 ItemUtils.extractFromInventory(inventory, recipe.ingredients().get(i), 1, 5);
             }
 
-            inventory.insertItem(5, recipe.output(), false);
+            inventory.insertItem(5, recipe.output().copy(), false);
             outputTank.fill(recipe.fluidOutput(), IFluidHandler.FluidAction.EXECUTE);
         }
     }
