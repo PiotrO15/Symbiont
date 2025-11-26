@@ -132,7 +132,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
         if (inputItem.is(ModItems.CELL_CULTURE) && resultItem.is(ModItems.CELL_CULTURE)) {
             double productionMultiplier = CellCultureItem.getProduction(inputItem, level);
             double consumptionMultiplier = CellCultureItem.getConsumption(inputItem, level);
-            int countChange = CellCultureItem.getCountChange(inputItem, level.random);
+            int countChange = CellCultureItem.getCountChange(inputItem, level.random, level);
 
             if (countChange < 0) {
                 inventory.extractItem(0, 1, false);

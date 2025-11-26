@@ -220,12 +220,12 @@ public class CellCultureItem extends Item {
         return result;
     }
 
-    public static int getCountChange(ItemStack itemStack, RandomSource random) {
+    public static int getCountChange(ItemStack itemStack, RandomSource random, Level level) {
         int countChange = 0;
         if (!(itemStack.getItem() instanceof CellCultureItem))
             return countChange;
 
-        double stability = CellCultureItem.getStability(itemStack, null);
+        double stability = CellCultureItem.getStability(itemStack, level);
 
         if (stability < 1.0) {
             if (random.nextDouble() > stability) {

@@ -125,7 +125,7 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
             productionMultiplier = CellCultureItem.getProduction(inputItem, level);
             consumptionMultiplier = CellCultureItem.getConsumption(inputItem, level);
 
-            countChange = CellCultureItem.getCountChange(inputItem, level.random);
+            countChange = CellCultureItem.getCountChange(inputItem, level.random, level);
             if (countChange < 0) {
                 inventory.extractItem(0, 1, false);
             }
