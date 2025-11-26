@@ -176,7 +176,7 @@ public class CentrifugeBlockEntity extends BasicMachineBlockEntity implements Me
 
         ItemStack extract = new ItemStack(ModItems.BIOTRAIT_EXTRACT.get());
         AtomicBoolean emptyOutput = new AtomicBoolean(true);
-        List<CellCultureItem.AppliedBiotrait> traits = CellCultureItem.getBiocode(inventory.getStackInSlot(0));
+        List<CellCultureItem.AppliedBiotrait> traits = CellCultureItem.getBiocode(inventory.getStackInSlot(0), level);
         if (traits != null) {
             traits.stream()
                     .filter(t -> t.type() == biotraitType)
@@ -205,7 +205,7 @@ public class CentrifugeBlockEntity extends BasicMachineBlockEntity implements Me
             biotraitType = null;
         }
 
-        List<CellCultureItem.AppliedBiotrait> traits = CellCultureItem.getBiocode(inventory.getStackInSlot(0));
+        List<CellCultureItem.AppliedBiotrait> traits = CellCultureItem.getBiocode(inventory.getStackInSlot(0), level);
         if (traits != null) {
             traits.stream()
                     .filter(t -> t.type() == biotraitType)

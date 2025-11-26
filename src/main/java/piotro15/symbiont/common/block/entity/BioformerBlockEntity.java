@@ -122,8 +122,8 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
         ItemStack inputItem = inventory.getStackInSlot(0);
 
         if (inputItem.is(ModItems.CELL_CULTURE)) {
-            productionMultiplier = CellCultureItem.getProduction(inputItem);
-            consumptionMultiplier = CellCultureItem.getConsumption(inputItem);
+            productionMultiplier = CellCultureItem.getProduction(inputItem, level);
+            consumptionMultiplier = CellCultureItem.getConsumption(inputItem, level);
 
             countChange = CellCultureItem.getCountChange(inputItem, level.random);
             if (countChange < 0) {
@@ -172,8 +172,8 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
 
         ItemStack inputItem = inventory.getStackInSlot(0);
         if (inputItem.is(ModItems.CELL_CULTURE)) {
-            productionMultiplier = CellCultureItem.getProduction(inputItem);
-            stability = CellCultureItem.getStability(inputItem);
+            productionMultiplier = CellCultureItem.getProduction(inputItem, level);
+            stability = CellCultureItem.getStability(inputItem, level);
         }
 
         NonNullList<ItemStack> adjustedResult = NonNullList.create();
@@ -206,7 +206,7 @@ public class BioformerBlockEntity extends BasicMachineBlockEntity implements Men
 
     public int getMaxProgress() {
         if (inventory.getStackInSlot(0).is(ModItems.CELL_CULTURE)) {
-            double progressMultiplier = CellCultureItem.getGrowth(inventory.getStackInSlot(0));
+            double progressMultiplier = CellCultureItem.getGrowth(inventory.getStackInSlot(0), level);
             return (int) (MAX_PROGRESS / progressMultiplier);
         }
         return MAX_PROGRESS;

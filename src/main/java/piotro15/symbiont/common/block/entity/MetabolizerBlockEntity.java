@@ -130,8 +130,8 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
         ItemStack inputItem = inventory.getStackInSlot(0);
         ItemStack resultItem = recipe.output();
         if (inputItem.is(ModItems.CELL_CULTURE) && resultItem.is(ModItems.CELL_CULTURE)) {
-            double productionMultiplier = CellCultureItem.getProduction(inputItem);
-            double consumptionMultiplier = CellCultureItem.getConsumption(inputItem);
+            double productionMultiplier = CellCultureItem.getProduction(inputItem, level);
+            double consumptionMultiplier = CellCultureItem.getConsumption(inputItem, level);
             int countChange = CellCultureItem.getCountChange(inputItem, level.random);
 
             if (countChange < 0) {
@@ -179,8 +179,8 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
         FluidStack fluidResult;
 
         if (inputItem.is(ModItems.CELL_CULTURE) && resultItem.is(ModItems.CELL_CULTURE)) {
-            double productionMultiplier = CellCultureItem.getProduction(inputItem);
-            double stability = CellCultureItem.getStability(inputItem);
+            double productionMultiplier = CellCultureItem.getProduction(inputItem, level);
+            double stability = CellCultureItem.getStability(inputItem, level);
 
             if (stability > 1.0) {
                 Biocode biocode = inputItem.get(ModDataComponents.BIOCODE);
@@ -216,7 +216,7 @@ public class MetabolizerBlockEntity extends BasicMachineBlockEntity implements M
 
     private int getMaxProgress() {
         if (inventory.getStackInSlot(0).is(ModItems.CELL_CULTURE)) {
-            double progressMultiplier = CellCultureItem.getGrowth(inventory.getStackInSlot(0));
+            double progressMultiplier = CellCultureItem.getGrowth(inventory.getStackInSlot(0), level);
             return (int) (MAX_PROGRESS / progressMultiplier);
         }
         return MAX_PROGRESS;

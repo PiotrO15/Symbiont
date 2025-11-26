@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import org.jetbrains.annotations.NotNull;
 import piotro15.symbiont.common.genetics.Biocode;
@@ -43,15 +44,18 @@ public class CellCultureItem extends Item {
         return super.getName(stack);
     }
 
-    private static double getStat(ItemStack stack, IntegerTraitModifier.StatType statType) {
+    private static double getStat(ItemStack stack, IntegerTraitModifier.StatType statType, Level level) {
         AtomicReference<Double> stat = new AtomicReference<>(1.0);
 
-        CellType cellType = getCellType(stack);
+        if (level != null && level.isClientSide())
+            return stat.get();
+
+        CellType cellType = getCellType(stack, level);
 
         if (cellType == null)
             return stat.get();
 
-        List<AppliedBiotrait> traits = getBiocode(stack);
+        List<AppliedBiotrait> traits = getBiocode(stack, level);
 
         if (traits == null)
             return stat.get();
@@ -74,20 +78,20 @@ public class CellCultureItem extends Item {
         return stat.get();
     }
 
-    public static double getStability(ItemStack stack) {
-        return getStat(stack, IntegerTraitModifier.StatType.STABILITY);
+    public static double getStability(ItemStack stack, Level level) {
+        return getStat(stack, IntegerTraitModifier.StatType.STABILITY, level);
     }
 
-    public static double getGrowth(ItemStack stack) {
-        return getStat(stack, IntegerTraitModifier.StatType.GROWTH);
+    public static double getGrowth(ItemStack stack, Level level) {
+        return getStat(stack, IntegerTraitModifier.StatType.GROWTH, level);
     }
 
-    public static double getProduction(ItemStack stack) {
-        return getStat(stack, IntegerTraitModifier.StatType.PRODUCTION);
+    public static double getProduction(ItemStack stack, Level level) {
+        return getStat(stack, IntegerTraitModifier.StatType.PRODUCTION, level);
     }
 
-    public static double getConsumption(ItemStack stack) {
-        return getStat(stack, IntegerTraitModifier.StatType.CONSUMPTION);
+    public static double getConsumption(ItemStack stack, Level level) {
+        return getStat(stack, IntegerTraitModifier.StatType.CONSUMPTION, level);
     }
 
     @Override
@@ -97,13 +101,13 @@ public class CellCultureItem extends Item {
 
     public static List<Component> getTooltipLines(ItemStack stack, TooltipFlag tooltipFlag) {
         List<Component> tooltipComponents = new ArrayList<>();
-        CellType cellType = getCellType(stack);
+        CellType cellType = getCellType(stack, null);
         if (cellType == null) {
             return tooltipComponents;
         }
 
         if (tooltipFlag.hasControlDown()) {
-            List<AppliedBiotrait> traits = getBiocode(stack);
+            List<AppliedBiotrait> traits = getBiocode(stack, null);
             if (traits == null || traits.isEmpty()) return tooltipComponents;
 
             tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.traits")
@@ -119,10 +123,10 @@ public class CellCultureItem extends Item {
                 appliedBiotrait.trait().modifiers().forEach(mod -> tooltipComponents.add(mod.getDisplayComponent()));
             });
         } else {
-            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.stability").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getStability(stack) * 100) + "%").withStyle(ChatFormatting.GREEN)));
-            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.growth").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getGrowth(stack) * 100) + "%").withStyle(ChatFormatting.AQUA)));
-            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.production").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getProduction(stack) * 100) + "%").withStyle(ChatFormatting.DARK_AQUA)));
-            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.consumption").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getConsumption(stack) * 100) + "%").withStyle(ChatFormatting.GOLD)));
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.stability").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getStability(stack, null) * 100) + "%").withStyle(ChatFormatting.GREEN)));
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.growth").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getGrowth(stack, null) * 100) + "%").withStyle(ChatFormatting.AQUA)));
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.production").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getProduction(stack, null) * 100) + "%").withStyle(ChatFormatting.DARK_AQUA)));
+            tooltipComponents.add(Component.translatable("item.symbiont.cell_culture.consumption").withStyle(ChatFormatting.GRAY).append(Component.literal(String.format("%.0f", getConsumption(stack, null) * 100) + "%").withStyle(ChatFormatting.GOLD)));
         }
         return tooltipComponents;
     }
@@ -154,22 +158,27 @@ public class CellCultureItem extends Item {
         return tooltipComponents;
     }
 
-    public static CellType getCellType(ItemStack stack) {
+    public static CellType getCellType(ItemStack stack, Level level) {
         ResourceLocation cellId = stack.get(ModDataComponents.CELL_TYPE.get());
         if (cellId == null)
             return null;
 
-        ClientPacketListener connection = Minecraft.getInstance().getConnection();
-        if (connection == null)
-            return null;
+        if (level == null || level.isClientSide()) {
+            ClientPacketListener connection = Minecraft.getInstance().getConnection();
+            if (connection == null)
+                return null;
 
-        Registry<CellType> registry = connection.registryAccess().registryOrThrow(ModRegistries.CELL_TYPE);
+            Registry<CellType> registry = connection.registryAccess().registryOrThrow(ModRegistries.CELL_TYPE);
 
+            return registry.get(cellId);
+        }
+
+        Registry<CellType> registry = level.registryAccess().registryOrThrow(ModRegistries.CELL_TYPE);
         return registry.get(cellId);
     }
 
-    public static List<AppliedBiotrait> getBiocode(ItemStack stack) {
-        CellType cellType = getCellType(stack);
+    public static List<AppliedBiotrait> getBiocode(ItemStack stack, Level level) {
+        CellType cellType = getCellType(stack, level);
 
         if (cellType == null) {
             return null;
@@ -182,6 +191,16 @@ public class CellCultureItem extends Item {
             traits.putAll(biocodeComponent.traits());
         }
 
+        Registry<Biotrait> registry;
+        if (level == null || level.isClientSide()) {
+            ClientPacketListener connection = Minecraft.getInstance().getConnection();
+            if (connection == null)
+                return null;
+            registry = connection.registryAccess().registryOrThrow(ModRegistries.BIOTRAIT);
+        } else {
+            registry = level.registryAccess().registryOrThrow(ModRegistries.BIOTRAIT);
+        }
+
         List<AppliedBiotrait> result = new ArrayList<>();
         for (Map.Entry<Biotrait.BiotraitType, ResourceLocation> entry : traits.entrySet()) {
             Biotrait.BiotraitType type = entry.getKey();
@@ -191,7 +210,6 @@ public class CellCultureItem extends Item {
             if (connection == null)
                 return null;
 
-            Registry<Biotrait> registry = connection.registryAccess().registryOrThrow(ModRegistries.BIOTRAIT);
             Biotrait resolved = registry.get(id);
 
             if (resolved != null) {
@@ -207,7 +225,7 @@ public class CellCultureItem extends Item {
         if (!(itemStack.getItem() instanceof CellCultureItem))
             return countChange;
 
-        double stability = CellCultureItem.getStability(itemStack);
+        double stability = CellCultureItem.getStability(itemStack, null);
 
         if (stability < 1.0) {
             if (random.nextDouble() > stability) {

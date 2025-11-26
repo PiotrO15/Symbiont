@@ -25,7 +25,7 @@ public record BioformerRecipe(
 ) implements SymbiontRecipe<BioformerRecipeInput> {
     @Override
     public boolean matches(BioformerRecipeInput input, @NotNull Level level) {
-        double consumptionModifier = CellCultureItem.getConsumption(input.getItem(0));
+        double consumptionModifier = CellCultureItem.getConsumption(input.getItem(0), level);
 
         int amountNeeded;
         if (consumptionModifier != 1.0) {

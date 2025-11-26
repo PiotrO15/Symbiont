@@ -27,7 +27,7 @@ public record MetabolizerRecipe(
 ) implements SymbiontRecipe<MetabolizerRecipeInput> {
     @Override
     public boolean matches(MetabolizerRecipeInput input, @NotNull Level level) {
-        double consumptionModifier = CellCultureItem.getConsumption(input.getItem(0));
+        double consumptionModifier = CellCultureItem.getConsumption(input.getItem(0), level);
 
         int amountNeeded;
         if (consumptionModifier != 1.0) {
