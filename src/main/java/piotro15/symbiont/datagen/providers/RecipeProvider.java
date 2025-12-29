@@ -25,6 +25,7 @@ import piotro15.symbiont.datagen.builders.BioformerRecipeBuilder;
 import piotro15.symbiont.datagen.builders.BioreactorRecipeBuilder;
 import piotro15.symbiont.datagen.builders.BoneSamplingRecipeBuilder;
 import piotro15.symbiont.datagen.builders.MetabolizerRecipeBuilder;
+import piotro15.symbiont.util.SizedIngredient;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -219,7 +220,7 @@ public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
         ).build(consumer, Symbiont.id("bioformer/bioplastic_sheet"));
 
         MetabolizerRecipeBuilder.newRecipe(
-                NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.BOWL), Ingredient.of(Items.SUGAR), Ingredient.of(Items.SUGAR), Ingredient.of(Items.SUGAR), Ingredient.of(Items.SUGAR)),
+                NonNullList.of(Ingredient.EMPTY, Ingredient.of(Items.BOWL), SizedIngredient.of(4, Items.SUGAR)),
                 SizedFluidIngredient.of(new FluidStack(ModFluids.NUTRITIONAL_PASTE, 1000)),
                 CellCultureItem.withCellType(Symbiont.id("glucose")),
                 new FluidStack(ModFluids.SWEET_PASTE, 500)).build(consumer, Symbiont.id("metabolizer/sweet_cell")

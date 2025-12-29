@@ -6,6 +6,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
+import piotro15.symbiont.util.MetabolizerCellSlotItemHandler;
 import piotro15.symbiont.util.OutputSlotItemHandler;
 import piotro15.symbiont.common.block.entity.MetabolizerBlockEntity;
 import piotro15.symbiont.common.registry.ModMenuTypes;
@@ -19,7 +20,7 @@ public class MetabolizerMenu extends BasicMachineMenu {
         this.blockEntity = blockEntity;
         this.data = data;
 
-        this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 0, 63, 49));
+        this.addSlot(new MetabolizerCellSlotItemHandler(blockEntity.getInventory(), 0, 63, 49, blockEntity.getLevel()));
 
         this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 1, 67, 17));
         this.addSlot(new SlotItemHandler(blockEntity.getInventory(), 2, 85, 17));

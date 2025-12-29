@@ -49,7 +49,7 @@ public class ItemUtils {
         for (int i = inputStart; i < inputEnd; i++) {
             ItemStack stackInSlot = handler.getStackInSlot(i);
             if (ingredient.test(stackInSlot)) {
-                handler.extractItem(i, 1, false);
+                handler.extractItem(i, ingredient.getItems()[0].getCount(), false);
                 return;
             }
         }

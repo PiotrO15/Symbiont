@@ -1,4 +1,4 @@
-// 1.21.1	2025-11-18T17:34:34.9341095	Recipes
+// 1.21.1	2025-12-28T22:46:35.7223267	Recipes
 628152130e7b5c38a9fd72416c9a6f9777cab307 data/symbiont/advancement/recipes/misc/bioformer.json
 16d96ae1de2848df82d3538defe9da39651b16ba data/symbiont/advancement/recipes/misc/bioreactor.json
 82bae1d5e40a91fd24e3d0d38fa18faab6443c12 data/symbiont/advancement/recipes/misc/bone_sampler.json
@@ -52,7 +52,7 @@ b8dcea22a7ff105dea6825618f6cf5ca416ad264 data/symbiont/recipe/metabolizer/myobla
 07de1c3490159e70a71fca9ed465c40944596406 data/symbiont/recipe/metabolizer/protein_paste.json
 689255721594cf63b130e902438cf0f2df69806d data/symbiont/recipe/metabolizer/proto_cell.json
 360f75f27802a3e5979e3640e32ef502cd35c627 data/symbiont/recipe/metabolizer/sticky_paste.json
-1da7dbd782f9e04e61c446673cdeec2b4e13a9a9 data/symbiont/recipe/metabolizer/sweet_cell.json
+1be04e380783788918d2d71a3dff640c6a99eb29 data/symbiont/recipe/metabolizer/sweet_cell.json
 dcea61c7dc5bd32a68b06fd39b5da3143b725f66 data/symbiont/recipe/metabolizer/sweet_paste_from_beetroot.json
 ca0c9786aa298df4035f69431b5b64215b9e256f data/symbiont/recipe/metabolizer/sweet_paste_from_sugar.json
 9205f3a9f99ada020cd37e620486055f406647b7 data/symbiont/recipe/metabolizer/sweet_paste_from_sweet_berries.json
