@@ -113,7 +113,7 @@ public class RecombinatorBlockEntity extends BlockEntity implements MenuProvider
         return Component.translatable("container.recombinator");
     }
 
-    public ItemStackHandler getItems() {
+    public ItemStackHandler getInventory() {
         return items;
     }
 

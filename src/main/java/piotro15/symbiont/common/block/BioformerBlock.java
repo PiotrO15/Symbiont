@@ -2,6 +2,7 @@ package piotro15.symbiont.common.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -18,9 +19,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import piotro15.symbiont.common.block.entity.BioformerBlockEntity;
+import piotro15.symbiont.common.block.entity.BioreactorBlockEntity;
 import piotro15.symbiont.common.registry.ModBlockEntities;
 
 public class BioformerBlock extends BaseEntityBlock {
@@ -69,5 +72,22 @@ public class BioformerBlock extends BaseEntityBlock {
     @Override
     public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return SHAPE;
+    }
+
+    @Override
+    public void onRemove(BlockState state, @NotNull Level level, @NotNull BlockPos pos, BlockState newState, boolean isMoving) {
+        if (state.getBlock() != newState.getBlock()) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+
+            if (blockEntity instanceof BioformerBlockEntity bioformerBlockEntity) {
+                ItemStackHandler inventory = bioformerBlockEntity.getInventory();
+
+                for (int i = 0; i < inventory.getSlots(); i++) {
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(i));
+                }
+            }
+        }
+
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 }

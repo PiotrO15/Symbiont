@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -26,8 +27,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import piotro15.symbiont.common.block.entity.BioreactorBlockEntity;
 import piotro15.symbiont.common.block.entity.RecombinatorBlockEntity;
 
 public class RecombinatorBlock extends BaseEntityBlock {
@@ -106,6 +109,23 @@ public class RecombinatorBlock extends BaseEntityBlock {
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    public void onRemove(BlockState state, @NotNull Level level, @NotNull BlockPos pos, BlockState newState, boolean isMoving) {
+        if (state.getBlock() != newState.getBlock()) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+
+            if (blockEntity instanceof RecombinatorBlockEntity recombinatorBlockEntity) {
+                ItemStackHandler inventory = recombinatorBlockEntity.getInventory();
+
+                for (int i = 0; i < inventory.getSlots(); i++) {
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(i));
+                }
+            }
+        }
+
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     static {

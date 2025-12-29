@@ -3,6 +3,7 @@ package piotro15.symbiont.common.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,6 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import piotro15.symbiont.common.block.entity.BioreactorBlockEntity;
@@ -107,7 +109,11 @@ public class BioreactorBlock extends BaseEntityBlock {
             BlockEntity blockEntity = level.getBlockEntity(pos);
 
             if (blockEntity instanceof BioreactorBlockEntity bioreactorBlockEntity) {
-                // Drop items
+                ItemStackHandler inventory = bioreactorBlockEntity.getInventory();
+
+                for (int i = 0; i < inventory.getSlots(); i++) {
+                    Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(i));
+                }
             }
         }
 

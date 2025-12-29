@@ -29,7 +29,7 @@ public class RecombinatorMenu extends BasicMachineMenu {
             return;
         }
 
-        ItemStackHandler handler = be.getItems();
+        ItemStackHandler handler = be.getInventory();
 
         this.addSlot(new SlotItemHandler(handler, 0, 80, 86));
 
@@ -64,7 +64,7 @@ public class RecombinatorMenu extends BasicMachineMenu {
     }
 
     public boolean hasCell() {
-        ItemStack cellStack = blockEntity.getItems().getStackInSlot(0);
+        ItemStack cellStack = blockEntity.getInventory().getStackInSlot(0);
         return !cellStack.isEmpty();
     }
 
